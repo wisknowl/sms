@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\level;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 class LevelController extends Controller
 {
@@ -26,9 +28,18 @@ class LevelController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        DB::transaction(function () use ($request) {
+            $level = strip_tags($request->input('level'));
+            $description = strip_tags($request->input('description'));
+            $level_obj = new level();
+            $level_obj->name=$level;
+            $level_obj->description=$description;
+            $level_obj->save();
+        });
+        return redirect()->route('levels.index');
+        // return redirect()->back()->with('success', 'Operation completed');
     }
 
     /**

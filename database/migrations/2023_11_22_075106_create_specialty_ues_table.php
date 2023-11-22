@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('specialty_ues', function (Blueprint $table) {
             $table->id();
-            $table->foreign('specialty_id')->references('id')->on('specialties')->cascadeOnDelete();
-            $table->foreign('ue_id')->references('id')->on('unite_enseignements')->cascadeOnDelete();
+            $table->foreignId('specialty_id')->references('id')->on('specialties')->cascadeOnDelete(); 
+            $table->foreignId('ue_id')->references('id')->on('unite_enseignements')->cascadeOnDelete();
             $table->timestamps();
         });
     }
