@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\unite_enseignement;
+use App\Models\specialty_ue;
 use Illuminate\Http\Request;
 
-class UniteEnseignementController extends Controller
+class SpecialtyUeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('uniteEseignements.index');
+        return view('specialty_ue.index');
     }
 
     /**
@@ -34,7 +34,7 @@ class UniteEnseignementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(unite_enseignement $unite_enseignement)
+    public function show(specialty_ue $specialty_ue)
     {
         //
     }
@@ -42,7 +42,7 @@ class UniteEnseignementController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(unite_enseignement $unite_enseignement)
+    public function edit(specialty_ue $specialty_ue)
     {
         //
     }
@@ -50,7 +50,7 @@ class UniteEnseignementController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, unite_enseignement $unite_enseignement)
+    public function update(Request $request, specialty_ue $specialty_ue)
     {
         //
     }
@@ -58,7 +58,7 @@ class UniteEnseignementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(unite_enseignement $unite_enseignement)
+    public function destroy(specialty_ue $specialty_ue)
     {
         //
     }

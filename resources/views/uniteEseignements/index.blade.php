@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight flex items-center text-center">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight flex text-center items-center">
             {{ __('Structure') }}
         </h2>
         @include ('partials.div')
@@ -17,7 +17,7 @@
                     <!--Tabs content-->
                     <div class="mb-6">
                         <h2 class="font-light text-xl text-gray-800 leading-tight flex items-center text-center my-4">
-                            {{ __('Specialité') }}
+                            {{ __('Unite Denseignement') }}
                         </h2>
                         <div class="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block" id="tabs-home" role="tabpanel" aria-labelledby="tabs-home-tab" data-te-tab-active>
                             <!-- Specialty List -->
@@ -74,7 +74,7 @@
                                         <div class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
                                             <!--Modal title-->
                                             <h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="exampleModalCenterTitle">
-                                                SPECIALITE
+                                                UNITE D'ENSEIGNEMENT
                                             </h5>
                                             <!--Close button-->
                                             <button type="button" class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" data-te-modal-dismiss aria-label="Close">
@@ -98,8 +98,25 @@
                                                 <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Code
                                                 </label>
                                             </div>
+
+                                            
+
+                                            <!-- Level and semester -->
+                                            <div class="grid grid-cols-2 gap-2">
+                                                <!-- Level -->
+                                                <select data-te-select-init data-te-select-placeholder="Niveau">
+                                                    <option value="1">One</option>
+                                                    <option value="2">Two</option>
+                                                </select>
+                                                <!-- Semester -->
+                                                <select data-te-select-init data-te-select-placeholder="Semester">
+                                                    <option value="1">One</option>
+                                                    <option value="2">Two</option>
+                                                </select>
+                                            </div>
+
                                             <!-- Description -->
-                                            <div class="relative mb-3" data-te-input-wrapper-init>
+                                            <div class="relative my-3" data-te-input-wrapper-init>
                                                 <textarea class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlTextarea1" rows="3" placeholder="Your message"></textarea>
                                                 <label for="exampleFormControlTextarea1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Description
                                                 </label>
@@ -120,6 +137,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

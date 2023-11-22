@@ -16,11 +16,12 @@ import {
     Tooltip,
     Select,
     Datetimepicker,
+    Datepicker,
     Modal,
     Tab,
     initTE,
 } from "tw-elements";
 initTE({
-    Chart, Tab, Sidenav, Dropdown, Tooltip, Collapse, Ripple,
+    Chart, Tab, Sidenav, Dropdown, Tooltip, Collapse, Ripple, Datepicker,
     Input, Select, Datetimepicker, Modal
 });

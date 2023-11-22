@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->unsignedInteger('credit_points');
-            $table->unsignedInteger('code');
-            $table->foreign('course_id')->references('id')->on('courses');
+            $table->string('code');
+            $table->foreign('level_id')->references('id')->on('levels')->cascadeOnDelete();
+            $table->foreign('semester_id')->references('id')->on('semesters')->cascadeOnDelete();
             $table->timestamps();
         });
     }

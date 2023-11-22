@@ -1,7 +1,12 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LevelController;
 use App\Http\Controllers\SpecialtyController;
+use App\Http\Controllers\UniteEnseignementController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\SpecialtyUeController;
+use App\Http\Controllers\UeCourseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,7 +28,27 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::resource('levels', LevelController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified']);
+
 Route::resource('specialties', SpecialtyController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified']);
+
+Route::resource('uniteEseignements', UniteEnseignementController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified']);
+
+Route::resource('cours', CourseController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified']);
+
+Route::resource('specialty_ue', SpecialtyUeController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified']);
+
+Route::resource('ue_cours', UeCourseController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified']);
 
@@ -33,4 +58,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
