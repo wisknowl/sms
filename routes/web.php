@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\UniteEnseignementController;
@@ -27,6 +28,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::resource('semesters', SemesterController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified']);
 
 Route::resource('levels', LevelController::class)
     ->only(['index', 'store'])

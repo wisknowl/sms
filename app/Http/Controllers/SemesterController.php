@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\semester;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 class SemesterController extends Controller
 {
@@ -12,7 +14,7 @@ class SemesterController extends Controller
      */
     public function index()
     {
-        //
+        // return view('semesters.index');
     }
 
     /**
@@ -26,9 +28,22 @@ class SemesterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        DB::transaction(function () use ($request) {
+            $semester = strip_tags($request->input('semester'));
+            $start_date = date('Y-m-d', strtotime(strip_tags($request->input('start_date'))));
+            // $start_date = strip_tags($request->input('start_date'));
+            $end_date = date('Y-m-d', strtotime(strip_tags($request->input('start_date'))));
+            // $end_date = strip_tags($request->input('end_date'));
+            $semester_obj = new semester();
+            $semester_obj->name=$semester;
+            $semester_obj->start_date=$start_date;
+            $semester_obj->end_date=$end_date;
+            $semester_obj->save();
+        });
+        // return redirect()->route('levels.index');
+        return redirect()->back()->with('success', 'Operation completed');
     }
 
     /**
