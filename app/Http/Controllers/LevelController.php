@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
 use App\Models\level;
+use App\Models\semester;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -12,9 +14,12 @@ class LevelController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): view
     {
-        return view('levels.index');
+        $levels = level::all();
+        $semesters = semester::all();
+    
+        return view('levels.index', compact('levels','semesters'));
     }
 
     /**
@@ -38,7 +43,7 @@ class LevelController extends Controller
             $level_obj->description=$description;
             $level_obj->save();
         });
-        return redirect()->route('levels.index');
+        return redirect()->back()->with('success', 'Niveau Creer avec success');
         // return redirect()->back()->with('success', 'Operation completed');
     }
 

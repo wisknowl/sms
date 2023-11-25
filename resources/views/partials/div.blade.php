@@ -1,11 +1,10 @@
 <div class="grid grid-cols-3 gap-4">
     <div class="flex text-center items-center">
-        @if (session()->has('success'))
-        <!-- Modal -->
+        <!-- @if (session()->has('success'))
         <div>
             {{ session()->get('success') }}
         </div>
-        @endif
+        @endif -->
     </div>
     <form action="">
         <select data-te-select-init data-te-select-placeholder="Annee Academic">
@@ -69,7 +68,11 @@
     </form>
     <div>
         <select data-te-select-init data-te-select-placeholder="Semestre">
-
+            @isset($semesters)
+            @foreach($semesters as $semester)
+            <option value="{{ $semester->id }}">{{ $semester->name }}</option>
+            @endforeach
+            @endisset
         </select>
 
         <div class="p-4" data-te-select-custom-content-ref>

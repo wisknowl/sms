@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
+use App\Models\semester;
 use App\Models\specialty;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -12,9 +14,12 @@ class SpecialtyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): view
     {
-        return view('specialties.index');
+        $semesters = semester::all();
+        $specialties = specialty::all();
+    
+        return view('specialties.index', compact('specialties','semesters'));
     }
 
     /**
@@ -41,7 +46,7 @@ class SpecialtyController extends Controller
             $specialty_obj->save();
         });
         
-        return redirect()->back()->with('success', 'Operation completed');
+        return redirect()->back()->with('success', 'Specialite Creer avec success');
     }
 
     /**

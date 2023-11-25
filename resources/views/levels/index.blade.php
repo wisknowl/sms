@@ -29,30 +29,22 @@
                                                 <thead class="border-b font-medium dark:border-neutral-500">
                                                     <tr>
                                                         <th scope="col" class="px-6 py-4">#</th>
-                                                        <th scope="col" class="px-6 py-4">First</th>
-                                                        <th scope="col" class="px-6 py-4">Last</th>
-                                                        <th scope="col" class="px-6 py-4">Handle</th>
+                                                        <th scope="col" class="px-6 py-4">Nom</th>
+                                                        <th scope="col" class="px-6 py-4">Description</th>
+                                                        <th scope="col" class="px-6 py-4">Jour Creer</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    @isset($levels)
+                                                    @foreach($levels as $level)
                                                     <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-200">
-                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">1</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Mark</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Otto</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">@mdo</td>
+                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $level->id }}</td>
+                                                        <td class="whitespace-nowrap px-6 py-4">{{ $level->name }}</td>
+                                                        <td class="whitespace-nowrap px-6 py-4">{{ $level->description }}</td>
+                                                        <td class="whitespace-nowrap px-6 py-4">{{ $level->created_at }}</td>
                                                     </tr>
-                                                    <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-200">
-                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">2</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Jacob</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Thornton</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">@fat</td>
-                                                    </tr>
-                                                    <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-200">
-                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">3</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Larry</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Wild</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">@twitter</td>
-                                                    </tr>
+                                                    @endforeach
+                                                    @endisset
                                                 </tbody>
                                             </table>
                                         </div>

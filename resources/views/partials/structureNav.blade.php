@@ -44,11 +44,10 @@
         </div>
     </div>
     <div class="flex text-center items-center">
-        @if (session()->has('success'))
-        <!-- Modal -->
+        <!-- @if (session()->has('success'))
         <div>
             {{ session()->get('success') }}
         </div>
-        @endif
+        @endif -->
     </div>
 </div>

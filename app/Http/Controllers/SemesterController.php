@@ -43,7 +43,7 @@ class SemesterController extends Controller
             $semester_obj->save();
         });
         // return redirect()->route('levels.index');
-        return redirect()->back()->with('success', 'Operation completed');
+        return redirect()->back()->with('success', 'Semestre Creer avec success');
     }
 
     /**

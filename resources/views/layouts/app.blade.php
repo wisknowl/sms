@@ -36,6 +36,13 @@
             {{ $slot }}
         </main>
     </div>
+    <div>
+        @if (session()->has('success'))
+        <div class="flex items-center text-center text-xl p-6 w-auto rounded shadow-xl" style="height: 50px; background-color:lightgreen; position:fixed; bottom:0; left:50%; transform:translate(-50%);">
+            {{ session()->get('success') }}
+        </div>
+        @endif
+    </div>
 </body>
 
 </html>
