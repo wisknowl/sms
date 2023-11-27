@@ -2,17 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
+use App\Models\semester;
+use App\Models\level;
 use App\Models\course;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    
+    public function index(): view
     {
-        return view('cours.index');
+        $courses = course::all();
+        $levels = level::all();
+        $semesters = semester::all();
+        
+        return view('cours.index', compact('levels','courses','semesters'));
     }
 
     /**
@@ -26,9 +36,32 @@ class CourseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        DB::transaction(function () use ($request) {
+            $course = strip_tags($request->input('name'));
+            $code = strip_tags($request->input('code'));
+            $credit_point = strip_tags($request->input('credit_point'));
+            $duration = strip_tags($request->input('duration'));
+            $cost_per_hour = strip_tags($request->input('cost_per_hour'));
+            $course_nature = strip_tags($request->input('course_nature'));
+            $level = strip_tags($request->input('level'));
+            $semester = strip_tags($request->input('semester'));
+            $description = strip_tags($request->input('description'));
+            $course_obj = new course();
+            $course_obj->name=$course;
+            $course_obj->code=$code;
+            $course_obj->credit_points=$credit_point;
+            $course_obj->duration=$duration;
+            $course_obj->cost_per_hour=$cost_per_hour;
+            $course_obj->course_nature=$course_nature;
+            $course_obj->level_id=$level;
+            $course_obj->semester_id=$semester;
+            $course_obj->description=$description;
+            $course_obj->save();
+        });
+        
+        return redirect()->back()->with('success', 'Unite Denseignement Creer avec success');
     }
 
     /**
