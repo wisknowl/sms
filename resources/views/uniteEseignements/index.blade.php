@@ -29,9 +29,9 @@
                                                 <thead class="border-b font-medium dark:border-neutral-500">
                                                     <tr>
                                                         <th scope="col" class="px-6 py-4">#</th>
-                                                        <th scope="col" class="px-6 py-4">First</th>
-                                                        <th scope="col" class="px-6 py-4">Last</th>
-                                                        <th scope="col" class="px-6 py-4">Handle</th>
+                                                        <th scope="col" class="px-6 py-4">Name</th>
+                                                        <th scope="col" class="px-6 py-4">Code</th>
+                                                        <th scope="col" class="px-6 py-4">Description</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

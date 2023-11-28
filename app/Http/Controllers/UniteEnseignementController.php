@@ -53,8 +53,9 @@ class UniteEnseignementController extends Controller
             $ue_obj->description=$description;
             $ue_obj->save();
         });
-        
-        return redirect()->back()->with('success', 'Unite Denseignement Creer avec success');
+        notify()->success('Unite Denseignement Creer avec succès');
+        return redirect()->back();
+        // return redirect()->back()->with('success', 'Unite Denseignement Creer avec succès');
     }
 
     /**

@@ -60,8 +60,9 @@ class CourseController extends Controller
             $course_obj->description=$description;
             $course_obj->save();
         });
-        
-        return redirect()->back()->with('success', 'Unite Denseignement Creer avec success');
+        notify()->success('Cours Creer avec succès');
+        return redirect()->back();
+        //->with('success', 'Cours Creer avec succès');
     }
 
     /**

@@ -8,6 +8,7 @@
 
     <title>247 | Student</title>
     <!-- <title>{{ config('app.name', 'Laravel') }}</title> -->
+    @notifyCss
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -43,6 +44,8 @@
         </div>
         @endif
     </div>
+    <x-notify::notify />
+    @notifyJs
 </body>
 
 </html>

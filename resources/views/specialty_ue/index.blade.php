@@ -29,30 +29,22 @@
                                                 <thead class="border-b font-medium dark:border-neutral-500">
                                                     <tr>
                                                         <th scope="col" class="px-6 py-4">#</th>
-                                                        <th scope="col" class="px-6 py-4">First</th>
-                                                        <th scope="col" class="px-6 py-4">Last</th>
-                                                        <th scope="col" class="px-6 py-4">Handle</th>
+                                                        <th scope="col" class="px-6 py-4">Unite Denseignement</th>
+                                                        <th scope="col" class="px-6 py-4">Specialite</th>
+                                                        <th scope="col" class="px-6 py-4">Jour Creer</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    @isset($specialty_ues)
+                                                    @foreach($specialty_ues as $specialty_ue)
                                                     <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-200">
-                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">1</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Mark</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Otto</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">@mdo</td>
+                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $specialty_ue->id }}</td>
+                                                        <td class="whitespace-nowrap px-6 py-4">{{ $specialty_ue->specialty->name  }}</td>
+                                                        <td class="whitespace-nowrap px-6 py-4">{{ $specialty_ue->ue->name  }}</td>
+                                                        <td class="whitespace-nowrap px-6 py-4">{{ $specialty_ue->created_at }}</td>
                                                     </tr>
-                                                    <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-200">
-                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">2</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Jacob</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Thornton</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">@fat</td>
-                                                    </tr>
-                                                    <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-200">
-                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">3</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Larry</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">Wild</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">@twitter</td>
-                                                    </tr>
+                                                    @endforeach
+                                                    @endisset
                                                 </tbody>
                                             </table>
                                         </div>
@@ -85,50 +77,43 @@
                                         </div>
 
                                         <!--Modal body-->
-                                        <div class="relative p-4">
-                                            <!-- Specialty Name -->
-                                            <div class="mb-1.5">
-                                                Specialite
+                                        <form method="POST" action="">
+                                            @csrf
+                                            <div class="relative p-4">
+                                                <!-- Specialty Name -->
+                                                <div class="mb-1.5">
+                                                    Specialite
+                                                </div>
+                                                <select name="specialty" data-te-select-placeholder=" " data-te-select-init data-te-select-option-height="52">
+                                                    @isset($specialties)
+                                                    @foreach($specialties as $specialty)
+                                                    <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
+                                                    @endforeach
+                                                    @endisset
+                                                </select>
+                                                <div class="mt-3 mb-1.5">
+                                                    Unite D'enseignement
+                                                </div>
+                                                <!-- UE -->
+                                                <select name="specialty_ue[]" data-te-select-init data-te-select-placeholder=" " multiple>
+                                                    @isset($ues)
+                                                    @foreach($ues as $ue)
+                                                    <option value="{{ $ue->id }}">{{ $ue->name }}</option>
+                                                    @endforeach
+                                                    @endisset
+                                                </select>
                                             </div>
-                                            <select data-te-select-init data-te-select-option-height="52">
-                                                <option value="1" data-te-select-secondary-text="Secondary text">
-                                                    One
-                                                </option>
-                                                <option value="2" data-te-select-secondary-text="Secondary text">
-                                                    Two
-                                                </option>
-                                                <option value="3" data-te-select-secondary-text="Secondary text">
-                                                    Three
-                                                </option>
-                                                <option value="4" data-te-select-secondary-text="Secondary text">
-                                                    Four
-                                                </option>
-                                                <option value="5" data-te-select-secondary-text="Secondary text">
-                                                    Five
-                                                </option>
-                                            </select>
-                                            <div class="mt-3 mb-1.5">
-                                                Unite D'enseignement
-                                            </div>
-                                            <!-- UE -->
-                                            <select data-te-select-init data-te-select-placeholder="UE" multiple>
-                                                <option value="1">One</option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
-                                                <option value="4">Four</option>
-                                                <option value="5">Five</option>
-                                            </select>
-                                        </div>
 
-                                        <!--Modal footer-->
-                                        <div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
-                                            <button type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
-                                                Close
-                                            </button>
-                                            <button type="button" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
-                                                Affecter
-                                            </button>
-                                        </div>
+                                            <!--Modal footer-->
+                                            <div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                                                <button type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
+                                                    Close
+                                                </button>
+                                                <button type="submit" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
+                                                    Affecter
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

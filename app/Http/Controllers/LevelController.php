@@ -43,7 +43,9 @@ class LevelController extends Controller
             $level_obj->description=$description;
             $level_obj->save();
         });
-        return redirect()->back()->with('success', 'Niveau Creer avec success');
+        notify()->success('Niveau Creer avec succès');
+        return redirect()->back();
+        //return redirect()->back()->with('success', 'Niveau Creer avec succès');
         // return redirect()->back()->with('success', 'Operation completed');
     }
 

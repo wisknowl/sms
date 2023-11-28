@@ -42,8 +42,10 @@ class SemesterController extends Controller
             $semester_obj->end_date=$end_date;
             $semester_obj->save();
         });
+        notify()->success('Semestre Creer avec succès');
+        return redirect()->back();
         // return redirect()->route('levels.index');
-        return redirect()->back()->with('success', 'Semestre Creer avec success');
+        //return redirect()->back()->with('success', 'Semestre Creer avec succès');
     }
 
     /**
