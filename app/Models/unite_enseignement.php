@@ -13,4 +13,9 @@ class unite_enseignement extends Model
     {
         return $this->belongsToMany('App\Models\specialty', 'specialty_ues','specialty_id', 'ue_id');
     }
+
+    public function course(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\course', 'ue_courses','ue_id', 'course_id');
+    }
 }
