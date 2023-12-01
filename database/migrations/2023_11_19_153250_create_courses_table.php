@@ -20,17 +20,21 @@ return new class extends Migration
             $table->integer('duration'); 
             $table->decimal('cost_per_hour', 8, 2); 
             $table->string('course_nature');
-            $table->foreignId('level_id')->references('id')->on('levels')->cascadeOnDelete(); 
+             
+            $table->foreignId('level_id')->references('id')->on('levels')->cascadeOnDelete();
             $table->foreignId('semester_id')->references('id')->on('semesters')->cascadeOnDelete();
             $table->timestamps(); 
         });
-    }
 
+       
+    }
+  
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
         Schema::dropIfExists('courses');
+        
     }
 };

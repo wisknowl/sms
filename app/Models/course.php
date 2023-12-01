@@ -10,8 +10,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class course extends Model
 {
     use HasFactory;
-    public function ues(): BelongsToMany
+    
+
+    public function student(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\unite_enseignement', 'ue_courses','ue_id', 'course_id');
+        return $this->belongsToMany('App\Models\student', 'course_students','student_id', 'course_id');
+    }
+    /**
+     * The specialties that belong to the course.
+     */
+    public function specialties(): BelongsToMany
+    {
+        return $this->belongsToMany(specialty::class);
     }
 }

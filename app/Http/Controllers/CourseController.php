@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\View\View;
 use App\Models\semester;
 use App\Models\level;
+use App\Models\unite_enseignement;
 use App\Models\course;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -21,8 +22,9 @@ class CourseController extends Controller
         $courses = course::all();
         $levels = level::all();
         $semesters = semester::all();
+        $ues = unite_enseignement::all();
         
-        return view('cours.index', compact('levels','courses','semesters'));
+        return view('cours.index', compact('levels','courses','semesters','ues'));
     }
 
     /**
@@ -45,6 +47,7 @@ class CourseController extends Controller
             $duration = strip_tags($request->input('duration'));
             $cost_per_hour = strip_tags($request->input('cost_per_hour'));
             $course_nature = strip_tags($request->input('course_nature'));
+            $ue_id = strip_tags($request->input('ue_id'));
             $level = strip_tags($request->input('level'));
             $semester = strip_tags($request->input('semester'));
             $description = strip_tags($request->input('description'));
@@ -55,6 +58,7 @@ class CourseController extends Controller
             $course_obj->duration=$duration;
             $course_obj->cost_per_hour=$cost_per_hour;
             $course_obj->course_nature=$course_nature;
+            $course_obj->ue_id=$ue_id;
             $course_obj->level_id=$level;
             $course_obj->semester_id=$semester;
             $course_obj->description=$description;

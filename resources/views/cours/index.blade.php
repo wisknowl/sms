@@ -41,7 +41,7 @@
                                                         <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $course->id }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $course->name }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $course->code }}</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">{{ $course->description }}</td>
+                                                        <td class="whitespace-nowrap px-6 py-4">{{ $course->ue_id }}</td>
                                                     </tr>
                                                     @endforeach
                                                     @endisset
@@ -135,6 +135,16 @@
                                                         @isset($semesters)
                                                         @foreach($semesters as $semester)
                                                         <option value="{{ $semester->id }}">{{ $semester->name }}</option>
+                                                        @endforeach
+                                                        @endisset
+                                                    </select>
+                                                </div>
+                                                <!-- UE -->
+                                                <div class="mt-3">
+                                                    <select name="ue_id" data-te-select-init data-te-select-filter="true" data-te-select-placeholder="Unite Denseignement">
+                                                        @isset($ues)
+                                                        @foreach($ues as $ue)
+                                                        <option value="{{ $ue->id }}">{{ $ue->name }}</option>
                                                         @endforeach
                                                         @endisset
                                                     </select>

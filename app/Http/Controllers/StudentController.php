@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\View\View;
+use App\Models\specialty;
+use App\Models\unite_enseignement;
+use App\Models\course;
+use App\Models\course_student;
 use App\Models\student;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class StudentController extends Controller
 {
@@ -15,7 +20,9 @@ class StudentController extends Controller
      */
     public function index(): view
     {
-        return view('students.index');
+        $specialties = specialty::all();
+        $students = student::all();
+        return view('students.index', compact('specialties', 'students'));
     }
 
     /**
@@ -26,115 +33,96 @@ class StudentController extends Controller
         //
     }
 
-    // Define a function to generate a matricule
-    function generateMatricule($name, $specialty)
-    {
-        // Get the first letter of the name and specialty, and convert them to uppercase
-        $name_letter = strtoupper(substr($name, 0, 1));
-        $specialty_letter = strtoupper(substr($specialty, 0, 1));
-        // Get the last two digits of the current year
-        $year = date('y');
-        // Get the next sequence number from the database, or start from 0001 if none exists
-        $last_student = Student::orderBy('id', 'desc')->first();
-        if ($last_student) {
-            $sequence = str_pad($last_student->id + 1, 4, '0', STR_PAD_LEFT);
-        } else {
-            $sequence = '0001';
-        }
-        // Concatenate the letters, year, and sequence to form the matricule
-        $matricule = $name_letter . $specialty_letter . $year . $sequence;
-        // Return the matricule
-        return $matricule;
-    }
-
-    // Define a function to store a student with a matricule
-    function storeStudent($name, $specialty)
-    {
-        // Generate a matricule for the student
-        $matricule = StudentController::generateMatricule($name, $specialty);
-        // Check if the matricule already exists in the database, and generate a new one if needed
-        while (Student::where('matricule', $matricule)->exists()) {
-            $matricule = StudentController::generateMatricule($name, $specialty);
-        }
-        // Create a new student with the name, specialty, and matricule
-        $student = new Student();
-        $student->name = $name;
-        $student->specialty = $specialty;
-        $student->matricule = $matricule;
-        // Save the student to the database
-        $student->save();
-        // Return the student
-        return $student;
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-    // Define the store method of the controller class
     public function store(Request $request)
     {
         // Validate the request data
-        $request->validate([
-            'name' => 'required|string',
-            'specialty' => 'required|string',
-        ]);
+        // $request->validate([
+        //     'name' => 'required|string',
+        //     'specialty' => 'required|int',
+        // ]);
         // Get the name and specialty from the request
-        $name = $request->input('name');
-        $specialty = $request->input('specialty');
-        // Call the storeStudent function with the name and specialty
-        $student = $this->storeStudent($name, $specialty);
-        // Return a response with the student data and a success message
-        return response()->json([
-            'student' => $student,
-            'message' => 'Student created successfully',
-        ]);
-    }
-
-    // Define the storeStudent function as a private method of the controller class
-    private function storeStudent($name, $specialty)
-    {
-        // Generate a matricule for the student
-        $matricule = $this->generateMatricule($name, $specialty);
-        // Check if the matricule already exists in the database, and generate a new one if needed
-        while (Student::where('matricule', $matricule)->exists()) {
-            $matricule = $this->generateMatricule($name, $specialty);
-        }
+        $name = strip_tags($request->input('name'));
+        $email = strip_tags($request->input('email'));
+        $mobile = strip_tags($request->input('mobile'));
+        $dob = date('Y-m-d', strtotime(strip_tags($request->input('dob'))));
+        $gender = strip_tags($request->input('gender'));
+        $specialty_id = $request->input('specialty_id');
+        // dd ($request->all ());
+        // Call the generateMatricule function without any arguments
+        $matricule = $this->generateMatricule();
         // Create a new student with the name, specialty, and matricule
-        $student = new Student();
-        $student->name = $name;
-        $student->specialty = $specialty;
-        $student->matricule = $matricule;
+        $student_obj = new Student();
+        $student_obj->name = $name;
+        $student_obj->email = $email;
+        $student_obj->mobile = $mobile;
+        $student_obj->dob = $dob;
+        $student_obj->gender = $gender;
+        $student_obj->specialty_id = $specialty_id;
+        $student_obj->matricule = $matricule;
         // Save the student to the database
-        $student->save();
-        // Return the student
-        return $student;
+        $student_obj->save();
+        // Get the id of the student
+        $student_id = $student_obj->id;
+        
+        // Get courses of the specialty
+        $specialty = specialty::find($specialty_id);
+        $ue_ids = $specialty->ues->pluck('id')->toArray();
+        // echo '<pre>';
+        // print_r($ue_ids);
+        // echo '</pre>';
+
+        // Initialize an empty array to store the final result
+        $result = array();
+        foreach ($ue_ids as $ue_id) {
+            $course_id = course::where('ue_id', $ue_id)->get()->pluck('id')->toArray();
+            // echo '<pre>';
+            // print_r($course_id);
+            // echo '</pre>';
+
+            // Merge the $course_id array with the $result array
+            $result = array_merge($result, $course_id);
+        }
+        // Print the final result
+        // echo '<pre>';
+        // print_r($result);
+        // echo '</pre>';
+        // die();
+
+        // $courses = Course::whereIn('id', $courseIds)->get();
+        // $course_id = $courses->pluck('id')->toArray();
+        // echo '<pre>';
+        // print_r($course_id);
+        // echo '</pre>';
+
+        $timestamp = Carbon::now()->format('Y-m-d H:i:s');
+        $student = student::find($student_id);
+        $student->course()->attach($result, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+        // Return a response with the student data and a success message
+        notify()->success('Etudiant Ajouter avec succès');
+        return redirect()->back();
     }
 
-    // Define the generateMatricule function as a private method of the controller class
-    private function generateMatricule($name, $specialty)
+    // Define the constants for the school name, the sequence length, and the starting number
+    const SCHOOL_NAME = 'ISIG';
+    const SEQUENCE_LENGTH = 4;
+    const STARTING_NUMBER = 1000;
+
+    // Define the generateMatricule function
+    function generateMatricule()
     {
-        // Get the first letter of the name and specialty, and convert them to uppercase
-        $name_letter = strtoupper(substr($name, 0, 1));
-        $specialty_letter = strtoupper(substr($specialty, 0, 1));
         // Get the last two digits of the current year
         $year = date('y');
-        // Get the next sequence number from the database, or start from 0001 if none exists
-        $last_student = Student::orderBy('id', 'desc')->first();
-        if ($last_student) {
-            $sequence = str_pad($last_student->id + 1, 4, '0', STR_PAD_LEFT);
-        } else {
-            $sequence = '0001';
-        }
-        // Concatenate the letters, year, and sequence to form the matricule
-        $matricule = $name_letter . $specialty_letter . $year . $sequence;
+        // Get the count of the students in the database, or zero if none exists
+        $count = Student::count();
+        // Add the count to the starting number to get the sequence number
+        $sequence = StudentController::STARTING_NUMBER + $count;
+        // Pad the sequence number with zeros to match the sequence length
+        $sequence = str_pad($sequence, StudentController::SEQUENCE_LENGTH, '0', STR_PAD_LEFT);
+        // Concatenate the year, school name, and sequence to form the matricule
+        $matricule = $year . StudentController::SCHOOL_NAME . $sequence;
         // Return the matricule
         return $matricule;
     }
-
 
     /**
      * Display the specified resource.
