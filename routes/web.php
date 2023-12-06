@@ -7,6 +7,7 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\UniteEnseignementController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\SpecialtyUeController;
 use App\Http\Controllers\UeCourseController;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,9 @@ Route::resource('specialty_ue', SpecialtyUeController::class)
     ->middleware(['auth', 'verified']);
 
 Route::resource('ue_cours', UeCourseController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified']);
+Route::resource('notes', CourseStudentController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified']);
 

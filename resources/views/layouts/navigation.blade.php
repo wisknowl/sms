@@ -86,7 +86,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link>
+                    <x-nav-link :href="route('notes.index')" :active="request()->routeIs('notes.index')">
                         <span class="mr-1.5 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
                                 <path style="fill:#FFFFFF;" d="M372.809,508H94.315c-15.735-0.04-28.477-12.783-28.517-28.517V32.517 C65.838,16.782,78.581,4.04,94.315,4h323.378c15.735,0.04,28.477,12.783,28.517,28.517v402.306" />

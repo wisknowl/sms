@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\course;
 use App\Models\course_student;
+use App\Models\level;
+use App\Models\semester;
+use App\Models\specialty;
+use App\Models\unite_enseignement;
 use Illuminate\Http\Request;
 
 class CourseStudentController extends Controller
@@ -12,7 +17,13 @@ class CourseStudentController extends Controller
      */
     public function index()
     {
-        //
+        $courses = course::all();
+        $levels = level::all();
+        $semesters = semester::all();
+        $ues = unite_enseignement::all();
+        $specialties = specialty::all();
+
+        return view('notes.index', compact('levels', 'courses', 'semesters', 'ues', 'specialties'));
     }
 
     /**
