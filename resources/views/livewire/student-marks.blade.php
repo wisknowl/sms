@@ -1,27 +1,89 @@
-<div class="my-4 p-6">
-    <div class="grid grid-cols-3 gap-6">
-        <div>
-            <form>
-                <select wire:model="specialty" wire:change="updateCourses" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
-                    @isset($specialties)
-                    @foreach($specialties as $specialty)
-                    <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
+<div class="mb-4 p-6">
+    <!-- @notifyCss -->
+    <script>
+        document.addEventListener('livewire:load', function() {
+            function validate(str, min, max) {
+                // convert the input string to a number
+                var n = parseFloat(str);
+                // check if the number is valid and within the range
+                if (!isNaN(n) && n >= min && n <= max) {
+                    // return the number as valid
+                    return n;
+                } else {
+                    // return null as invalid
+                    return null;
+                }
+            }
+
+            function validateInput() {
+                // get the input element by its id
+                var input = document.getElementById("number-input");
+                // get the input value
+                var value = input.value;
+                // validate the input value using the validate function
+                var valid = validate(value, 0, 20);
+                // if the input value is valid, set it as the input value
+                if (valid !== null) {
+                    input.value = valid;
+                } else {
+                    // if the input value is invalid, clear the input value
+                    input.value = "";
+                }
+            }
+        })
+    </script>
+    <x-notify::notify />
+    <!-- @notifyJs -->
+    @if (session()->has('message'))
+    <div class="alert alert-success">
+        {{ session('message') }}
+    </div>
+    @endif
+    <button wire:click="updateMarks" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Enregistrer</button>
+    <div class="my-2 px-3 rounded bg-slate-100">
+        <div class="pt-4 grid grid-cols-3 gap-6">
+            <div>
+                <label for="">Cycle</label>
+                <select class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                    <option value="">HND</option>
+                    <option value="">BTS</option>
+                </select>
+            </div>
+            <div>
+                <label for="">Niveau</label>
+                <select class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                    <option value="">Niveau 1</option>
+                    <option value="">Niveau 2</option>
+                </select>
+            </div>
+        </div>
+        <div class="py-4 grid grid-cols-3 gap-6">
+            <div>
+                <form>
+                    <label>Specialite</label>
+                    <select wire:model="specialty" wire:change="updateCourses" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                        @isset($specialties)
+                        @foreach($specialties as $specialty)
+                        <option value="{{ $specialty->id }}">{{ $specialty->code }} | {{ $specialty->name }}</option>
+                        @endforeach
+                        @endisset
+                    </select>
+                </form>
+
+            </div>
+            <div>
+            <label>Cours</label>
+                <select wire:model="course" wire:change="updateStudents" name="course_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                    @isset($courses)
+                    @foreach($courses as $course)
+                    <option value="{{ $course->id }}">{{ $course->code }} | {{ $course->name }}</option>
                     @endforeach
                     @endisset
                 </select>
-            </form>
-        </div>
-        <div>
-            <select wire:model="course" wire:change="updateStudents" name="course_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
-                @isset($courses)
-                @foreach($courses as $course)
-                <option value="{{ $course->id }}">{{ $course->name }}</option>
-                @endforeach
-                @endisset
-            </select>
-        </div>
-        <div>
+            </div>
+            <div>
 
+            </div>
         </div>
     </div>
     <div class="flex flex-col">
@@ -32,24 +94,42 @@
                         <thead class="border-b font-medium dark:border-neutral-500">
                             <tr>
                                 <th scope="col" class="px-6 py-4">Matricule</th>
-                                <th scope="col" class="px-6 py-4">Name</th>
+                                <th scope="col" class="px-6 py-4">Nom</th>
                                 <th scope="col" class="px-6 py-4">Note CC</th>
                                 <th scope="col" class="px-6 py-4">Note Examen</th>
                                 <th scope="col" class="px-6 py-4">Note Rattrapage</th>
-                                
+                                <th scope="col" class="px-6 py-4">Index</th>
                             </tr>
                         </thead>
+                        <style>
+                            .center-placeholder {
+                                text-align: center;
+
+                                ::placeholder {
+                                    text-align: center;
+                                }
+                            }
+                        </style>
                         <tbody>
-                            @isset($students)
-                            @foreach($students as $student)
+                            @isset($course_students)
+                            @foreach($course_students as $course_student)
                             <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-200">
-                                <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $student->matricule }}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{ $student->name }}</td>
-                                <td class="whitespace-nowrap px-6 py-4">{{ $student->email }}</td>
+                                <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $course_student->student->matricule }}</td>
+                                <td class="whitespace-nowrap px-6 py-4">{{ $course_student->student->name }}</td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    
+                                    <input wire:ignore-self oninput="validateInput()" id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
+                                    @error('ca_marks') <span class="error">{{ $message }}</span> @enderror
                                 </td>
-                                <td class="whitespace-nowrap px-6 py-4">{{ $student->matricule }}</td>
+
+                                <td class="whitespace-nowrap px-6 py-4">
+                                    <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" wire:change="updated" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
+                                </td>
+                                <td class="whitespace-nowrap px-6 py-4">
+                                    <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
+                                </td>
+                                <td>
+                                    <input type="text" placeholder="{{ $course_student->id }}" wire:model="course_student_id" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
+                                </td>
                             </tr>
                             @endforeach
                             @endisset
@@ -60,3 +140,35 @@
         </div>
     </div>
 </div>
+@push('scripts')
+<script>
+    function validate(str, min, max) {
+        // convert the input string to a number
+        var n = parseFloat(str);
+        // check if the number is valid and within the range
+        if (!isNaN(n) && n >= min && n <= max) {
+            // return the number as valid
+            return n;
+        } else {
+            // return null as invalid
+            return null;
+        }
+    }
+
+    function validateInput() {
+        // get the input element by its id
+        var input = document.getElementById("number-input");
+        // get the input value
+        var value = input.value;
+        // validate the input value using the validate function
+        var valid = validate(value, 0, 20);
+        // if the input value is valid, set it as the input value
+        if (valid !== null) {
+            input.value = valid;
+        } else {
+            // if the input value is invalid, clear the input value
+            input.value = "";
+        }
+    }
+</script>
+@endpush

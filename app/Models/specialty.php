@@ -13,4 +13,9 @@ class specialty extends Model
     {
         return $this->belongsToMany('App\Models\unite_enseignement', 'specialty_ues','specialty_id', 'ue_id');
     }
+    public function cycle()
+    {
+        return $this->belongsTo(cycle::class);
+    }
+    
 }

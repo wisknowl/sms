@@ -66,6 +66,8 @@ class StudentController extends Controller
         
         // Get courses of the specialty
         $specialty = specialty::find($specialty_id);
+        // die($specialty);
+        
         $ue_ids = $specialty->ues->pluck('id')->toArray();
         // echo '<pre>';
         // print_r($ue_ids);

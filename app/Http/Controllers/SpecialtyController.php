@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\View\View;
+use App\Models\cycle;
 use App\Models\semester;
 use App\Models\specialty;
 use Illuminate\Http\Request;
@@ -17,9 +18,10 @@ class SpecialtyController extends Controller
     public function index(): view
     {
         $semesters = semester::all();
-        $specialties = specialty::all();
+        $cycles = cycle::all();
+        $specialties = Specialty::with('cycle')->get();
     
-        return view('specialties.index', compact('specialties','semesters'));
+        return view('specialties.index', compact('specialties','semesters','cycles'));
     }
 
     /**
@@ -38,10 +40,12 @@ class SpecialtyController extends Controller
         DB::transaction(function () use ($request) {
             $specialty = strip_tags($request->input('title'));
             $code = strip_tags($request->input('code'));
+            $cycle = strip_tags($request->input('cycle'));
             $description = strip_tags($request->input('descript'));
             $specialty_obj = new specialty();
             $specialty_obj->name=$specialty;
             $specialty_obj->code=$code;
+            $specialty_obj->cycle_id=$cycle;
             $specialty_obj->description=$description;
             $specialty_obj->save();
         });

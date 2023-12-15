@@ -5,26 +5,40 @@ namespace App\Http\Controllers;
 use Illuminate\View\View;
 use App\Models\semester;
 use App\Models\level;
+use App\Models\specialty;
 use App\Models\unite_enseignement;
 use App\Models\course;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Livewire\Features\SupportFormObjects\Form;
 
 class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    
+
     public function index(): view
     {
         $courses = course::all();
         $levels = level::all();
         $semesters = semester::all();
         $ues = unite_enseignement::all();
-        
-        return view('cours.index', compact('levels','courses','semesters','ues'));
+        $specialties = Specialty::with('ues')->get();
+        // $dropdown_data = [];
+        // foreach ($specialties as $specialty) {
+        //     $dropdown_data[$specialty->name] = $specialty->ues->pluck('name', 'id');
+        // }
+        $dropdown_data = [];
+        foreach ($specialties as $specialty) {
+            // dd($specialty);
+            foreach ($specialty->ues as $ue) {
+                $dropdown_data[$ue->id] = $ue->name;
+            }
+        }
+        // dd($dropdown_data);
+        return view('cours.index', compact('levels', 'courses', 'semesters', 'ues', 'dropdown_data'));
     }
 
     /**
@@ -52,16 +66,16 @@ class CourseController extends Controller
             $semester = strip_tags($request->input('semester'));
             $description = strip_tags($request->input('description'));
             $course_obj = new course();
-            $course_obj->name=$course;
-            $course_obj->code=$code;
-            $course_obj->credit_points=$credit_point;
-            $course_obj->duration=$duration;
-            $course_obj->cost_per_hour=$cost_per_hour;
-            $course_obj->course_nature=$course_nature;
-            $course_obj->ue_id=$ue_id;
-            $course_obj->level_id=$level;
-            $course_obj->semester_id=$semester;
-            $course_obj->description=$description;
+            $course_obj->name = $course;
+            $course_obj->code = $code;
+            $course_obj->credit_points = $credit_point;
+            $course_obj->duration = $duration;
+            $course_obj->cost_per_hour = $cost_per_hour;
+            $course_obj->course_nature = $course_nature;
+            $course_obj->ue_id = $ue_id;
+            $course_obj->level_id = $level;
+            $course_obj->semester_id = $semester;
+            $course_obj->description = $description;
             $course_obj->save();
         });
         notify()->success('Cours Creer avec succès');

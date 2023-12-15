@@ -9,6 +9,8 @@ use App\Models\semester;
 use App\Models\specialty;
 use App\Models\unite_enseignement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class CourseStudentController extends Controller
 {
@@ -63,7 +65,7 @@ class CourseStudentController extends Controller
      */
     public function update(Request $request, course_student $course_student)
     {
-        //
+       
     }
 
     /**
