@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\course;
 use App\Models\course_student;
+use App\Models\cycle;
 use App\Models\student;
 use App\Models\level;
 use App\Models\semester;
@@ -18,8 +19,14 @@ use Livewire\Component;
 class StudentMarks extends Component
 {
     // protected $listeners = ['specialtyUpdated' => 'updateCourse'];
+    public $cycle;
+    public $level;
+    public $semester;
     public $specialty;
     public $course;
+    public $levels = [];
+    public $semesters = [];
+    public $specialties = [];
     public $courses = [];
     public $course_students;
     public $students;
@@ -32,27 +39,34 @@ class StudentMarks extends Component
     protected $rules = [
         'name' => 'required|max:2',
         'ca_marks' => 'required|array|min:1',
-        '*.ca_marks' => 'required|integer|max:2',
+        'ca_marks.*' => 'required|integer|max:2',
 
     ];
 
     public function mount()
     {
-        // get the first specialty from the database
-        $first_specialty = Specialty::first();
+        $first_cycle = cycle::first();
+        $this->cycle = $first_cycle->id;
+        $this->updateSpecialties();
 
-        // set the $specialty property to the first specialty id
+        $first_specialty = $this->specialties[0];
         $this->specialty = $first_specialty->id;
+        $this->updateLevels();
 
-        // update the courses based on the first specialty
+        $first_level = $this->levels[0];
+        $this->level = $first_level->id;
+        $this->updateSemesters();
+
+        $first_specialty = $this->specialties[0];
+        $this->specialty = $first_specialty->id;
+        $first_level = $this->levels[0];
+        $this->level = $first_level->id;
+        $first_semester = $this->semesters[0];
+        $this->semester = $first_semester->id;
         $this->updateCourses();
 
-        // get the first course from the courses array
         $first_course = $this->courses[0];
-
-        // set the $course property to the first course id
         $this->course = $first_course->id;
-
         $this->updateStudents();
     }
     public function getCourseProperty()
@@ -63,20 +77,40 @@ class StudentMarks extends Component
         // return the first course id
         return $first_course->id;
     }
-    // public function updated($propertyName)
-    // {
-    //     // dump($this->$propertyName);
-
-    //     $this->validateOnly($propertyName);
+    public function updateSpecialties()
+    {
+        $this->specialties = specialty::where('cycle_id', $this->cycle)->get();
+    }
+    public function updateLevels()
+    {
+        $this->levels = level::whereHas('specialties', function ($query) {
+            $query->where('specialty_id', $this->specialty);
+        })->get();
+    }
+    public function updateSemesters()
+    {
+        $this->semesters = semester::whereHas('levels', function ($query) {
+            $query->where('level_id', $this->level);
+        })->get();
+    }
+    // public function updateCourses(){
+    //     $query = course::all();
+    //     $this->courses = course::where('level_id', $this->level)
+    //                             ->Where('semester_id', $this->semester)
+    //                             ->get();
+    //     // $this->courses = course::where('semester_id', $this->semester)->get();
     // }
     public function updateCourses()
     {
         // query for the courses based on the selected specialty
         // find the specialty by id
+        // $ues = unite_enseignement::where(spec)
         $specialty = Specialty::find($this->specialty);
 
         // get the ids of the unite_enseignement related to the specialty
-        $ue_ids = $specialty->ues->pluck('id')->toArray();
+        $ue_ids = $specialty->ues->where('level_id', $this->level)
+                                    ->where('semester_id', $this->semester)
+                                    ->pluck('id')->toArray();
 
         // initialize an empty array to store the course ids
         $result = array();
@@ -93,6 +127,13 @@ class StudentMarks extends Component
 
         // $this->emit('specialtyUpdated');
     }
+    // public function updated($propertyName)
+    // {
+    //     // dump($this->$propertyName);
+
+    //     $this->validateOnly($propertyName);
+    // }
+
 
     public function updateStudents()
     {
@@ -151,11 +192,12 @@ class StudentMarks extends Component
     public function render(Request $request)
     {
         $courses = course::all();
-        $levels = level::all();
-        $semesters = semester::all();
+        // $levels = level::all();
+        // $semesters = semester::all();
         $ues = unite_enseignement::all();
-        $specialties = specialty::all();
+        // $specialties = specialty::all();
+        $cycles = cycle::all();
         // query for the students based on the selected course
-        return view('livewire.student-marks', compact('levels', 'semesters', 'ues', 'specialties'));
+        return view('livewire.student-marks', compact('ues', 'cycles'));
     }
 }

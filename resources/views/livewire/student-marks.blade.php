@@ -39,32 +39,32 @@
         {{ session('message') }}
     </div>
     @endif
-    <button wire:click="updateMarks" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Enregistrer</button>
+    <h2 class="underline underline-offset-4 font-light text-xl text-gray-800 leading-tight flex items-center text-center mb-2">
+        {{ __('Saisie Des Notes') }}
+    </h2>
+    <div class="flex justify-end">
+        <button wire:click="updateMarks" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Enregistrer</button>
+
+    </div>
     <div class="my-2 px-3 rounded bg-slate-100">
         <div class="pt-4 grid grid-cols-3 gap-6">
             <div>
                 <label for="">Cycle</label>
-                <select class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
-                    <option value="">HND</option>
-                    <option value="">BTS</option>
+                <select wire:model="cycle" wire:change="updateSpecialties" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                    @isset($cycles)
+                    @foreach($cycles as $cycle)
+                    <option value="{{ $cycle->id }}">{{ $cycle->name }} | {{ $cycle->code }}</option>
+                    @endforeach
+                    @endisset
                 </select>
             </div>
-            <div>
-                <label for="">Niveau</label>
-                <select class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
-                    <option value="">Niveau 1</option>
-                    <option value="">Niveau 2</option>
-                </select>
-            </div>
-        </div>
-        <div class="py-4 grid grid-cols-3 gap-6">
             <div>
                 <form>
                     <label>Specialite</label>
-                    <select wire:model="specialty" wire:change="updateCourses" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                    <select wire:model="specialty" wire:change="updateLevels" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                         @isset($specialties)
                         @foreach($specialties as $specialty)
-                        <option value="{{ $specialty->id }}">{{ $specialty->code }} | {{ $specialty->name }}</option>
+                        <option value="{{ $specialty->id }}">{{ $specialty->name }} | {{ $specialty->code }}</option>
                         @endforeach
                         @endisset
                     </select>
@@ -72,7 +72,29 @@
 
             </div>
             <div>
-            <label>Cours</label>
+                <label for="">Niveau</label>
+                <select wire:model="level" wire:change="updateSemesters" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                    @isset($levels)
+                    @foreach($levels as $level)
+                    <option value="{{ $level->id }}">{{ $level->name }}</option>
+                    @endforeach
+                    @endisset
+                </select>
+            </div>
+        </div>
+        <div class="py-4 grid grid-cols-3 gap-6">
+            <div>
+                <label>Semestre</label>
+                <select wire:model="semester" wire:change="updateCourses" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                    @isset($semesters)
+                    @foreach($semesters as $semester)
+                    <option value="{{ $semester->id }}">{{ $semester->name }}</option>
+                    @endforeach
+                    @endisset
+                </select>
+            </div>
+            <div>
+                <label>Cours</label>
                 <select wire:model="course" wire:change="updateStudents" name="course_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                     @isset($courses)
                     @foreach($courses as $course)
@@ -81,9 +103,7 @@
                     @endisset
                 </select>
             </div>
-            <div>
 
-            </div>
         </div>
     </div>
     <div class="flex flex-col">

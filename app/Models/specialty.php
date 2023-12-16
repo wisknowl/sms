@@ -18,4 +18,8 @@ class specialty extends Model
         return $this->belongsTo(cycle::class);
     }
     
+    public function levels(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\level', 'specialty_levels', 'level_id', 'specialty_id');
+    }
 }

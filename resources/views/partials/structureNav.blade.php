@@ -15,11 +15,6 @@
                 {{ __('Unité Denseignement') }}
             </x-nav-link>
         </div>
-        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uppercase p-3">
-            <x-nav-link :href="route('cours.index')" :active="request()->routeIs('cours.index')">
-                {{ __('Cours') }}
-            </x-nav-link>
-        </div>
         <div class="sm:ms-10" data-te-dropdown-ref>
             <button class="flex items-center whitespace-nowrap rounded bg-primary-100 px-6 pb-1 pt-1.5 text-xs font-medium uppercase leading-normal text-neutral-800 shadow-[0_4px_9px_-4px_#fbfbfb] transition duration-150 ease-in-out hover:bg-neutral-100 hover:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:bg-neutral-100 focus:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:outline-none focus:ring-0 active:bg-neutral-200 active:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] motion-reduce:transition-none" type="button" id="dropdownMenuButton9" data-te-dropdown-toggle-ref aria-expanded="false" data-te-ripple-init>
                 Affectation
@@ -42,6 +37,12 @@
                 </li> -->
             </ul>
         </div>
+        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uppercase p-3">
+            <x-nav-link :href="route('cours.index')" :active="request()->routeIs('cours.index')">
+                {{ __('Cours') }}
+            </x-nav-link>
+        </div>
+
     </div>
     <div class="flex text-center items-center">
         <!-- @if (session()->has('success'))
