@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\academic_year;
 use Illuminate\View\View;
 use App\Models\semester;
 use App\Models\level;
 use App\Models\specialty;
 use App\Models\unite_enseignement;
 use App\Models\course;
+use App\Models\student;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +25,7 @@ class CourseController extends Controller
     {
         $courses = course::all();
         $levels = level::all();
+        $academic_years = academic_year::all();
         $semesters = semester::all();
         $ues = unite_enseignement::all();
         $specialties = Specialty::with('ues')->get();
@@ -38,7 +41,7 @@ class CourseController extends Controller
             }
         }
         // dd($dropdown_data);
-        return view('cours.index', compact('levels', 'courses', 'semesters', 'ues', 'dropdown_data'));
+        return view('cours.index', compact('levels', 'courses','academic_years', 'semesters', 'ues', 'dropdown_data'));
     }
 
     /**
@@ -77,6 +80,9 @@ class CourseController extends Controller
             $course_obj->semester_id = $semester;
             $course_obj->description = $description;
             $course_obj->save();
+
+            // $course_id = $course_obj->id;
+            // $student = student::where('specialty_id', );
         });
         notify()->success('Cours Creer avec succès');
         return redirect()->back();

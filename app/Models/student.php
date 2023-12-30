@@ -26,31 +26,33 @@ class student extends Model
     //     'password',
     // ];
 
-    // The attributes that should be cast to native types
-    // protected $casts = [
-    //     'email_verified_at' => 'datetime',
-    // ];
-
-    // The "booted" method of the model
-    // protected static function booted()
-    // {
-    //     // Register a creating model event with the dispatcher
-    //     static::creating(function ($student) {
-    //         // Generate a version 4 UUID and assign it to the matricule attribute
-    //         $student->matricule = Uuid::uuid4()->toString();
-    //     });
-    // }
 
     // The specialty that the student belongs to
     public function specialty()
     {
         return $this->belongsTo(specialty::class);
     }
+
+    public function cycle()
+    {
+        return $this->belongsTo(cycle::class);
+    }
+
     public function course(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\course', 'course_students','student_id', 'course_id');
     }
-    
+    public function levels()
+    {
+        return $this->belongsToMany(Level::class, 'student_levels')
+            ->withPivot('academic_year', 'pass_mark')
+            ->withTimestamps();
+    }
+
+    public function currentLevel()
+    {
+        return $this->levels()->latest('academic_year')->first();
+    }
 
     /**
      * The unite enseignements that belong to the student.

@@ -23,4 +23,5 @@ class course extends Model
     {
         return $this->belongsToMany(specialty::class);
     }
+    
 }

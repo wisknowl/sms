@@ -22,4 +22,10 @@ class level extends Model
     public function semester(){
         return $this->belongsToMany('App\Models\semester', 'level_semesters', 'semester_id', 'level_id');
     }
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'student_levels')
+            ->withPivot('academic_year', 'pass_mark')
+            ->withTimestamps();
+    }
 }

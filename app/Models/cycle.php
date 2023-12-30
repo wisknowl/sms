@@ -14,6 +14,10 @@ class cycle extends Model
     {
         return $this->hasMany(specialty::class);
     }
+    public function students(): HasMany
+    {
+        return $this->hasMany(student::class);
+    }
     public function levels(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\level', 'cycle_levels', 'cycle_id', 'level_id');

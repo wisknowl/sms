@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\academic_year;
 use App\Models\course;
 use App\Models\course_student;
 use App\Models\level;
@@ -17,15 +18,19 @@ class CourseStudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $courses = course::all();
         $levels = level::all();
         $semesters = semester::all();
+        $academic_years = academic_year::all();
+        $a_year =$request->input('select_input');
+        // dd($a_year);
+        // die();
         $ues = unite_enseignement::all();
         $specialties = specialty::all();
 
-        return view('notes.index', compact('levels', 'courses', 'semesters', 'ues', 'specialties'));
+        return view('notes.index', compact('levels', 'courses', 'academic_years', 'a_year',  'semesters', 'ues', 'specialties'));
     }
 
     /**
@@ -41,7 +46,11 @@ class CourseStudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $a_year =academic_year::find($request->input('select_input'));
+        dd($a_year);
+        die();
+        return view('notes.index', compact('a_year'));
+        
     }
 
     /**

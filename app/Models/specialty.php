@@ -22,4 +22,8 @@ class specialty extends Model
     {
         return $this->belongsToMany('App\Models\level', 'specialty_levels', 'level_id', 'specialty_id');
     }
+
+    public function students(){
+        return $this->hasMany(student::class);
+    }
 }

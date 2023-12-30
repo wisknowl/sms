@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\academic_year;
 use Illuminate\View\View;
 use App\Models\level;
 use App\Models\semester;
@@ -17,9 +18,10 @@ class LevelController extends Controller
     public function index(): view
     {
         $levels = level::all();
+        $academic_years = academic_year::all();
         $semesters = semester::all();
     
-        return view('levels.index', compact('levels','semesters'));
+        return view('levels.index', compact('levels','academic_years','semesters'));
     }
 
     /**

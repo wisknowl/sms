@@ -2,7 +2,11 @@
 
 namespace App\Livewire;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+// use Barryvdh\DomPDF\Facade as PDF;
+
 use App\Models\course;
+use App\Models\course_nature;
 use App\Models\course_student;
 use App\Models\cycle;
 use App\Models\student;
@@ -12,6 +16,7 @@ use App\Models\specialty;
 use App\Models\unite_enseignement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 
 
 use Livewire\Component;
@@ -35,16 +40,17 @@ class StudentMarks extends Component
     public $reseat_mark = [];
     public $course_student_id;
     public $name;
+    public $average;
+    public $studentId;
+    public $a_year;
+    public $level_id;
 
-    protected $rules = [
-        'name' => 'required|max:2',
-        'ca_marks' => 'required|array|min:1',
-        'ca_marks.*' => 'required|integer|max:2',
 
-    ];
 
-    public function mount()
+    public function mount($a_year)
     {
+        $this->a_year = $a_year;
+        // $this->studentId = $studentId;
         $first_cycle = cycle::first();
         $this->cycle = $first_cycle->id;
         $this->updateSpecialties();
@@ -93,13 +99,7 @@ class StudentMarks extends Component
             $query->where('level_id', $this->level);
         })->get();
     }
-    // public function updateCourses(){
-    //     $query = course::all();
-    //     $this->courses = course::where('level_id', $this->level)
-    //                             ->Where('semester_id', $this->semester)
-    //                             ->get();
-    //     // $this->courses = course::where('semester_id', $this->semester)->get();
-    // }
+
     public function updateCourses()
     {
         // query for the courses based on the selected specialty
@@ -109,8 +109,8 @@ class StudentMarks extends Component
 
         // get the ids of the unite_enseignement related to the specialty
         $ue_ids = $specialty->ues->where('level_id', $this->level)
-                                    ->where('semester_id', $this->semester)
-                                    ->pluck('id')->toArray();
+            ->where('semester_id', $this->semester)
+            ->pluck('id')->toArray();
 
         // initialize an empty array to store the course ids
         $result = array();
@@ -127,13 +127,6 @@ class StudentMarks extends Component
 
         // $this->emit('specialtyUpdated');
     }
-    // public function updated($propertyName)
-    // {
-    //     // dump($this->$propertyName);
-
-    //     $this->validateOnly($propertyName);
-    // }
-
 
     public function updateStudents()
     {
@@ -146,11 +139,11 @@ class StudentMarks extends Component
 
     public function updateMarks(Request $request)
     {
-        $this->validate();
+        // $this->validate();
         // enable the query log for the default connection
-        DB::connection()->enableQueryLog();
-        // // enable the query log
-        DB::enableQueryLog();
+        // DB::connection()->enableQueryLog();
+        // // // enable the query log
+        // DB::enableQueryLog();
 
         // update the marks using the update method
         DB::transaction(function () use ($request) {
@@ -164,11 +157,19 @@ class StudentMarks extends Component
             foreach ($indexes as $index) {
                 // find the course_student record by the index
                 $course_student = course_student::find($index);
+
+                if ($this->exam_mark[$index] < $this->reseat_mark[$index]) {
+                    $this->average = (((((($this->ca_marks[$index]) / 20) * 30) + ((($this->reseat_mark[$index]) / 20) * 70)) / 100) * 20);
+                } else {
+                    $this->average = (((((($this->ca_marks[$index]) / 20) * 30) + ((($this->exam_mark[$index]) / 20) * 70)) / 100) * 20);
+                }
                 // update the record with the ca_mark and exam_mark values
                 $updated = $updated && $course_student->update([
                     'ca_marks' => $this->ca_marks[$index],
                     'exam_marks' => $this->exam_mark[$index],
                     'reseat_mark' => $this->reseat_mark[$index],
+                    'average' => $this->average,
+
                 ]);
             }
             DB::commit();
@@ -187,6 +188,62 @@ class StudentMarks extends Component
         $queryLog = DB::getQueryLog();
         // dump the query log
         // dump($queryLog);
+    }
+
+    public function generateTranscript($id)
+    {
+        $academic_year = $this->getAcademicYear();
+        $studentId = $id;
+        $credential = student::find($id);
+        $level = $credential->currentLevel()->name;
+        $level = preg_replace("/^Niveau/", "", $level);
+        $specialty_id = $credential->specialty_id;
+        $level_id = $credential->currentLevel()->id;
+        $this->level_id = $level_id;
+        $semesters = semester::whereHas('levels', function ($query) {
+            $query->where('level_id', $this->level_id);
+        })->get();
+
+        $course_natures = course_nature::all();
+        $specialty = Specialty::find($specialty_id);
+        // dd($specialty, $level_id, $semester_id);
+
+        // get the ids of the unite_enseignement related to the specialty
+        $ues = $specialty->ues->where('level_id', $level_id)
+            ->all();
+        $ue_ids = $specialty->ues->where('level_id', $level_id)
+            ->pluck('id')->toArray();
+        // dd($specialty ,$ues);
+        $result = array();
+        // loop through the ue_ids and get the course ids related to each one
+        foreach ($ue_ids as $ue_id) {
+            $course_id = Course::where('ue_id', $ue_id)->get()->pluck('id')->toArray();
+            // merge the course ids into the result array
+            $result = array_merge($result, $course_id);
+        }
+        // $st_courses = course_student::with('course')->whereIn('course_id', $result)->get();
+
+        $st_courses = course_student::with('course')->where('student_id', $id)->get();
+        
+        // query for the courses based on the result array
+        $courses = Course::whereIn('id', $result)->get();
+
+        // dd($ue_ids, $result, $st_courses);
+        // do some logic here
+        $pdf = Pdf::loadView('pdf.index', compact('studentId', 'level', 'academic_year', 'credential', 'semesters','course_natures', 'ues', 'courses','st_courses'));
+        return $pdf->stream();
+    }
+    function getAcademicYear()
+    {
+        $currentYear = date('Y');
+        $currentMonth = date('m');
+        if ($currentMonth > 7) { // If the month is above July
+            $nextYear = $currentYear + 1;
+            return "$currentYear/$nextYear";
+        } else { // If the month is July or below
+            $previousYear = $currentYear - 1;
+            return "$previousYear/$currentYear";
+        }
     }
 
     public function render(Request $request)

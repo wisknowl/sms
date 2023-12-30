@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\academic_year;
 use Illuminate\View\View;
 use App\Models\cycle;
 use App\Models\semester;
@@ -18,10 +19,11 @@ class SpecialtyController extends Controller
     public function index(): view
     {
         $semesters = semester::all();
+        $academic_years = academic_year::all();
         $cycles = cycle::all();
         $specialties = Specialty::with('cycle')->get();
     
-        return view('specialties.index', compact('specialties','semesters','cycles'));
+        return view('specialties.index', compact('specialties','academic_years','semesters','cycles'));
     }
 
     /**

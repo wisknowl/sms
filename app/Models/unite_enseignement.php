@@ -19,5 +19,8 @@ class unite_enseignement extends Model
     {
         return $this->hasMany(course::class);
     }
+    public function course_nature(){
+        return $this->belongsTo(course_nature::class);
+    }
     
 }

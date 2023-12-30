@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SemesterController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\SpecialtyUeController;
 use App\Http\Controllers\UeCourseController;
+use App\Livewire\StudentMarks;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,7 +33,14 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('generateTranscript/{id}', [StudentMarks::class, 'generateTranscript'])->name('Transcript');
+
+
 Route::resource('students', StudentController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified']);
+
+Route::resource('academic_years', AcademicYearController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified']);
 

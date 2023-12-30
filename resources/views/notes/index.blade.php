@@ -2,7 +2,9 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Gestion Des Notes') }}
+            {{$a_year}} 
         </h2>
+        @include ('partials.div')
     </x-slot>
 
     <div class="py-12">
@@ -16,10 +18,36 @@
                     </form> -->
 
                 </div>
-                @livewire('student-marks')
+                @livewire('student-marks', ['a_year' => $a_year])
+                
             </div>
         </div>
     </div>
+    <script>
+                function autoSubmitSelect() {
+
+                    
+
+                    // window.onload = function() {
+                    //     var input = document.getElementById("select_input");
+                    //     window.addEventListener("onload", function() {
+                    //         // Focus the input element
+                    //         input.focus();
+                    //         // Select the text inside the input element
+                    //         input.select();
+                    //     });
+                    //     const selectForm = document.getElementById('select_form"');
+                    //     selectForm.submit();
+
+                    // };
+                    // var select_input = document.getElementById("select_input");
+                    // const selectForm = document.getElementById('select_form"');
+                    // select_input.addEventListener('change', function() {
+                    //     selectForm.submit();
+                    // });
+                }
+            </script>
+
     <script>
         function validate(str, min, max) {
             // convert the input string to a number

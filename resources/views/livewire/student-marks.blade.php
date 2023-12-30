@@ -113,12 +113,16 @@
                     <table class="min-w-full text-center text-sm font-light">
                         <thead class="border-b font-medium dark:border-neutral-500">
                             <tr>
+                                <th scope="col" class="px-6 py-4">Index</th>
+                                <th scope="col" class="px-6 py-4">Action</th>
                                 <th scope="col" class="px-6 py-4">Matricule</th>
                                 <th scope="col" class="px-6 py-4">Nom</th>
                                 <th scope="col" class="px-6 py-4">Note CC</th>
                                 <th scope="col" class="px-6 py-4">Note Examen</th>
                                 <th scope="col" class="px-6 py-4">Note Rattrapage</th>
-                                <th scope="col" class="px-6 py-4">Index</th>
+                                <th scope="col" class="px-6 py-4">Note Semestriel</th>
+
+                                <!-- <th scope="col" class="px-6 py-4">Index</th> -->
                             </tr>
                         </thead>
                         <style>
@@ -134,22 +138,32 @@
                             @isset($course_students)
                             @foreach($course_students as $course_student)
                             <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-200">
+                                <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $course_student->id }}</td>
+                                <td class="whitespace-nowrap px-6 py-4 font-medium">
+                                    <a href="{{ URL::to('generateTranscript/'. $course_student->student->id) }}">
+                                        <x-primary-button wire:change="generateTranscript({{$a_year}})" class=" ml-3">
+                                            {{ __('Relever') }}
+                                        </x-primary-button>
+                                    </a>
+                                </td>
                                 <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $course_student->student->matricule }}</td>
                                 <td class="whitespace-nowrap px-6 py-4">{{ $course_student->student->name }}</td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <input wire:ignore-self oninput="validateInput()" id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
-                                    @error('ca_marks') <span class="error">{{ $message }}</span> @enderror
+                                    <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
                                 </td>
 
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" wire:change="updated" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
+                                    <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
                                 </td>
-                                <td>
-                                    <input type="text" placeholder="{{ $course_student->id }}" wire:model="course_student_id" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
+                                <td class="whitespace-nowrap px-6 py-4">
+                                    <input placeholder="{{ $course_student->average }}" type="number" wire:key="{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
                                 </td>
+                                <!-- <td>
+                                    <input type="text" placeholder="{{ $course_student->id }}" wire:model="course_student_id" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
+                                </td> -->
                             </tr>
                             @endforeach
                             @endisset

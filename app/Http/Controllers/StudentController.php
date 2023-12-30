@@ -7,6 +7,8 @@ use App\Models\specialty;
 use App\Models\unite_enseignement;
 use App\Models\course;
 use App\Models\course_student;
+use App\Models\cycle;
+use App\Models\level;
 use App\Models\student;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -21,8 +23,10 @@ class StudentController extends Controller
     public function index(): view
     {
         $specialties = specialty::all();
-        $students = student::all();
-        return view('students.index', compact('specialties', 'students'));
+        $cycles = cycle::all();
+        $levels = level::all();
+        $students = student::orderBy('id', 'desc')->get();
+        return view('students.index', compact('levels', 'cycles', 'specialties', 'students'));
     }
 
     /**
@@ -44,10 +48,13 @@ class StudentController extends Controller
         $name = strip_tags($request->input('name'));
         $email = strip_tags($request->input('email'));
         $mobile = strip_tags($request->input('mobile'));
-        $dob = date('Y-m-d', strtotime(strip_tags($request->input('dob'))));
+        $dob = date('Y-m-d', strtotime(str_replace('/', '-', strip_tags($request->input('dob')))));
         $gender = strip_tags($request->input('gender'));
+        $pob = strip_tags($request->input('pob'));
+        $cycle_id = strip_tags($request->input('cycle_id'));
         $specialty_id = $request->input('specialty_id');
-        // dd ($request->all ());
+        $level_id = strip_tags($request->input('level_id'));
+        // dd ($request->all (), $dob);
         // Call the generateMatricule function without any arguments
         $matricule = $this->generateMatricule();
         // Create a new student with the name, specialty, and matricule
@@ -57,17 +64,21 @@ class StudentController extends Controller
         $student_obj->mobile = $mobile;
         $student_obj->dob = $dob;
         $student_obj->gender = $gender;
+        $student_obj->pob = $pob;
+        $student_obj->cycle_id = $cycle_id;
         $student_obj->specialty_id = $specialty_id;
         $student_obj->matricule = $matricule;
         // Save the student to the database
         $student_obj->save();
         // Get the id of the student
         $student_id = $student_obj->id;
-        
+
         // Get courses of the specialty
+        $level = level::find($level_id);
+        $id = $level->id;
         $specialty = specialty::find($specialty_id);
         // die($specialty);
-        
+
         $ue_ids = $specialty->ues->pluck('id')->toArray();
         // echo '<pre>';
         // print_r($ue_ids);
@@ -95,14 +106,33 @@ class StudentController extends Controller
         // echo '<pre>';
         // print_r($course_id);
         // echo '</pre>';
+        $ayear = $this->getAcademicYear();
 
         $timestamp = Carbon::now()->format('Y-m-d H:i:s');
         $student = student::find($student_id);
         $student->course()->attach($result, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+
+        $student->levels()->attach($level, [
+            'academic_year' => $ayear,
+            'pass_mark' => 50
+        ]);
         // Return a response with the student data and a success message
-        notify()->success('Etudiant Ajouter avec succès');
+        notify()->success('Etudiant inscrire avec succès');
         return redirect()->back();
     }
+    function getAcademicYear()
+    {
+        $currentYear = date('Y');
+        $currentMonth = date('m');
+        if ($currentMonth > 7) { // If the month is above July
+            $nextYear = $currentYear + 1;
+            return "$currentYear/$nextYear";
+        } else { // If the month is July or below
+            $previousYear = $currentYear - 1;
+            return "$previousYear/$currentYear";
+        }
+    }
+
 
     // Define the constants for the school name, the sequence length, and the starting number
     const SCHOOL_NAME = 'ISIG';

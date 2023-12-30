@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\academic_year;
 use Illuminate\View\View;
 use App\Models\level;
 use App\Models\semester;
@@ -17,11 +18,12 @@ class UniteEnseignementController extends Controller
      */
     public function index(): view
     {
+        $academic_years = academic_year::all();
         $ues = unite_enseignement::all();
         $levels = level::all();
         $semesters = semester::all();
         
-        return view('uniteEseignements.index', compact('ues','levels','semesters'));
+        return view('uniteEseignements.index', compact('ues','levels','academic_years','semesters'));
     }
 
     /**
