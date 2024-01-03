@@ -13,6 +13,7 @@ use App\Models\student;
 use App\Models\level;
 use App\Models\semester;
 use App\Models\specialty;
+use App\Models\student_ue;
 use App\Models\unite_enseignement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -223,14 +224,42 @@ class StudentMarks extends Component
         }
         // $st_courses = course_student::with('course')->whereIn('course_id', $result)->get();
 
+        $st_ues = student_ue::with('ue')->where('student_id', $id)->whereHas('ue', function ($query) {
+            // Add a constraint on the level_id column of the ues table
+            $query->where('level_id', $this->level_id);
+        })->get();
         $st_courses = course_student::with('course')->where('student_id', $id)->get();
+
+        foreach ($st_ues as $st_ue) {
+            $sum = 0;
+            $c = 0;
+            $count = 0;
+            foreach($st_courses as $st_course){
+                if($st_course->course->ue_id == $st_ue->ue->id){
+                    $sum = $sum + $st_course->average;
+                    if($st_course->average >= 10){
+                        $c = $c + $st_course->course->credit_points;
+                    }
+                    $count = $count + 1;
+                }
+            }
+
+            $sum = $sum/$count;
+            $updated = $st_ue->update([
+                'average' => $sum,
+                'credit'  => $c,
+            ]);
+            $st_ue = $st_ue->fresh();
+
+        }
         
+       
         // query for the courses based on the result array
         $courses = Course::whereIn('id', $result)->get();
 
         // dd($ue_ids, $result, $st_courses);
         // do some logic here
-        $pdf = Pdf::loadView('pdf.index', compact('studentId', 'level', 'academic_year', 'credential', 'semesters','course_natures', 'ues', 'courses','st_courses'));
+        $pdf = Pdf::loadView('pdf.index', compact('studentId', 'level', 'academic_year', 'credential', 'semesters', 'course_natures', 'st_ues', 'courses', 'st_courses'));
         return $pdf->stream();
     }
     function getAcademicYear()

@@ -4,7 +4,6 @@
             {{ __('Gestion Des Notes') }}
             {{$a_year}} 
         </h2>
-        @include ('partials.div')
     </x-slot>
 
     <div class="py-12">

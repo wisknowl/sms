@@ -96,32 +96,39 @@
                 </tr>
             </thead>
             <tbody style="background-color: white; text-align: center; font-size: 13px;">
+            @php($totcredit=0)
                 @foreach($semesters as $semester)
                 <tr style="font-size: 12px; background-color:gray">
-                    <th colspan="2">{{ $semester->name }}</th>
-                    <th colspan="3">CREDIT ACQUIRED IN SEMESTER 1: 30</th>
-                    <th colspan="4">AVERAGE: 13.63</th>
+                    <th colspan="9">{{ strtoupper($semester->name) }}</th>
                 </tr>
+                @php($credit =$sumavg = $count = 0)
                 @foreach($course_natures as $course_nature)
-                
+
                 <tr style="font-size: 12px; text-align: center; background-color:lightblue">
                     <td colspan="9">{{$course_nature->id}}-{{ $course_nature->name }}</td>
                 </tr>
-                @foreach($ues as $ue)
-                @if($semester->id == $ue->semester_id && $course_nature->id == $ue->course_nature_id)
+                @foreach($st_ues as $st_ue)
+                @if($semester->id == $st_ue->ue->semester_id && $course_nature->id == $st_ue->ue->course_nature_id)
                 <tr style="font-size: 12px; text-align: center; font-weight:bold;">
-                    <td>{{ $ue->code }}</td>
+                    <td>{{ $st_ue->ue->code }}</td>
                     <td></td>
-                    <td>{{ $ue->name }}</td>
+                    <td>{{ $st_ue->ue->name }}</td>
                     <td></td>
-                    <td>11.9</td>
-                    <td>5</td>
+                    <td>{{ $st_ue->average }}</td>
+                    <td>{{ $st_ue->credit }}</td>
                     <td>B</td>
+                    @if($st_ue->credit == 0)
+                    <td>NVA</td>
+                    @else
                     <td>VA</td>
+                    @endif
                     <td></td>
+                    @php($credit=$credit + $st_ue->credit)
+                    @php($sumavg = $sumavg + $st_ue->average)
+                    @php($count=$count+1)
                 </tr>
                 @foreach($st_courses as $st_course)
-                @if($ue->id == $st_course->course->ue_id)
+                @if($st_ue->ue->id == $st_course->course->ue_id)
                 <tr>
                     <td></td>
                     <td>{{$st_course->course->code}}</td>
@@ -135,7 +142,11 @@
                     @endif
                     <td>B</td>
                     <td></td>
-                    <td>SN3</td>
+                    @if($semester->id == 1)
+                    <td>SN1</td>
+                    @else
+                    <td>SN2</td>
+                    @endif
                 </tr>
                 @else
                 <div></div>
@@ -146,6 +157,12 @@
                 @endif
                 @endforeach
                 @endforeach
+                <tr style="font-size: 12px; background-color:gray;">
+                    <th colspan="6">CREDIT ACQUIRED IN {{ strtoupper($semester->name) }}: {{ $credit }} on 30</th>
+                    <th colspan="3">AVERAGE: {{ $sumavg/$count }}</th>
+                </tr>
+                <div style="height: 3px;"></div>
+                @php($totcredit += $credit)
                 @endforeach
             </tbody>
         </table>
@@ -156,7 +173,7 @@
                 <td><label for="">Decision of Jury: </label><span>Passed</span></td>
                 <td><label for="">GPA: </label><span>2.619</span></td>
                 <td><label for="">Grade: </label><span>C+</span></td>
-                <td><label for="">Total credit earned: </label><span>60 On 60</span></td>
+                <td><label for="">Total credit earned: </label><span>{{$totcredit}} On 60</span></td>
                 <td><label for="">Appreciation: </label><span>FAIRLY GOOD</span></td>
             </tr>
             <tr style="font-size: 13px; text-align:end">

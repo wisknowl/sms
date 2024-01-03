@@ -22,5 +22,12 @@ class unite_enseignement extends Model
     public function course_nature(){
         return $this->belongsTo(course_nature::class);
     }
+
+    public function student(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\student','student_ues','student_id','ue_id')
+                ->withPivot('average', 'credit')
+                ->withTimestamps();
+    }
     
 }

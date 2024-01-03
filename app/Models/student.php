@@ -57,8 +57,10 @@ class student extends Model
     /**
      * The unite enseignements that belong to the student.
      */
-    public function uniteEnseignements(): BelongsToMany
+    public function ues(): BelongsToMany
     {
-        return $this->belongsToMany(UniteEnseignement::class);
+        return $this->belongsToMany('App\Models\UniteEnseignement','student_ues','student_id','ue_id')
+                ->withPivot('average', 'credit')
+                ->withTimestamps();
     }
 }

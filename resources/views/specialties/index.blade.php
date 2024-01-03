@@ -3,7 +3,6 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight flex items-center text-center">
             {{ __('Structure') }}
         </h2>
-        @include ('partials.div')
     </x-slot>
 
     <div class="py-12">
