@@ -23,5 +23,7 @@ class course extends Model
     {
         return $this->belongsToMany(specialty::class);
     }
-    
+    public function ue(){
+        return $this->belongsTo(unite_enseignement::class);
+    }
 }

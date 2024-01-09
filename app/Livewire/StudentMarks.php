@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\academic_year;
 use Barryvdh\DomPDF\Facade\Pdf;
 // use Barryvdh\DomPDF\Facade as PDF;
 
@@ -25,6 +26,7 @@ use Livewire\Component;
 class StudentMarks extends Component
 {
     // protected $listeners = ['specialtyUpdated' => 'updateCourse'];
+    public $progress = 0;
     public $cycle;
     public $level;
     public $semester;
@@ -43,15 +45,20 @@ class StudentMarks extends Component
     public $name;
     public $average;
     public $studentId;
+    public $academic_year;
     public $a_year;
     public $level_id;
+    public $greeting = [];
 
 
 
-    public function mount($a_year)
+
+    public function mount()
     {
-        $this->a_year = $a_year;
+        // $this->a_year = $a_year;
         // $this->studentId = $studentId;
+        $first_a_year = academic_year::first();
+        $this->academic_year = $first_a_year->name;
         $first_cycle = cycle::first();
         $this->cycle = $first_cycle->id;
         $this->updateSpecialties();
@@ -76,6 +83,10 @@ class StudentMarks extends Component
         $this->course = $first_course->id;
         $this->updateStudents();
     }
+    public function academicYear(){
+        dd($this->academic_year);
+    }
+   
     public function getCourseProperty()
     {
         // get the first course from the courses array
@@ -109,7 +120,8 @@ class StudentMarks extends Component
         $specialty = Specialty::find($this->specialty);
 
         // get the ids of the unite_enseignement related to the specialty
-        $ue_ids = $specialty->ues->where('level_id', $this->level)
+        $ue_ids = unite_enseignement::where('specialty_id', $this->specialty)
+            ->where('level_id', $this->level)
             ->where('semester_id', $this->semester)
             ->pluck('id')->toArray();
 
@@ -132,10 +144,29 @@ class StudentMarks extends Component
     public function updateStudents()
     {
         // query for the students based on the selected course
+        $academic_year = $this->getAcademicYear();
         $this->students = Student::whereHas('course', function ($query) {
             $query->where('course_id', $this->course);
         })->get();
-        $this->course_students = course_student::with('student', 'course')->where('course_id', $this->course)->get();
+        // $this->course_students = course_student::with('student', 'course')->where('course_id', $this->course)->get();
+        $this->course_students = course_student::with('student', 'course')
+            ->where('course_id', $this->course)
+            ->whereHas('student', function ($query) {
+                // Assuming you have a function to get the current academic year
+                $current_year = $this->getAcademicYear();
+                // Assuming the student model has a level relation
+                $query->whereHas('levels', function ($query) use ($current_year) {
+                    // Assuming the level model has a year column
+                    $query->where('academic_year', $this->academic_year)->where('level_id', $this->level);
+                });
+            })
+            ->get();
+
+
+        foreach ($this->course_students as $course_student) {
+            $le = $course_student->student->currentLevel()->name;
+            // dd($le);
+        }
     }
 
     public function updateMarks(Request $request)
@@ -201,8 +232,8 @@ class StudentMarks extends Component
         $specialty_id = $credential->specialty_id;
         $level_id = $credential->currentLevel()->id;
         $this->level_id = $level_id;
-        $semesters = semester::whereHas('levels', function ($query) {
-            $query->where('level_id', $this->level_id);
+        $semesters = semester::whereHas('levels', function ($query) use ($level_id) {
+            $query->where('level_id', $level_id);
         })->get();
 
         $course_natures = course_nature::all();
@@ -224,9 +255,9 @@ class StudentMarks extends Component
         }
         // $st_courses = course_student::with('course')->whereIn('course_id', $result)->get();
 
-        $st_ues = student_ue::with('ue')->where('student_id', $id)->whereHas('ue', function ($query) {
+        $st_ues = student_ue::with('ue')->where('student_id', $id)->whereHas('ue', function ($query) use ($level_id) {
             // Add a constraint on the level_id column of the ues table
-            $query->where('level_id', $this->level_id);
+            $query->where('level_id', $level_id);
         })->get();
         $st_courses = course_student::with('course')->where('student_id', $id)->get();
 
@@ -234,26 +265,25 @@ class StudentMarks extends Component
             $sum = 0;
             $c = 0;
             $count = 0;
-            foreach($st_courses as $st_course){
-                if($st_course->course->ue_id == $st_ue->ue->id){
+            foreach ($st_courses as $st_course) {
+                if ($st_course->course->ue_id == $st_ue->ue->id) {
                     $sum = $sum + $st_course->average;
-                    if($st_course->average >= 10){
+                    if ($st_course->average >= 10) {
                         $c = $c + $st_course->course->credit_points;
                     }
                     $count = $count + 1;
                 }
             }
 
-            $sum = $sum/$count;
+            $sum = $sum / $count;
             $updated = $st_ue->update([
                 'average' => $sum,
                 'credit'  => $c,
             ]);
             $st_ue = $st_ue->fresh();
-
         }
-        
-       
+
+
         // query for the courses based on the result array
         $courses = Course::whereIn('id', $result)->get();
 
@@ -283,7 +313,8 @@ class StudentMarks extends Component
         $ues = unite_enseignement::all();
         // $specialties = specialty::all();
         $cycles = cycle::all();
+        $academic_years = academic_year::all();
         // query for the students based on the selected course
-        return view('livewire.student-marks', compact('ues', 'cycles'));
+        return view('livewire.student-marks', compact('ues', 'cycles','academic_years'));
     }
 }

@@ -1,29 +1,21 @@
 <div class="grid grid-cols-3 gap-4">
     <div class="flex text-center items-center">
-        <!-- @if (session()->has('success'))
-        <div>
-            {{ session()->get('success') }}
-        </div>
-        @endif -->
     </div>
 
-    <div>
-        <form id="select_form" method="get" action="{{ route('notes.store') }}">
-            <select id="select_input" onchange="autoSubmitSelect()" name="academic_year" data-te-select-init data-te-select-placeholder="Annee academique">
-                @isset($academic_years)
-                @foreach($academic_years as $academic_year)
-                <option value="{{ $academic_year->id }}">{{ $academic_year->name }}</option>
-                @endforeach
-                @endisset
-            </select>
-            <div class="p-4" data-te-select-custom-content-ref>
-                <!-- Button trigger modal -->
-                <button type="button" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-toggle="modal" data-te-target="#exampleModal1" data-te-ripple-init data-te-ripple-color="light">
-                    Creer
-                </button>
-            </div>
-
-        </form>
+    <div class="flex p-1 border rounded-lg items-center">
+        <select id="select_input" wire:model.lazy.500ms="academic_year" wire:change="academicYear" class="py-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+            @isset($academic_years)
+            @foreach($academic_years as $academic_year)
+            <option value="{{ $academic_year->id }}">{{ $academic_year->name }}</option>
+            @endforeach
+            @endisset
+        </select>
+        <div class="pl-2" data-te-select-custom-content-ref>
+            <!-- Button trigger modal -->
+            <button type="button" class="inline-block rounded bg-primary p-1 text-xs font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-toggle="modal" data-te-target="#exampleModal1" data-te-ripple-init data-te-ripple-color="light">
+                Creer
+            </button>
+        </div>
         <!-- Modal -->
         <div data-te-modal-init class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div data-te-modal-dialog-ref class="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px]">
@@ -77,7 +69,7 @@
         </div>
     </div>
     <div>
-        <select data-te-select-init data-te-select-placeholder="Semestre">
+        <select data-te-select-init data-te-select-disable data-te-select-placeholder="Semestre">
             @isset($semesters)
             @foreach($semesters as $semester)
             <option value="{{ $semester->id }}">{{ $semester->name }}</option>
@@ -142,6 +134,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>

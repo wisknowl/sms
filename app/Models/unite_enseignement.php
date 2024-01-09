@@ -10,9 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class unite_enseignement extends Model
 {
     use HasFactory;
-    public function specialties(): BelongsToMany
+    public function specialties()
     {
-        return $this->belongsToMany('App\Models\specialty', 'specialty_ues','specialty_id', 'ue_id');
+        // return $this->belongsToMany('App\Models\specialty', 'specialty_ues','specialty_id', 'ue_id');
+        return $this->belongsTo(specialty::class);
     }
 
     public function course(): HasMany

@@ -9,10 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class specialty extends Model
 {
     use HasFactory;
-    public function ues(): BelongsToMany
-    {
-        return $this->belongsToMany('App\Models\unite_enseignement', 'specialty_ues','specialty_id', 'ue_id');
+    // public function ues(): BelongsToMany
+    // {
+    //     return $this->belongsToMany('App\Models\unite_enseignement', 'specialty_ues','specialty_id', 'ue_id');
+    // }
+    public function ues(){
+        return $this->hasMany(unite_enseignement::class);
     }
+    
     public function cycle()
     {
         return $this->belongsTo(cycle::class);

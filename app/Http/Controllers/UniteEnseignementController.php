@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\academic_year;
+use App\Models\course_nature;
 use Illuminate\View\View;
 use App\Models\level;
 use App\Models\semester;
+use App\Models\specialty;
 use App\Models\unite_enseignement;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -16,14 +18,23 @@ class UniteEnseignementController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): view
+    public function index(Request $request): view
     {
         $academic_years = academic_year::all();
-        $ues = unite_enseignement::all();
+        $ues = unite_enseignement::orderBy('id', 'desc')
+            ->when($request->input('level'), function($query) use($request){
+                return $query->where('level_id', $request->input('level'));
+            })
+            ->when($request->input('specialty'), function($query) use($request){
+                return $query->where('specialty_id', $request->input('specialty'));
+            })
+            ->get();
         $levels = level::all();
+        $course_natures = course_nature::all();
+        $specialties = specialty::all();
         $semesters = semester::all();
-        
-        return view('uniteEseignements.index', compact('ues','levels','academic_years','semesters'));
+
+        return view('uniteEseignements.index', compact('ues', 'levels', 'academic_years', 'semesters', 'specialties','course_natures'));
     }
 
     /**
@@ -45,14 +56,18 @@ class UniteEnseignementController extends Controller
             $credit_point = strip_tags($request->input('credit_point'));
             $level = strip_tags($request->input('level'));
             $semester = strip_tags($request->input('semester'));
+            $course_nature = strip_tags($request->input('course_nature'));
+            $specialty = strip_tags($request->input('specialty'));
             $description = strip_tags($request->input('description'));
             $ue_obj = new unite_enseignement();
-            $ue_obj->name=$ue;
-            $ue_obj->code=$code;
-            $ue_obj->credit_points=$credit_point;
-            $ue_obj->level_id=$level;
-            $ue_obj->semester_id=$semester;
-            $ue_obj->description=$description;
+            $ue_obj->name = $ue;
+            $ue_obj->code = $code;
+            $ue_obj->credit_points = $credit_point;
+            $ue_obj->level_id = $level;
+            $ue_obj->semester_id = $semester;
+            $ue_obj->course_nature_id = $course_nature;
+            $ue_obj->specialty_id = $specialty;
+            $ue_obj->description = $description;
             $ue_obj->save();
         });
         notify()->success('Unite Denseignement Creer avec succès');
