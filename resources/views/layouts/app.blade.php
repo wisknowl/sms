@@ -48,20 +48,10 @@
     </div>
     <x-notify::notify />
     @notifyJs
+    <!-- @livewire ('wire-elements-modal') -->
+    @livewire('livewire-ui-modal')
     @livewireScripts
-    <script>
-        function autoSubmitSelect() {
-            var x = document.getElementById("select_input").value;
-            document.getElementById("showValue").value = x;
-
-
-            var select_input = document.getElementById("select_input");
-            const selectForm = document.getElementById("select_form");
-            select_input.addEventListener('change', function() {
-                selectForm.submit();
-            });
-        }
-    </script>
+   
 </body>
 
 </html>

@@ -246,16 +246,21 @@
                                                     @forelse ($ues as $ue)
                                                     <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
                                                         <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $ue->id }}</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">{{ $ue->name }}</td>
+                                                        <td class="whitespace-nowrap px-6 py-4">{{ $ue->name }} | Credit {{ $ue->credit_points }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $ue->code }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $ue->course_nature->name }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">
-                                                            <a href="#" type="button" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Modifier</a>
+                                                            <button wire:click="confirmUeDeletion({{ $ue->id }})" type="button" class="font-medium text-red-600 dark:text-red-500 hover:underline">
+                                                                Supprimer
+                                                            </button>
+                                                            <!-- <button wire:click="$emit('openModal', 'mymodal')">Open Modal</button> -->
+                                                            <button wire:click="$dispatch('openModal', {component: 'mymodal'})" class="font-medium text-blue-600 dark:text-red-500 hover:underline">Modify</button>
+
                                                         </td>
                                                     </tr>
                                                     @empty
                                                     <tr>
-                                                        <td colspan="4" class="whitespace-nowrap px-6 py-4 text-center">No ues found</td>
+                                                        <td colspan="5" class="whitespace-nowrap px-6 py-4 text-center">No ues found</td>
                                                     </tr>
                                                     @endforelse
                                                 </tbody>
@@ -264,6 +269,7 @@
                                     </div>
                                 </div>
                             </div>
+
 
 
                             <!--Verically centered modal-->

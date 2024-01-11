@@ -18,10 +18,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
+use Livewire\WithPagination;
 use Livewire\Component;
 
 class Specialty extends Component
 {
+    use WithPagination;
     public $academic_year;
 
     public function mount()
@@ -36,7 +38,7 @@ class Specialty extends Component
     {
         $students = student::where('specialty_id', $id)->with('course')->get();
         // dd($students);
-        $ues = unite_enseignement::where('specialty_id', $id)->where('level_id', 11)->where('semester_id', 1)->get();
+        $ues = unite_enseignement::orderBy('code','asc')->where('specialty_id', $id)->where('level_id', 11)->where('semester_id', 1)->get();
 
         $ue_ids = unite_enseignement::where('specialty_id', $id)
             ->pluck('id')->toArray();
@@ -65,7 +67,8 @@ class Specialty extends Component
         $semesters = semester::all();
         $academic_years = academic_year::all();
         $cycles = cycle::all();
-        $specialties = ModelsSpecialty::with('cycle')->get();
+        $specialties = ModelsSpecialty::with('cycle');
+        $specialties = $specialties->paginate(3);
         return view('livewire.specialty', compact('specialties', 'academic_years', 'semesters', 'cycles'));
     }
 }

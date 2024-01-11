@@ -12,6 +12,12 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
     <!-- Styles -->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    @livewireStyles
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Scripts -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         /* ! tailwindcss v3.2.4 | MIT License | https://tailwindcss.com */
         *,
@@ -952,6 +958,11 @@
             </div>
         </div>
     </div>
+    <!-- @livewire ('wire-elements-modal') -->
+
+    @livewire('livewire-ui-modal')
+    @livewireScripts
+
 </body>
 
 </html>

@@ -41,16 +41,18 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @isset($levels)
-                                                    @foreach($levels as $level)
-                                                    <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-300 dark:hover:bg-neutral-200">
+                                                    @forelse($levels as $level)
+                                                    <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
                                                         <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $level->id }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $level->name }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $level->description }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $level->created_at }}</td>
                                                     </tr>
-                                                    @endforeach
-                                                    @endisset
+                                                    @empty
+                                                    <tr>
+                                                        <td colspan="4" class="whitespace-nowrap px-6 py-4">No Students found</td>
+                                                    </tr>
+                                                    @endforelse
                                                 </tbody>
                                             </table>
                                         </div>

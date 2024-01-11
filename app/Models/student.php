@@ -59,7 +59,7 @@ class student extends Model
      */
     public function ues(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\UniteEnseignement','student_ues','student_id','ue_id')
+        return $this->belongsToMany('App\Models\unite_enseignement','student_ues','student_id','ue_id')
                 ->withPivot('average', 'credit')
                 ->withTimestamps();
     }

@@ -57,8 +57,9 @@ class StudentMarks extends Component
     {
         // $this->a_year = $a_year;
         // $this->studentId = $studentId;
-        $first_a_year = academic_year::first();
-        $this->academic_year = $first_a_year->name;
+        $this->academic_year = $this->getAcademicYear();
+        // $first_a_year = academic_year::first();
+        // $this->academic_year = $first_a_year->name;
         $first_cycle = cycle::first();
         $this->cycle = $first_cycle->id;
         $this->updateSpecialties();

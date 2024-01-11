@@ -23,14 +23,36 @@ class Ues extends Component
     public $search;
     public function mount()
     {
-        $first_a_year = academic_year::first();
-        $this->academic_year = $first_a_year->name;
+        $this->academic_year = $this->getAcademicYear();
+        // $first_a_year = academic_year::first();
+        // $this->academic_year = $first_a_year->name;
         // $first_level = level::first();
         // $this->level=$first_level->id;
         // dd($this->level);
     }
     public function nf(){
         // dd($this->level);
+    }
+    public function updatingLevel(){
+        $this->resetPage();
+    }
+    public function updatingSearch(){
+        $this->resetPage();
+    }
+    public function confirmUeDeletion(unite_enseignement $ue){
+        $ue->delete();
+    }
+    function getAcademicYear()
+    {
+        $currentYear = date('Y');
+        $currentMonth = date('m');
+        if ($currentMonth > 7) { // If the month is above July
+            $nextYear = $currentYear + 1;
+            return "$currentYear/$nextYear";
+        } else { // If the month is July or below
+            $previousYear = $currentYear - 1;
+            return "$previousYear/$currentYear";
+        }
     }
     public function render(Request $request)
     {
@@ -45,14 +67,15 @@ class Ues extends Component
             ->when($this->search, function ($query) {
                 return $query->where(function ($query){
                     $query->where('name','like', '%' . $this->search . '%')
-                        ->orwhere('code','like', '%' . $this->search . '%');
-
+                        ->orwhere('code','like', '%' . $this->search . '%')
+                        ->orwhere('id','like', '%' .$this->search . '%');
                 });
             })
             ->get();
         // dd($ues);
         $sql=$units->toSql();
         $ues = $units->paginate(10);
+        // $ues = $units->get();
 
         $levels = level::all();
         $course_natures = course_nature::all();

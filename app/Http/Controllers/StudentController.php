@@ -39,12 +39,6 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the request data
-        // $request->validate([
-        //     'name' => 'required|string',
-        //     'specialty' => 'required|int',
-        // ]);
-        // Get the name and specialty from the request
         $name = strip_tags($request->input('name'));
         $email = strip_tags($request->input('email'));
         $mobile = strip_tags($request->input('mobile'));
@@ -55,7 +49,6 @@ class StudentController extends Controller
         $specialty_id = $request->input('specialty_id');
         $level_id = strip_tags($request->input('level_id'));
         // dd ($request->all (), $dob);
-        // Call the generateMatricule function without any arguments
         $matricule = $this->generateMatricule();
         // Create a new student with the name, specialty, and matricule
         $student_obj = new Student();
@@ -79,7 +72,8 @@ class StudentController extends Controller
         $specialty = specialty::find($specialty_id);
         // die($specialty);
 
-        $ue_ids = $specialty->ues->pluck('id')->toArray();
+        // $ue_ids = $specialty->ues->pluck('id')->toArray();
+        $ue_ids =  unite_enseignement::where('specialty_id', $specialty_id)->where('level_id', $id)->pluck('id')->toArray();
         // echo '<pre>';
         // print_r($ue_ids);
         // echo '</pre>';
@@ -96,26 +90,24 @@ class StudentController extends Controller
             $result = array_merge($result, $course_id);
         }
         // Print the final result
+        // $ue_ids =  unite_enseignement::where('specialty_id', $specialty_id)->where('level_id',$id)->pluck('name')->toArray();
         // echo '<pre>';
-        // print_r($result);
+        // print_r($ue_ids);
         // echo '</pre>';
         // die();
 
-        // $courses = Course::whereIn('id', $courseIds)->get();
-        // $course_id = $courses->pluck('id')->toArray();
-        // echo '<pre>';
-        // print_r($course_id);
-        // echo '</pre>';
         $ayear = $this->getAcademicYear();
 
-        $timestamp = Carbon::now()->format('Y-m-d H:i:s');
-        $student = student::find($student_id);
-        $student->course()->attach($result, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+        try {
+            $timestamp = Carbon::now()->format('Y-m-d H:i:s');
+            $student = student::find($student_id);
+            $student->ues()->attach($ue_ids, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+            $student->course()->attach($result, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+        } catch (\Carbon\Exceptions\InvalidFormatException $e) {
+            echo $e->getMessage();
+        }
 
-        $student->levels()->attach($level, [
-            'academic_year' => $ayear,
-            'pass_mark' => 50
-        ]);
+        $student->levels()->attach($level, ['academic_year' => $ayear, 'pass_mark' => 50]);
         // Return a response with the student data and a success message
         notify()->success('Etudiant inscrire avec succès');
         return redirect()->back();

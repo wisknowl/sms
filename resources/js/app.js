@@ -1,10 +1,11 @@
 import './bootstrap';
 
-import Alpine from 'alpinejs';
+// import Alpine from 'alpinejs';
 
-window.Alpine = Alpine;
+// window.Alpine = Alpine;
 
-Alpine.start();
+// Alpine.start();
+
 import 'flowbite';
 
 import {
@@ -26,3 +27,8 @@ initTE({
     Chart, Tab, Sidenav, Dropdown, Tooltip, Collapse, Ripple, Datepicker,
     Input, Select, Datetimepicker, Modal
 });
+require('./vendor/livewire-ui/modal');
+
+
+// Reference from vendor
+require('../../vendor/livewire-ui/modal/resources/js/modal');
