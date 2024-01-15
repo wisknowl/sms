@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Livewire\Features\SupportFormObjects\Form;
+use Carbon\Carbon;
 
 class CourseController extends Controller
 {
@@ -41,7 +42,7 @@ class CourseController extends Controller
             }
         }
         // dd($dropdown_data);
-        return view('cours.index', compact('levels', 'courses','academic_years', 'semesters', 'ues', 'dropdown_data'));
+        return view('cours.index', compact('levels', 'courses', 'academic_years', 'semesters', 'ues', 'dropdown_data'));
     }
 
     /**
@@ -81,8 +82,21 @@ class CourseController extends Controller
             $course_obj->description = $description;
             $course_obj->save();
 
-            // $course_id = $course_obj->id;
-            // $student = student::where('specialty_id', );
+            $course_id = $course_obj->id;
+            $specialty_ids = unite_enseignement::where('id', $ue_id)->pluck('specialty_id')->toArray();
+            $result = array();
+            foreach ($specialty_ids as $specialty_id) {
+                $student_id = student::where('specialty_id', $specialty_id)->pluck('id')->toArray();
+                $result = array_merge($result, $student_id);
+            }
+            $query = student::whereIn('id', $result);
+            $students = $query->whereHas('levels', function ($query)  use ($level){
+                $query->where('level_id', $level);
+            })->get();
+            foreach ($students as $student) {
+                $timestamp = Carbon::now()->format('Y-m-d H:i:s');
+                $student->course()->syncWithoutDetaching($course_id, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+            }
         });
         notify()->success('Cours Creer avec succès');
         return redirect()->back();

@@ -18,6 +18,7 @@ use App\Models\student_ue;
 use App\Models\unite_enseignement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Livewire\WithPagination;
 
 
 
@@ -25,13 +26,14 @@ use Livewire\Component;
 
 class StudentMarks extends Component
 {
+    use WithPagination;
     // protected $listeners = ['specialtyUpdated' => 'updateCourse'];
     public $progress = 0;
     public $cycle;
     public $level;
     public $semester;
     public $specialty;
-    public $course;
+    public $coursemod;
     public $levels = [];
     public $semesters = [];
     public $specialties = [];
@@ -81,13 +83,14 @@ class StudentMarks extends Component
         $this->updateCourses();
 
         $first_course = $this->courses[0];
-        $this->course = $first_course->id;
+        $this->coursemod = $first_course->id;
         $this->updateStudents();
     }
-    public function academicYear(){
+    public function academicYear()
+    {
         dd($this->academic_year);
     }
-   
+
     public function getCourseProperty()
     {
         // get the first course from the courses array
@@ -137,21 +140,25 @@ class StudentMarks extends Component
         }
 
         // query for the courses based on the result array
-        $this->courses = Course::whereIn('id', $result)->get();
+        $this->courses = Course::whereIn('id', $result)->orderBy('code', 'asc')->get();
 
         // $this->emit('specialtyUpdated');
+    }
+    public function updatingCoursemod(){
+        $this->resetPage();
     }
 
     public function updateStudents()
     {
         // query for the students based on the selected course
         $academic_year = $this->getAcademicYear();
+        // dd($this->coursemod);
         $this->students = Student::whereHas('course', function ($query) {
-            $query->where('course_id', $this->course);
+            $query->where('course_id', $this->coursemod);
         })->get();
         // $this->course_students = course_student::with('student', 'course')->where('course_id', $this->course)->get();
         $this->course_students = course_student::with('student', 'course')
-            ->where('course_id', $this->course)
+            ->where('course_id', $this->coursemod)
             ->whereHas('student', function ($query) {
                 // Assuming you have a function to get the current academic year
                 $current_year = $this->getAcademicYear();
@@ -191,19 +198,27 @@ class StudentMarks extends Component
                 // find the course_student record by the index
                 $course_student = course_student::find($index);
 
-                if ($this->exam_mark[$index] < $this->reseat_mark[$index]) {
-                    $this->average = (((((($this->ca_marks[$index]) / 20) * 30) + ((($this->reseat_mark[$index]) / 20) * 70)) / 100) * 20);
-                } else {
-                    $this->average = (((((($this->ca_marks[$index]) / 20) * 30) + ((($this->exam_mark[$index]) / 20) * 70)) / 100) * 20);
+                // if ($this->exam_mark[$index] < $this->reseat_mark[$index]) {
+                //     $this->average = (((((($this->ca_marks[$index]) / 20) * 30) + ((($this->reseat_mark[$index]) / 20) * 70)) / 100) * 20);
+                // } else {
+                //     $this->average = (((((($this->ca_marks[$index]) / 20) * 30) + ((($this->exam_mark[$index]) / 20) * 70)) / 100) * 20);
+                // }
+                // // update the record with the ca_mark and exam_mark values
+                
+                if (array_key_exists($index, $this->ca_marks) && !empty($this->ca_marks[$index])) {
+                    $updated = $updated && $course_student->update(['ca_marks' => $this->ca_marks[$index]]);
                 }
-                // update the record with the ca_mark and exam_mark values
-                $updated = $updated && $course_student->update([
-                    'ca_marks' => $this->ca_marks[$index],
-                    'exam_marks' => $this->exam_mark[$index],
-                    'reseat_mark' => $this->reseat_mark[$index],
-                    'average' => $this->average,
-
-                ]);
+                if (array_key_exists($index, $this->exam_mark) && !empty($this->exam_mark[$index])) {
+                    $updated = $updated && $course_student->update(['exam_marks' => $this->exam_mark[$index]]);
+                }
+                if (array_key_exists($index, $this->reseat_mark) && !empty($this->reseat_mark[$index])) {
+                    $updated = $updated && $course_student->update(['reseat_mark' => $this->reseat_mark[$index]]);
+                }
+                // $updated = $updated && $course_student->update([
+                //     'ca_marks' => $this->ca_marks[$index],
+                //     'exam_marks' => $this->exam_mark[$index],
+                //     'reseat_mark' => $this->reseat_mark[$index],
+                // ]);
             }
             DB::commit();
             // check if the update was successful
@@ -315,7 +330,8 @@ class StudentMarks extends Component
         // $specialties = specialty::all();
         $cycles = cycle::all();
         $academic_years = academic_year::all();
+        config(['app.name' => 'Notes']);
         // query for the students based on the selected course
-        return view('livewire.student-marks', compact('ues', 'cycles','academic_years'));
+        return view('livewire.student-marks', compact('ues', 'cycles', 'academic_years'));
     }
 }

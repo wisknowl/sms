@@ -9,7 +9,7 @@
                 </div>
                 <div></div>
                 <div wire:ignore>
-                    <select id="select_input" wire:model.lazy.500ms="academic_year" data-te-select-init wire:change="" class="py-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                    <select id="select_input" wire:model.lazy.500ms="academic_year" data-te-select-init data-te-select-placeholder="Annee academique" wire:change="" class="py-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                         @isset($academic_years)
                         @foreach($academic_years as $academic_year)
                         <option value="{{ $academic_year->name }}">{{ $academic_year->name }}</option>
@@ -125,6 +125,11 @@
                                                             <a href="{{ URL::to('generatePV/'. $specialty->id)  }}" target="_blank">
                                                                 <x-primary-button wire:change="" class=" ml-3">
                                                                     {{ __('PV') }}
+                                                                </x-primary-button>
+                                                            </a>
+                                                            <a href="{{ URL::to('export/'. $specialty->id)  }}" target="_blank">
+                                                                <x-primary-button wire:change="" class=" ml-3">
+                                                                    {{ __('PVx') }}
                                                                 </x-primary-button>
                                                             </a>
                                                         </td>

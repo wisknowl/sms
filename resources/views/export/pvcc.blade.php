@@ -48,13 +48,16 @@
     <div>
         <table border="0px" class="table" style="text-align: center;">
             <thead>
+                <tr>
+                    <td>{{$name}}</td>
+                </tr>
                 <tr class=" ">
                     <td colspan="3"></td>
                     @foreach($ues as $ue)
                     @php($n=0)
                     @foreach($courses as $course)
                     @if($ue->id == $course->ue_id)
-                    @php($n = $n+6)
+                    @php($n = $n+2)
                     @endif
                     @endforeach
                     <th class=" " colspan="{{ $n }}">{{ $ue->code }} {{ $ue->name }}</th>
@@ -63,7 +66,7 @@
                 <tr style="font-size: small;">
                     <td colspan="3"></td>
                     @foreach($courses as $course)
-                    <th colspan="6">{{$course->code}} {{$course->name}}</th>
+                    <th colspan="2">{{$course->code}} {{$course->name}}</th>
                     @endforeach
                 </tr>
                 <tr style="font-size: x-small;">
@@ -72,11 +75,7 @@
                     <th>Noms</th>
                     @foreach($courses as $course)
                     <th>CC</th>
-                    <th>EXAM</th>
-                    <th>Moyenne</th>
-                    <th>Grade</th>
-                    <th>Credit</th>
-                    <th>Dec</th>
+                    <th>Judgement</th>
                     @endforeach
                 </tr>
             </thead>
@@ -96,11 +95,7 @@
 
                     @if($st_course->student_id == $student->id)
                     <td>{{ $st_course->ca_marks }}</td>
-                    <td>{{$st_course->exam_marks}}</td>
-                    <td>{{$st_course->average}}</td>
-                    <td>B</td>
-                    <td>2</td>
-                    <td>NVA</td>
+                    <td>Assez bien</td>
                     @endif
                     @endif
                     @endforeach

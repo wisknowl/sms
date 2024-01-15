@@ -48,6 +48,9 @@
     <div>
         <table border="0px" class="table" style="text-align: center;">
             <thead>
+                <tr>
+                    <td>{{$name}}</td>
+                </tr>
                 <tr class=" ">
                     <td colspan="3"></td>
                     @foreach($ues as $ue)

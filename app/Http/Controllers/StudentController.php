@@ -98,6 +98,7 @@ class StudentController extends Controller
 
         $ayear = $this->getAcademicYear();
 
+        
         try {
             $timestamp = Carbon::now()->format('Y-m-d H:i:s');
             $student = student::find($student_id);

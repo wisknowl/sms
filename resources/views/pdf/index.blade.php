@@ -96,7 +96,7 @@
                 </tr>
             </thead>
             <tbody style="background-color: white; text-align: center; font-size: 13px;">
-            @php($totcredit=0)
+                @php($totcredit=0)
                 @foreach($semesters as $semester)
                 <tr style="font-size: 12px; background-color:gray">
                     <th colspan="9">{{ strtoupper($semester->name) }}</th>
@@ -134,8 +134,15 @@
                     <td>{{$st_course->course->code}}</td>
                     <td>{{ $st_course->course->name }}</td>
                     <td>{{ $st_course->course->credit_points }}</td>
-                    <td>{{ $st_course->average }}</td>
-                    @if($st_course->average >= 10)
+                    @php($courseavg)
+                    @if($st_course->exam_marks < $st_course->reseat_mark)
+                    @php($courseavg = (((((($st_course->ca_marks) / 20) * 30) + ((($st_course->reseat_mark) / 20) * 70)) / 100) * 20))
+                    <td>{{ $courseavg }}</td>
+                    @else
+                    @php($courseavg = (((((($st_course->ca_marks) / 20) * 30) + ((($st_course->exam_marks) / 20) * 70)) / 100) * 20))
+                    <td>{{ $courseavg }}</td>
+                    @endif
+                    @if($courseavg >= 10)
                     <td>{{ $st_course->course->credit_points }}</td>
                     @else
                     <td>0</td>

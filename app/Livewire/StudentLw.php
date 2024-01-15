@@ -25,8 +25,9 @@ class StudentLw extends Component
     public $search;
     public function mount()
     {
-        $first_a_year = academic_year::first();
-        $this->academic_year = $first_a_year->name;
+        $this->academic_year = $this->getAcademicYear();
+        // $first_a_year = academic_year::first();
+        // $this->academic_year = $first_a_year->name;
         // $first_level = level::first();
         // $this->level=$first_level->id;
         // dd($this->level);
@@ -37,6 +38,19 @@ class StudentLw extends Component
     public function updatingSearch(){
         $this->resetPage();
     }
+    function getAcademicYear()
+    {
+        $currentYear = date('Y');
+        $currentMonth = date('m');
+        if ($currentMonth > 7) { // If the month is above July
+            $nextYear = $currentYear + 1;
+            return "$currentYear/$nextYear";
+        } else { // If the month is July or below
+            $previousYear = $currentYear - 1;
+            return "$previousYear/$currentYear";
+        }
+    }
+
     public function render()
     {
         $academic_years = academic_year::all();
@@ -52,6 +66,7 @@ class StudentLw extends Component
             });
         })->get();
         $students = $students->paginate(10);
+        config(['app.name' => 'Etudiant']);
         return view('livewire.student-lw', compact('levels', 'cycles', 'specialties', 'students', 'academic_years'));
     }
 }

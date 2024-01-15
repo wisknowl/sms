@@ -81,6 +81,7 @@ class Ues extends Component
         $course_natures = course_nature::all();
         $specialties = specialty::all();
         $semesters = semester::all();
+        config(['app.name' => 'Unite Denseignement']);
 
         return view('livewire.ues', compact('ues', 'levels', 'academic_years', 'semesters', 'specialties','course_natures','sql'));
     }

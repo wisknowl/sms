@@ -6,6 +6,11 @@
             </x-nav-link>
         </div>
         <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uppercase p-3">
+            <x-nav-link :href="route('proces_verbal')" :active="request()->routeIs('proces_verbal')">
+                {{ __('Proces verbal') }}
+            </x-nav-link>
+        </div>
+        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uppercase p-3">
             <x-nav-link>
                 {{ __('Impression Des Relever') }}
             </x-nav-link>

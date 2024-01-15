@@ -9,7 +9,7 @@
                 </div>
                 <div></div>
                 <div wire:ignore>
-                    <select id="select_input" wire:model.lazy.500ms="academic_year" data-te-select-init wire:change="" class="py-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                    <select id="select_input" wire:model.lazy.500ms="academic_year" data-te-select-init data-te-select-placeholder="Annee academique" wire:change="" class="py-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                         @isset($academic_years)
                         @foreach($academic_years as $academic_year)
                         <option value="{{ $academic_year->name }}">{{ $academic_year->name }}</option>
@@ -124,7 +124,7 @@
                                                         <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $course->id }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $course->name }} | Credit {{ $course->credit_points }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $course->code }}</td>
-                                                        <td class="whitespace-nowrap px-6 py-4">{{ $course->ue->name }}</td>
+                                                        <td class="whitespace-nowrap px-6 py-4">{{ $course->ue->code }} | {{ $course->ue->name }}</td>
                                                     </tr>
                                                     @empty
                                                     <tr>
@@ -173,6 +173,12 @@
                                                         <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Code
                                                         </label>
                                                     </div>
+                                                    <!-- Credit Points -->
+                                                    <div class="relative mb-3" data-te-input-wrapper-init>
+                                                        <input name="credit_point" type="number" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" />
+                                                        <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Credit
+                                                        </label>
+                                                    </div>
                                                     <!-- Type -->
                                                     <select name="course_nature" data-te-select-init data-te-select-option-height="52" data-te-select-placeholder="Type de Cours">
                                                         <option value="Matiere Fondamental" data-te-select-secondary-text="Tronc Commun">
@@ -185,12 +191,7 @@
                                                             Matiere Transversal
                                                         </option>
                                                     </select>
-                                                    <!-- Credit Points -->
-                                                    <div class="relative mb-3" data-te-input-wrapper-init>
-                                                        <input name="credit_point" type="number" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" />
-                                                        <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Credit
-                                                        </label>
-                                                    </div>
+
                                                     <!-- Cost/Hour -->
                                                     <div class="relative mb-3" data-te-input-wrapper-init>
                                                         <input name="cost_per_hour" type="number" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" />

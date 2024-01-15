@@ -2,7 +2,7 @@
     <div class="bg-white shadow">
         <div class="flex justify-between max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Gestion Des Notes') }} {{$academic_year}}
+                {{ __('Poces Verbal') }} {{$academic_year}}
             </h2>
             <div class="grid grid-cols-3 gap-4">
                 <div class="flex text-center items-center">
@@ -89,40 +89,15 @@
                     <x-notify::notify />
                     <!-- @notifyJs -->
                     <h2 class="underline underline-offset-4 font-light text-xl text-gray-800 leading-tight flex items-center text-center mb-2">
-                        {{ __('Saisie Des Notes') }}
+                        {{ __('Proces Verbal') }}
                     </h2>
-                    <div class="flex justify-end">
-                        <button wire:click="updateMarks" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Enregistrer</button>
 
-                    </div>
                     <div class="my-2 px-3 rounded bg-slate-100">
-                        <div class="pt-4 grid grid-cols-3 gap-6">
-                            <div>
-                                <label for="">Cycle</label>
-                                <select wire:model="cycle" multiple wire:change="updateSpecialties" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
-                                    @isset($cycles)
-                                    @foreach($cycles as $cycle)
-                                    <option value="{{ $cycle->id }}">{{ $cycle->name }} | {{ $cycle->code }}</option>
-                                    @endforeach
-                                    @endisset
-                                </select>
-                            </div>
-                            <div>
-                                <form>
-                                    <label>Specialite</label>
-                                    <select wire:model="specialty" multiple wire:change="updateLevels" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
-                                        @isset($specialties)
-                                        @foreach($specialties as $specialty)
-                                        <option value="{{ $specialty->id }}">{{ $specialty->name }} | {{ $specialty->code }}</option>
-                                        @endforeach
-                                        @endisset
-                                    </select>
-                                </form>
 
-                            </div>
+                        <div class="py-4 grid grid-cols-3 gap-6 items-center">
                             <div>
                                 <label for="">Niveau</label>
-                                <select wire:model="level" multiple wire:change="updateSemesters" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                                <select wire:model.lazy.500ms="levelmod" wire:change=" " class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                                     @isset($levels)
                                     @foreach($levels as $level)
                                     <option value="{{ $level->id }}">{{ $level->name }}</option>
@@ -130,11 +105,9 @@
                                     @endisset
                                 </select>
                             </div>
-                        </div>
-                        <div class="py-4 grid grid-cols-3 gap-6 items-center">
                             <div>
                                 <label>Semestre</label>
-                                <select wire:model="semester" multiple wire:change="updateCourses" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                                <select wire:model.lazy.500ms="semestermod" wire:change=" " class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                                     @isset($semesters)
                                     @foreach($semesters as $semester)
                                     <option value="{{ $semester->id }}">{{ $semester->name }}</option>
@@ -142,20 +115,12 @@
                                     @endisset
                                 </select>
                             </div>
-                            <div>
-                                <label>Cours</label>
-                                <select wire:model.lazy.500ms="coursemod" multiple wire:change="updateStudents" name="course_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
-                                    @isset($courses)
-                                    @foreach($courses as $course)
-                                    <option value="{{ $course->id }}">{{ $course->code }} | {{ $course->name }}</option>
-                                    @endforeach
-                                    @endisset
-                                </select>
-                            </div>
-                            <div class="">
-                                
-                            </div>
+
                         </div>
+
+                    </div>
+                    <div>
+                        {{ $specialties->links() }}
                     </div>
                     <div class="flex flex-col">
                         <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -164,16 +129,11 @@
                                     <table class="min-w-full text-center text-sm font-light">
                                         <thead class="border-b font-medium dark:border-neutral-500">
                                             <tr>
-                                                <th scope="col" class="px-6 py-4">Index</th>
+                                                <th scope="col" class="px-6 py-4">#</th>
                                                 <th scope="col" class="px-6 py-4">Action</th>
-                                                <th scope="col" class="px-6 py-4">Matricule</th>
-                                                <th scope="col" class="px-6 py-4">Nom</th>
-                                                <th scope="col" class="px-6 py-4">Note CC</th>
-                                                <th scope="col" class="px-6 py-4">Note Examen</th>
-                                                <th scope="col" class="px-6 py-4">Note Rattrapage</th>
-                                                <th scope="col" class="px-6 py-4">Note Semestriel</th>
-
-                                                <!-- <th scope="col" class="px-6 py-4">Index</th> -->
+                                                <th scope="col" class="px-6 py-4">Name</th>
+                                                <th scope="col" class="px-6 py-4">Code</th>
+                                                <th scope="col" class="px-6 py-4">Cycle</th>
                                             </tr>
                                         </thead>
                                         <style>
@@ -186,38 +146,28 @@
                                             }
                                         </style>
                                         <tbody>
-                                            @forelse($course_students as $course_student)
+                                            @forelse($specialties as $specialty)
                                             <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
-                                                <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $course_student->id }}</td>
+                                                <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $specialty->id }}</td>
                                                 <td class="whitespace-nowrap px-6 py-4 font-medium">
-                                                    <a href="{{ URL::to('generateTranscript/'. $course_student->student->id) }}" target="_blank">
-                                                        <x-primary-button wire:change="generateTranscript({{$a_year}})" class=" ml-3">
-                                                            {{ __('Relever') }}
+                                                    <a href="{{ URL::to('export/'. $specialty->id. '/' . $levelmod . '/' . $semestermod)  }}" target="_blank">
+                                                        <x-primary-button wire:change="" class=" ml-3">
+                                                            {{ __('PVCC') }}
+                                                        </x-primary-button>
+                                                    </a>
+                                                    <a href="{{ URL::to('export/'. $specialty->id. '/' . $levelmod . '/' . $semestermod)  }}" target="_blank">
+                                                        <x-primary-button wire:change="" class=" ml-3">
+                                                            {{ __('PVSN') }}
                                                         </x-primary-button>
                                                     </a>
                                                 </td>
-                                                <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $course_student->student->matricule }}</td>
-                                                <td class="whitespace-nowrap px-6 py-4">{{ $course_student->student->name }} {{ $course_student->student->id }}</td>
-                                                <td class="whitespace-nowrap px-6 py-4">
-                                                    <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
-                                                </td>
-
-                                                <td class="whitespace-nowrap px-6 py-4">
-                                                    <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
-                                                </td>
-                                                <td class="whitespace-nowrap px-6 py-4">
-                                                    <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
-                                                </td>
-                                                <td class="whitespace-nowrap px-6 py-4">
-                                                    <input placeholder="{{ $course_student->average }}" type="number" wire:key="{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
-                                                </td>
-                                                <!-- <td>
-                                    <input type="text" placeholder="{{ $course_student->id }}" wire:model="course_student_id" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
-                                </td> -->
+                                                <td class="whitespace-nowrap px-6 py-4">{{ $specialty->name }}</td>
+                                                <td class="whitespace-nowrap px-6 py-4">{{ $specialty->code }}</td>
+                                                <td class="whitespace-nowrap px-6 py-4">{{ $specialty->cycle->code }}</td>
                                             </tr>
                                             @empty
                                             <tr>
-                                                <td colspan="8" class="whitespace-nowrap px-6 py-4">No Students found</td>
+                                                <td class="whitespace-nowrap px-6 py-4">No specialty found</td>
                                             </tr>
                                             @endforelse
                                         </tbody>

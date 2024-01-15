@@ -20,7 +20,8 @@ class LevelController extends Controller
         $levels = level::all();
         $academic_years = academic_year::all();
         $semesters = semester::all();
-    
+        config(['app.name' => 'Niveau']);
+
         return view('levels.index', compact('levels','academic_years','semesters'));
     }
 

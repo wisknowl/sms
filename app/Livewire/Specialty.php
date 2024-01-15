@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Livewire;
+use App\Exports\Ues;
+use Maatwebsite\Excel\Facades\Excel;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -28,11 +30,16 @@ class Specialty extends Component
 
     public function mount()
     {
-        $first_a_year = academic_year::first();
-        $this->academic_year = $first_a_year->name;
+        $this->academic_year = $this->getAcademicYear();
+        // $first_a_year = academic_year::first();
+        // $this->academic_year = $first_a_year->name;
         // $first_level = level::first();
         // $this->level=$first_level->id;
         // dd($this->level);
+    }
+    public function export()
+    {
+        return Excel::download(new Ues, 'ues.xlsx');
     }
     public function generatePV($id)
     {
@@ -62,6 +69,19 @@ class Specialty extends Component
         $pdf->setPaper('a4', 'landscape');
         return $pdf->stream();
     }
+    function getAcademicYear()
+    {
+        $currentYear = date('Y');
+        $currentMonth = date('m');
+        if ($currentMonth > 7) { // If the month is above July
+            $nextYear = $currentYear + 1;
+            return "$currentYear/$nextYear";
+        } else { // If the month is July or below
+            $previousYear = $currentYear - 1;
+            return "$previousYear/$currentYear";
+        }
+    }
+
     public function render()
     {
         $semesters = semester::all();
@@ -69,6 +89,7 @@ class Specialty extends Component
         $cycles = cycle::all();
         $specialties = ModelsSpecialty::with('cycle');
         $specialties = $specialties->paginate(3);
+        config(['app.name' => 'Specialite']);
         return view('livewire.specialty', compact('specialties', 'academic_years', 'semesters', 'cycles'));
     }
 }

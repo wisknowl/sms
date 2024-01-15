@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Ues;
+use Maatwebsite\Excel\Facades\Excel;
+
 use App\Models\academic_year;
 use App\Models\course_nature;
 use Illuminate\View\View;
@@ -15,6 +18,10 @@ use Illuminate\Support\Facades\DB;
 
 class UniteEnseignementController extends Controller
 {
+    public function export()
+    {
+        return Excel::download(new Ues, 'ues.xlsx');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -22,10 +29,10 @@ class UniteEnseignementController extends Controller
     {
         $academic_years = academic_year::all();
         $ues = unite_enseignement::orderBy('id', 'desc')
-            ->when($request->input('level'), function($query) use($request){
+            ->when($request->input('level'), function ($query) use ($request) {
                 return $query->where('level_id', $request->input('level'));
             })
-            ->when($request->input('specialty'), function($query) use($request){
+            ->when($request->input('specialty'), function ($query) use ($request) {
                 return $query->where('specialty_id', $request->input('specialty'));
             })
             ->get();
@@ -34,7 +41,7 @@ class UniteEnseignementController extends Controller
         $specialties = specialty::all();
         $semesters = semester::all();
 
-        return view('uniteEseignements.index', compact('ues', 'levels', 'academic_years', 'semesters', 'specialties','course_natures'));
+        return view('uniteEseignements.index', compact('ues', 'levels', 'academic_years', 'semesters', 'specialties', 'course_natures'));
     }
 
     /**

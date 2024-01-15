@@ -14,6 +14,9 @@ use App\Http\Controllers\UeCourseController;
 use App\Livewire\Specialty;
 use App\Livewire\StudentMarks;
 use Illuminate\Support\Facades\Route;
+use App\Exports\SpecialtyExport;
+use App\Livewire\ProcesVerbal;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +40,16 @@ Route::get('/dashboard', function () {
 Route::get('generateTranscript/{id}', [StudentMarks::class, 'generateTranscript'])->name('Transcript');
 Route::get('generatePV/{id}', [Specialty::class, 'generatePV'])->name('PV');
 Route::get('/student_marks', StudentMarks::class);
+Route::get('proces_verbal', ProcesVerbal::class)->name('proces_verbal');
+Route::get('ues', [UniteEnseignementController::class, 'export']);
+// Route::get('pvxls', [Specialty::class, 'export']);
+// Route::get('export/{id}', function ($id) {
+//     return Excel::download(new SpecialtyExport($id), 'students.xlsx');
+// });
+Route::get('export/{id}/{level_id}/{semester_id}', function ($id, $level_id, $semester_id) {
+    return Excel::download(new SpecialtyExport($id, $level_id, $semester_id), 'students.xlsx');
+});
+
 
 Route::resource('students', StudentController::class)
     ->only(['index', 'store'])
