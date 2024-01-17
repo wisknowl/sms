@@ -91,11 +91,11 @@
                         <h2 class="font-light text-xl text-gray-800 leading-tight flex items-center text-center my-4">
                             {{ __('Unite Denseignement') }}
                         </h2>
-                        <div>
+                        <!-- <div>
                             <input type="checkbox" wire:model="level" wire:change="nf">
                             <label for="">Level 1</label>
                             <label for="">{{ $sql }}</label>
-                        </div>
+                        </div> -->
                         <!-- Add Specialty -->
                         <div class="space-y-2 mb-2 flex justify-between items-center">
                             <!-- TW Elements is free under AGPL, with commercial license required for specific uses. See more details: https://tw-elements.com/license/ and contact us for queries at tailwind@mdbootstrap.com -->
@@ -103,12 +103,12 @@
                                 <input wire:model="search" wire:change="nf" type="search" class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:border-0 focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary" id="exampleSearch" placeholder="Rechercher" />
                             </div>
                             <div class="flex justify-end items-center">
-                                <form action="{{ route('uniteEseignements.index') }}" method='get'>
+                                <!-- <form action="{{ route('uniteEseignements.index') }}" method='get'>
                                     @csrf
                                     <input type="checkbox" name="all" value="some_value" onclick="this.form.submit()" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
 
                                     <label for="some_name">Tous</label>
-                                </form>
+                                </form> -->
                                 <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="justify-between mx-3 border-2 text-neutral-900 bg-white hover:bg-slate-50 focus:outline-none  font-medium rounded-lg text-sm px-3 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                                     <span class="[&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                         <svg width="800px" height="800px" viewBox="-5 -2 24 24" fill="#9CA3AF" xmlns="http://www.w3.org/2000/svg">

@@ -21,9 +21,9 @@ class ProcesVerbal extends Component
     {
         $this->academic_year = $this->getAcademicYear();
         $first_level = level::first();
-        $this->levelmod = $first_level->name;
+        $this->levelmod = $first_level->id;
         $first_semester = semester::first();
-        $this->semestermod = $first_semester->name;
+        $this->semestermod = $first_semester->id;
     }
     function getAcademicYear()
     {
