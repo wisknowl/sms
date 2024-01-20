@@ -125,7 +125,7 @@
                                 <select wire:model="level" multiple wire:change="updateSemesters" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                                     @isset($levels)
                                     @foreach($levels as $level)
-                                    <option value="{{ $level->id }}">{{ $level->name }}</option>
+                                    <option value="{{ $level->id }}">Niveau {{ $level->name }}</option>
                                     @endforeach
                                     @endisset
                                 </select>
@@ -137,7 +137,7 @@
                                 <select wire:model="semester" multiple wire:change="updateCourses" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                                     @isset($semesters)
                                     @foreach($semesters as $semester)
-                                    <option value="{{ $semester->id }}">{{ $semester->name }}</option>
+                                    <option value="{{ $semester->id }}">Semestre {{ $semester->name }}</option>
                                     @endforeach
                                     @endisset
                                 </select>

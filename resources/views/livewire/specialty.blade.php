@@ -111,7 +111,6 @@
                                                 <thead class="border-b font-medium dark:border-neutral-500">
                                                     <tr>
                                                         <th scope="col" class="px-6 py-4">#</th>
-                                                        <th scope="col" class="px-6 py-4">Action</th>
                                                         <th scope="col" class="px-6 py-4">Name</th>
                                                         <th scope="col" class="px-6 py-4">Code</th>
                                                         <th scope="col" class="px-6 py-4">Cycle</th>
@@ -121,18 +120,6 @@
                                                     @forelse($specialties as $specialty)
                                                     <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
                                                         <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $specialty->id }}</td>
-                                                        <td class="whitespace-nowrap px-6 py-4 font-medium">
-                                                            <a href="{{ URL::to('generatePV/'. $specialty->id)  }}" target="_blank">
-                                                                <x-primary-button wire:change="" class=" ml-3">
-                                                                    {{ __('PV') }}
-                                                                </x-primary-button>
-                                                            </a>
-                                                            <a href="{{ URL::to('export/'. $specialty->id)  }}" target="_blank">
-                                                                <x-primary-button wire:change="" class=" ml-3">
-                                                                    {{ __('PVx') }}
-                                                                </x-primary-button>
-                                                            </a>
-                                                        </td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $specialty->name }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $specialty->code }}</td>
                                                         <td class="whitespace-nowrap px-6 py-4">{{ $specialty->cycle->code }}</td>

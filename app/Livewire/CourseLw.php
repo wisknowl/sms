@@ -47,10 +47,10 @@ class CourseLw extends Component
         $currentMonth = date('m');
         if ($currentMonth > 7) { // If the month is above July
             $nextYear = $currentYear + 1;
-            return "$currentYear/$nextYear";
+            return "$currentYear-$nextYear";
         } else { // If the month is July or below
             $previousYear = $currentYear - 1;
-            return "$previousYear/$currentYear";
+            return "$previousYear-$currentYear";
         }
     }
 
@@ -71,7 +71,7 @@ class CourseLw extends Component
         $academic_years = academic_year::all();
         $semesters = semester::all();
         $specialties = Specialty::with('ues')->get();
-        config(['app.name' => 'Course']);
+        config(['app.name' => 'Cours']);
         return view('livewire.course-lw', compact('levels', 'courses', 'academic_years', 'semesters', 'ues'));
     }
 }

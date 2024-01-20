@@ -91,7 +91,7 @@ class CourseController extends Controller
             }
             $query = student::whereIn('id', $result);
             $students = $query->whereHas('levels', function ($query)  use ($level){
-                $query->where('level_id', $level);
+                $query->where('level_id', $level);// STUDENTS IN LEVEL_N OF WHICH ADADEMIC YEAR
             })->get();
             foreach ($students as $student) {
                 $timestamp = Carbon::now()->format('Y-m-d H:i:s');

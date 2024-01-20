@@ -11,8 +11,8 @@
                 <div wire:ignore>
                     <select id="select_input" wire:model.lazy.500ms="academic_year" data-te-select-init data-te-select-placeholder="Annee academique" wire:change="" class="py-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                         @isset($academic_years)
-                        @foreach($academic_years as $academic_year)
-                        <option value="{{ $academic_year->name }}">{{ $academic_year->name }}</option>
+                        @foreach($academic_years as $academic_y)
+                        <option value="{{ $academic_y->name }}">{{ $academic_y->name }}</option>
                         @endforeach
                         @endisset
                     </select>
@@ -93,14 +93,13 @@
                     </h2>
 
                     <div class="my-2 px-3 rounded bg-slate-100">
-
                         <div class="py-4 grid grid-cols-3 gap-6 items-center">
                             <div>
                                 <label for="">Niveau</label>
                                 <select wire:model.lazy.500ms="levelmod" wire:change=" " class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                                     @isset($levels)
                                     @foreach($levels as $level)
-                                    <option value="{{ $level->id }}">{{ $level->name }}</option>
+                                    <option value="{{ $level->id }}">Niveau {{ $level->name }}</option>
                                     @endforeach
                                     @endisset
                                 </select>
@@ -110,7 +109,7 @@
                                 <select wire:model.lazy.500ms="semestermod" wire:change=" " class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                                     @isset($semesters)
                                     @foreach($semesters as $semester)
-                                    <option value="{{ $semester->id }}">{{ $semester->name }}</option>
+                                    <option value="{{ $semester->id }}">Semestre {{ $semester->name }}</option>
                                     @endforeach
                                     @endisset
                                 </select>
@@ -150,16 +149,16 @@
                                             <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
                                                 <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $specialty->id }}</td>
                                                 <td class="whitespace-nowrap px-6 py-4 font-medium">
-                                                    <a href="{{ URL::to('export/'. $specialty->id. '/' . $levelmod . '/' . $semestermod)  }}" target="_blank">
+                                                    <a href="{{ URL::to('export/'. $specialty->id. '/' . $levelmod . '/' . $semestermod . '/' . $academic_year)  }}" target="_blank">
                                                         <x-primary-button wire:change="" class=" ml-3">
                                                             {{ __('PVCC') }}
                                                         </x-primary-button>
                                                     </a>
-                                                    <a href="{{ URL::to('export/'. $specialty->id. '/' . $levelmod . '/' . $semestermod)  }}" target="_blank">
+                                                    <!-- <a href="{{ URL::to('export/'. $specialty->id. '/' . $levelmod . '/' . $semestermod)  }}" target="_blank">
                                                         <x-primary-button wire:change="" class=" ml-3">
                                                             {{ __('PVSN') }}
                                                         </x-primary-button>
-                                                    </a>
+                                                    </a> -->
                                                 </td>
                                                 <td class="whitespace-nowrap px-6 py-4">{{ $specialty->name }}</td>
                                                 <td class="whitespace-nowrap px-6 py-4">{{ $specialty->code }}</td>

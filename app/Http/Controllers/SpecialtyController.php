@@ -52,7 +52,7 @@ class SpecialtyController extends Controller
             $specialty_obj->save();
             $name = $specialty_obj->name;
         });
-        notify()->success('Specialité . {{$name}} . Creer avec succès');
+        notify()->success('Specialité Creer avec succès');
         return redirect()->back();
         // return redirect()->back()->with('success', 'Specialite Creer avec succès');
     }

@@ -226,7 +226,7 @@
                                                 <select name="cycle_id" data-te-select-init data-te-select-filter="false" data-te-select-placeholder="Cycle">
                                                     @isset($cycles)
                                                     @foreach($cycles as $cycle)
-                                                    <option value="{{ $cycle->id }}">{{ $cycle->name }}</option>
+                                                    <option value="{{ $cycle->id }}">{{ $cycle->code }} | {{ $cycle->name }}</option>
                                                     @endforeach
                                                     @endisset
                                                 </select>
@@ -234,7 +234,7 @@
                                                 <select name="specialty_id" data-te-select-init data-te-select-filter="true" data-te-select-placeholder="Specialite">
                                                     @isset($specialties)
                                                     @foreach($specialties as $specialty)
-                                                    <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
+                                                    <option value="{{ $specialty->id }}">{{ $specialty->code }} | {{ $specialty->name }}</option>
                                                     @endforeach
                                                     @endisset
                                                 </select>

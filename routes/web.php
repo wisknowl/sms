@@ -16,6 +16,9 @@ use App\Livewire\StudentMarks;
 use Illuminate\Support\Facades\Route;
 use App\Exports\SpecialtyExport;
 use App\Livewire\ProcesVerbal;
+use App\Models\level;
+use App\Models\semester;
+use App\Models\specialty as ModelsSpecialty;
 use Maatwebsite\Excel\Facades\Excel;
 
 /*
@@ -46,8 +49,16 @@ Route::get('ues', [UniteEnseignementController::class, 'export']);
 // Route::get('export/{id}', function ($id) {
 //     return Excel::download(new SpecialtyExport($id), 'students.xlsx');
 // });
-Route::get('export/{id}/{level_id}/{semester_id}', function ($id, $level_id, $semester_id) {
-    return Excel::download(new SpecialtyExport($id, $level_id, $semester_id), 'students.xlsx');
+Route::get('export/{id}/{level_id}/{semester_id}/{a_year}', function ($id, $level_id, $semester_id, $a_year) {
+    // Get the models by their ids
+    $specialty = ModelsSpecialty::find($id);
+    $level = level::find($level_id);
+    $semester = semester::find($semester_id);
+
+    // Create the file name using the model attributes
+    $file_name = $specialty->code . '_N' . $level->name . '_S' . $semester->name . '_' . $a_year . '.xlsx';
+    // return Excel::download(new SpecialtyExport($id, $level_id, $semester_id, $a_year), '$file_name.xlsx');
+    return Excel::download(new SpecialtyExport($id, $level_id, $semester_id, $a_year), $file_name);
 });
 
 

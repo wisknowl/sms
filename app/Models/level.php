@@ -24,7 +24,7 @@ class level extends Model
     }
     public function students()
     {
-        return $this->belongsToMany(Student::class, 'student_levels')
+        return $this->belongsToMany('App\Models\student', 'student_levels','student_id', 'level_id')
             ->withPivot('academic_year', 'pass_mark')
             ->withTimestamps();
     }

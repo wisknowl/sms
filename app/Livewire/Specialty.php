@@ -75,10 +75,10 @@ class Specialty extends Component
         $currentMonth = date('m');
         if ($currentMonth > 7) { // If the month is above July
             $nextYear = $currentYear + 1;
-            return "$currentYear/$nextYear";
+            return "$currentYear-$nextYear";
         } else { // If the month is July or below
             $previousYear = $currentYear - 1;
-            return "$previousYear/$currentYear";
+            return "$previousYear-$currentYear";
         }
     }
 
