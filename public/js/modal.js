@@ -27,7 +27,8 @@ function fillModalForm(event) {
     var inputCredit_point = document.getElementById("credit_point");
     var inputCourse_nature = document.getElementById("course_nature");
     var specialty = document.getElementById("specialty");
-
+    var level = document.getElementById("level");
+    var semester = document.getElementById("semester");
 
     // Assign the data attributes to the input fields
     inputName.value = name;
