@@ -105,6 +105,26 @@ class UniteEnseignementController extends Controller
     {
         //
     }
+    public function updateo(Request $request)
+{
+    // Validate the input data
+    $validatedData = $request->validate([
+        'id' => 'required|exists:ues,id',
+        'name' => 'required',
+        'email' => 'required|email',
+    ]);
+
+    // Find the model by id
+    $ue = Ue::find($validatedData['id']);
+    // Update the model with the input data
+    $ue->update($validatedData);
+
+    // Return a JSON response with a message
+    return response()->json([
+        'message' => 'Model updated successfully'
+    ]);
+}
+
 
     /**
      * Remove the specified resource from storage.

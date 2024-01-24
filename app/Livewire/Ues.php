@@ -21,6 +21,8 @@ class Ues extends Component
     public $academic_year;
     public $level;
     public $search;
+    public $delete_id;
+    public $uemod;
     public function mount()
     {
         $this->academic_year = $this->getAcademicYear();
@@ -38,6 +40,22 @@ class Ues extends Component
     }
     public function updatingSearch(){
         $this->resetPage();
+    }
+    public function setDeleteId($id){
+        $this->delete_id = $id;
+        $ue = unite_enseignement::where('id', $this->delete_id)->first();
+        $this->uemod = $ue->name;
+        // dd($this->uemod);
+
+    }
+    public function deleteUe(){
+        $ues = unite_enseignement::where('id', $this->delete_id)->first();
+        $ues->delete();
+        // $this->emit('hide:delete-modal');
+        // $this->dispatch('hide:delete-modal');
+        // $this->closeModal();
+        notify()->success('L\'unité d\'enseignement a été supprimée avec succès');
+
     }
     public function confirmUeDeletion(unite_enseignement $ue){
         $ue->delete();

@@ -17,7 +17,8 @@
 
     <!-- Scripts -->
     @livewireStyles
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js',])
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 
 </head>
 
@@ -46,11 +47,12 @@
         </div>
         @endif
     </div>
+    <script src="{{ asset('js/modal.js') }}"></script>
     <x-notify::notify />
     @notifyJs
     @livewire('livewire-ui-modal')
     @livewireScripts
-   
+    @stack('script')
 </body>
 
 </html>
