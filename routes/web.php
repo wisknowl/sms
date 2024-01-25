@@ -83,8 +83,10 @@ Route::resource('specialties', SpecialtyController::class)
     ->middleware(['auth', 'verified']);
 
 Route::resource('uniteEseignements', UniteEnseignementController::class)
-    ->only(['index', 'store',])
+    ->only(['index', 'store', 'update'])
     ->middleware(['auth', 'verified']);
+
+Route::put('/uniteEnseignements/updateUe', [UniteEnseignementController::class, 'updateUe'])->name('uniteEnseignements.updateUe');
 
 Route::resource('cours', CourseController::class)
     ->only(['index', 'store'])

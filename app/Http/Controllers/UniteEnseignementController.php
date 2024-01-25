@@ -95,36 +95,59 @@ class UniteEnseignementController extends Controller
      */
     public function edit(unite_enseignement $unite_enseignement)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, unite_enseignement $unite_enseignement)
+    // public function update(Request $request, unite_enseignement $unite_enseignement)
+    // {
+    // }
+    
+    public function updateUe(Request $request)
     {
-        //
+        $ue_id = strip_tags($request->input('id'));
+        $ue = strip_tags($request->input('upName'));
+        $code = strip_tags($request->input('upCode'));
+        $credit_point = strip_tags($request->input('upCredit_point'));
+        $level = strip_tags($request->input('upLevel'));
+        $semester = strip_tags($request->input('upSemester'));
+        $course_nature = strip_tags($request->input('upCourse_nature'));
+        $specialty = strip_tags($request->input('upSpecialty'));
+        $description = strip_tags($request->input('upDescription'));
+        // dd($ue_id);
+        // Validate the request data
+        $request->validate([
+            // Your validation rules here
+        ]);
+
+        // Get the id from the hidden field
+        // $id = $request->input('id');
+
+        // Find the model by id
+        $uniteEnseignement = unite_enseignement::findOrFail($ue_id);
+
+        // Update the model
+        $updated = $uniteEnseignement->update([
+            'name' => $ue,
+            'description' => $description,
+            'credit_points' => $credit_point,
+            'code' => $code,
+            'level_id' => $level,
+            'semester_id' => $semester,
+            'course_nature_id' => $course_nature,
+            'specialty_id' => $specialty,
+        ]);
+
+        if ($updated) {
+            // flash a success message
+            notify()->success('L\'unité d\'enseignement a été modifier avec succès');
+        } else {
+            // flash an error message
+            notify()->success('Something went wrong', 'Error');
+        }
+        return redirect()->back();
     }
-    public function updateo(Request $request)
-{
-    // Validate the input data
-    $validatedData = $request->validate([
-        'id' => 'required|exists:ues,id',
-        'name' => 'required',
-        'email' => 'required|email',
-    ]);
-
-    // Find the model by id
-    $ue = Ue::find($validatedData['id']);
-    // Update the model with the input data
-    $ue->update($validatedData);
-
-    // Return a JSON response with a message
-    return response()->json([
-        'message' => 'Model updated successfully'
-    ]);
-}
-
 
     /**
      * Remove the specified resource from storage.

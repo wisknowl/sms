@@ -5,6 +5,7 @@ function fillModalForm(event) {
     // var button = this;
 
     // Get the data attributes of the button
+    var id = button.getAttribute("data-te-id");
     var name = button.getAttribute("data-te-name");
     var code = button.getAttribute("data-te-code");
     var credit_point = button.getAttribute("data-te-cp");
@@ -13,25 +14,33 @@ function fillModalForm(event) {
     var level = button.getAttribute("data-te-level");
     var semester = button.getAttribute("data-te-semester");
     
-    if (name) {
+    if (id) {
         // Do something if the value is not empty
-        console.log("The value is " + name);
+        console.log("The value is " + id);
     } else {
         // Do something else if the value is empty
         console.log("The value is empty");
     }
 
     // Get the input fields of the modal form
+    var inputId = document.getElementById("id");
     var inputName = document.getElementById("name");
     var inputCode = document.getElementById("code");
     var inputCredit_point = document.getElementById("credit_point");
     var inputCourse_nature = document.getElementById("course_nature");
-    var specialty = document.getElementById("specialty");
-    var level = document.getElementById("level");
-    var semester = document.getElementById("semester");
+    var inputSpecialty = document.getElementById("specialty");
+    var inputLevel = document.getElementById("level");
+    var inputSemester = document.getElementById("semester");
 
     // Assign the data attributes to the input fields
+    inputId.value = id;
     inputName.value = name;
+    inputCode.value = code;
+    inputCredit_point.value = credit_point;
+    inputCourse_nature.value = course_nature;
+    inputSpecialty.value = specialty;
+    inputLevel.value = level;
+    inputSemester.value = semester;
 }
 // Get the modal element
 var modal = document.getElementById("updateModal");
@@ -39,77 +48,31 @@ var modal = document.getElementById("updateModal");
 modal.addEventListener("show.te.modal", fillModalForm);
 
 
-// function fillModalForm(event) {
-//     // Get the button that triggered the event
-//     var button = event.target;
-//     // Get the data attributes of the button
-//     var name = button.getAttribute("data-te-name");
-
-//     if (name) {
-//         // Do something if the value is not empty
-//         console.log("The value is " + name);
-//     } else {
-//         // Do something else if the value is empty
-//         console.log("The value is empty");
-//     }
-
-//     // Get the input fields of the modal form
-//     var inputName = document.getElementById("name");
-
-//     // Assign the data attributes to the input fields
-//     inputName.value = name;
-// }
-
-// // Get the button that triggered the modal
-// var button = document.getElementById("btnModal");
-// // Add an event listener to the button
-// button.addEventListener("click", fillModalForm);
-
-
-
-// function fillModalForm() {
-//     // Get the button that triggered the modal
-//     var button = event.target;
-//     // Get the data attributes of the button
-//     var name = button.getAttribute("data-name");
-
-//     if (name) {
-//         // Do something if the value is not empty
-//         console.log("The value is " + name);
-//     } else {
-//         // Do something else if the value is empty
-//         console.log("The value is empty");
-//     }
-
-//     // Get the input fields of the modal form
-//     var inputName = document.getElementById("name");
-
-//     // Assign the data attributes to the input fields
-//     inputName.value = name;
-// }
-// // Get the button that triggered the modal
-// var button = event.target;
-// // Add an event listener to the button
-// button.addEventListener("click", fillModalForm);
-// Get the modal element
-// var modal = document.getElementById("updateModal");
-// Add an event listener to the modal
-// modal.addEventListener("show.bs.modal", fillModalForm);
-
-// Use the click event instead of the show.bs.modal event
-// var modal = document.getElementById("updateModal");
-// modal.addEventListener("click", fillModalForm);
-
-
-// function updateModel() {
+// function updateModel(event) {
 //     // Prevent the default form submission
 //     event.preventDefault();
 //     // Get the input fields of the modal form
+//     var inputId = document.getElementById("id");
 //     var inputName = document.getElementById("name");
+//     var inputCode = document.getElementById("code");
+//     var inputCredit_point = document.getElementById("credit_point");
+//     var inputCourse_nature = document.getElementById("course_nature");
+//     var inputSpecialty = document.getElementById("specialty");
+//     var inputLevel = document.getElementById("level");
+//     var inputSemester = document.getElementById("semester");
+//     var inputDescription = document.getElementById("description");
 
 //     // Create an object to store the data
 //     var data = {
+//         id: inputId,
 //         name: inputName.value,
+//         code: inputCode.value,
+//         credit_point: inputCredit_point.value,
+//         course_nature: inputCourse_nature.value,
+//         specialty: inputSpecialty.value,
+//         semester: inputSemester.value,
+//         level: inputLevel.value,
+//         description: inputDescription.value,
 //     };
 //     // Create an AJAX request object
 //     var xhr = new XMLHttpRequest();
