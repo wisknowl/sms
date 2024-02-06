@@ -1,19 +1,61 @@
-<div class="grid grid-cols-3 gap-4 items-center">
-    <div></div>
-    <div>
-        <select id="select_input" data-te-select-init data-te-select-placeholder="Annee academique" wire:change="" class="py-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
-            @isset($academic_years)
-            @foreach($academic_years as $academic_year)
-            <option value="{{ $academic_year->name }}">{{ $academic_year->name }}</option>
-            @endforeach
-            @endisset
-        </select>
-        <div class="p-3" data-te-select-custom-content-ref>
-            <!-- Button trigger modal -->
-            <button type="button" class="inline-block rounded uppercase bg-primary p-1 text-xs font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-toggle="modal" data-te-target="#exampleModal1" data-te-ripple-init data-te-ripple-color="light">
-                Creer
-            </button>
-        </div>
+<div class="flex justify-between items-center">
+    <style>
+        /* Define the animation name and duration */
+        .text-motion {
+            animation: scroll-right-to-left 5s infinite;
+        }
+
+        /* Define the keyframes for the animation */
+        @keyframes scroll-right-to-left {
+
+            /* Start from the right edge of the container */
+            0% {
+                transform: translateX(100%);
+            }
+
+            /* End at the left edge of the container */
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        
+    </style>
+    <div class="">
+        <h2 class="text-motion glow font-semibold text-l text-gray-800 leading-tight">
+            @if (Session::has('year_name')) Année academique {{ Session::get('year_name') }}@endif
+            @if (Session::has('semester_name')) Semestre {{ Session::get('semester_name') }}@endif
+        </h2>
+    </div>
+    <div class="mx-3" data-te-dropdown-ref>
+        <button class="flex items-center whitespace-nowrap rounded bg-primary-100 px-6 pb-1 pt-1.5 text-xs font-medium uppercase leading-normal text-neutral-800 shadow-[0_4px_9px_-4px_#fbfbfb] transition duration-150 ease-in-out hover:bg-neutral-100 hover:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:bg-neutral-100 focus:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:outline-none focus:ring-0 active:bg-neutral-200 active:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] motion-reduce:transition-none" type="button" id="dropdownMenuButton8" data-te-dropdown-toggle-ref aria-expanded="false" data-te-ripple-init>
+            Changer Année
+            <span class="ml-2 w-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+            </span>
+        </button>
+        <ul class="absolute z-[1000] float-left m-0 hidden w-40 list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block" aria-labelledby="dropdownMenuButton8" data-te-dropdown-menu-ref>
+            <form action="{{ route('dashboard') }}" method="get">
+
+                @isset($academic_years)
+                @foreach($academic_years as $academic_year)
+                <div class="flex items-center pl-3">
+                    <input type="radio" name="year_id" id="radio" value="{{ $academic_year->id }}" onclick="this.form.submit()" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                    <label for="radio" class="ms-2 py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 uppercase">{{ $academic_year->name }}</label>
+                </div>
+                @endforeach
+                @endisset
+
+                <div class="p-3" data-te-select-custom-content-ref>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="inline-block rounded uppercase bg-primary p-1 text-xs font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-toggle="modal" data-te-target="#exampleModal1" data-te-ripple-init data-te-ripple-color="light">
+                        Creer
+                    </button>
+                </div>
+            </form>
+        </ul>
         <!-- Modal -->
         <div data-te-modal-init class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div data-te-modal-dialog-ref class="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:max-w-[500px]">

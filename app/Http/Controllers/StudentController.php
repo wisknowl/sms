@@ -23,7 +23,7 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): view
+    public function index(Request $request): view
     {
         $specialties = specialty::all();
         $cycles = cycle::all();
@@ -35,22 +35,13 @@ class StudentController extends Controller
     }
     public function getChartData(Request $request)
     {
-        if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
-            // Get the value of the selected semester from the request
-            $semester_id = $request->has('semester_id');
-            Session::put('semester_id', $semester_id);
-        }
-        else{
-            $semester_id = 4;
-        }
-
         $students = student::orderBy('id', 'desc')->get();
         $data = array();
         foreach ($students as $student) {
             $student_id = $student->id;
             $st_ues = student_ue::with('ue')
                 ->where('student_id', $student_id)
-                ->whereHas('ue', function ($query) use ($student, $semester_id) {
+                ->whereHas('ue', function ($query) use ($student) {
                     $level_id = $student->currentLevel()->id;
                     $query->where('level_id', $level_id)->where('semester_id', Session::get('semester_id'));
                 })->get();

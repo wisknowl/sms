@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use Session;
 
 use App\Http\Controllers\AcademicYearController;
@@ -46,15 +48,43 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('welcome');
 });
+function getAcademicYear()
+{
+    $currentYear = date('Y');
+    $currentMonth = date('m');
+    if ($currentMonth > 7) { // If the month is above July
+        $nextYear = $currentYear + 1;
+        return "$currentYear-$nextYear";
+    } else { // If the month is July or below
+        $previousYear = $currentYear - 1;
+        return "$previousYear-$currentYear";
+    }
+}
 
 Route::get('/dashboard', function (Request $request) {
-    if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
-        // Get the value of the selected semester from the request
-        $semester_id = $request->has('semester_id');
-        Session::put('semester_id', $semester_id);
+    if ($request->has('year_id') && !empty($request->input('year_id'))) {
+        $year_id = $request->input('year_id');
+        $year_name = academic_year::where('id', $year_id)->value('name');
+        Session::put('year_name', $year_name);
+        Session::put('year_id', $year_id);
+    } else {
+        $year = academic_year::first();
+        $year_id = $year->id;
+        $year_name = getAcademicYear();
+        // $year_name = $year->name;
+        Session::put('year_name', $year_name);
+        Session::put('year_id', $year_id);
     }
-    else{
-        $semester_id = 1;
+    if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
+        $semester_id = $request->input('semester_id');
+        $semester_name = semester::where('id', $semester_id)->value('name');
+        Session::put('semester_name', $semester_name);
+        Session::put('semester_id', $semester_id);
+    } else {
+        $semester = semester::first();
+        $semester_id = $semester->id;
+        $semester_name = $semester->name;
+        Session::put('semester_name', $semester_name);
         Session::put('semester_id', $semester_id);
     }
     $students = student::orderBy('id', 'desc')->get();

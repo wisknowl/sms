@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Livewire;
-
+use Session;
 use App\Models\academic_year;
 use Barryvdh\DomPDF\Facade\Pdf;
 // use Barryvdh\DomPDF\Facade as PDF;
@@ -52,14 +52,11 @@ class StudentMarks extends Component
     public $level_id;
     public $greeting = [];
 
-
-
-
     public function mount()
     {
         // $this->a_year = $a_year;
         // $this->studentId = $studentId;
-        $this->academic_year = $this->getAcademicYear();
+        // $this->academic_year = $this->getAcademicYear();
         // $first_a_year = academic_year::first();
         // $this->academic_year = $first_a_year->name;
         $first_cycle = cycle::first();
@@ -157,6 +154,9 @@ class StudentMarks extends Component
         $this->students = Student::whereHas('course', function ($query) {
             $query->where('course_id', $this->coursemod);
         })->get();
+        if (session()->has('year_name')) {
+            $this->academic_year = session('year_name');
+        }
         // $this->course_students = course_student::with('student', 'course')->where('course_id', $this->course)->get();
         $this->course_students = course_student::with('student', 'course')
             ->where('course_id', $this->coursemod)
