@@ -37,7 +37,7 @@ function fillModalForm(event) {
     inputName.value = name;
     inputCode.value = code;
     inputCredit_point.value = credit_point;
-    inputCourse_nature.value = course_nature;
+    inputCourse_nature.placeholder = course_nature;
     inputSpecialty.value = specialty;
     inputLevel.value = level;
     inputSemester.value = semester;
