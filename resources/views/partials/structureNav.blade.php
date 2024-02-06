@@ -1,10 +1,5 @@
-<div class="flex justify-between mb-5 items-center">
+<div class="flex justify-between mb-5 items-center border-b">
     <div class="flex items-center">
-        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uppercase p-3">
-            <x-nav-link :href="route('levels.index')" :active="request()->routeIs('levels.index')">
-                {{ __('Niveau') }}
-            </x-nav-link>
-        </div>
         <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uppercase p-3">
             <x-nav-link :href="route('specialties.index')" :active="request()->routeIs('specialties.index')">
                 {{ __('Specialité') }}

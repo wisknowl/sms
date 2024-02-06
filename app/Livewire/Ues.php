@@ -17,12 +17,18 @@ use Livewire\WithPagination;
 class Ues extends Component
 {
     use WithPagination;
-    
+
     public $academic_year;
     public $level;
+    public $specialty;
+    public $semester;
+    public $all;
     public $search;
     public $delete_id;
     public $uemod;
+    public $levelcheck = [];
+    public $indexes;
+
     public function mount()
     {
         $this->academic_year = $this->getAcademicYear();
@@ -32,32 +38,42 @@ class Ues extends Component
         // $this->level=$first_level->id;
         // dd($this->level);
     }
-    public function nf(){
-        // dd($this->level);
+    public function fl()
+    {
+        $this->indexes = array_keys($this->levelcheck);
+        // dd($this->levelcheck, $this->indexes);
     }
-    public function updatingLevel(){
+    public function fs()
+    {
+        // dd($this->specialty);
+    }
+    public function updatingLevel()
+    {
         $this->resetPage();
     }
-    public function updatingSearch(){
+    public function updatingSearch()
+    {
         $this->resetPage();
     }
-    public function setDeleteId($id){
+    public function setDeleteId($id)
+    {
         $this->delete_id = $id;
         $ue = unite_enseignement::where('id', $this->delete_id)->first();
         $this->uemod = $ue->name;
         // dd($this->uemod);
 
     }
-    public function deleteUe(){
+    public function deleteUe()
+    {
         $ues = unite_enseignement::where('id', $this->delete_id)->first();
         $ues->delete();
         // $this->emit('hide:delete-modal');
         // $this->dispatch('hide:delete-modal');
         // $this->closeModal();
         notify()->success('L\'unité d\'enseignement a été supprimée avec succès');
-
     }
-    public function confirmUeDeletion(unite_enseignement $ue){
+    public function confirmUeDeletion(unite_enseignement $ue)
+    {
         $ue->delete();
     }
     function getAcademicYear()
@@ -76,22 +92,39 @@ class Ues extends Component
     {
         $academic_years = academic_year::all();
         $units = unite_enseignement::with('course_nature')->orderBy('code', 'asc');
-        // if($this->level == true){
-        //     $query->where('level_id', 12)->get();
+        if (!empty($this->indexes)) {
+            foreach ($this->indexes as $i) {
+                if ($this->levelcheck[$i] == true) {
+                    // dump($i, $this->levelcheck[$i]);
+                    $units->where('level_id', $i)->get();
+                }
+            }
+        }
+        // if ($this->all) {
+        //     return $units->get();
         // }
+
         $units->when($this->level, function ($query) {
-                return $query->where('level_id', 12);
+                return $query->where('level_id', $this->level);
+            })
+            ->when($this->specialty, function ($query) {
+                // dd($this->specialty);
+                return $query->where('specialty_id', $this->specialty);
+            })
+            ->when($this->semester, function ($query) {
+                // dd($this->specialty);
+                return $query->where('semester_id', $this->semester);
             })
             ->when($this->search, function ($query) {
-                return $query->where(function ($query){
-                    $query->where('name','like', '%' . $this->search . '%')
-                        ->orwhere('code','like', '%' . $this->search . '%')
-                        ->orwhere('id','like', '%' .$this->search . '%');
+                return $query->where(function ($query) {
+                    $query->where('name', 'like', '%' . $this->search . '%')
+                        ->orwhere('code', 'like', '%' . $this->search . '%')
+                        ->orwhere('id', 'like', '%' . $this->search . '%');
                 });
             })
             ->get();
         // dd($ues);
-        $sql=$units->toSql();
+        $sql = $units->toSql();
         $ues = $units->paginate(10);
         // $ues = $units->get();
 
@@ -101,6 +134,6 @@ class Ues extends Component
         $semesters = semester::all();
         config(['app.name' => 'Unite Denseignement']);
 
-        return view('livewire.ues', compact('ues', 'levels', 'academic_years', 'semesters', 'specialties','course_natures','sql'));
+        return view('livewire.ues', compact('ues', 'levels', 'academic_years', 'semesters', 'specialties', 'course_natures', 'sql'));
     }
 }

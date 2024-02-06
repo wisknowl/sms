@@ -87,7 +87,7 @@
                     <!-- @notifyCss -->
                     <x-notify::notify />
                     <!-- @notifyJs -->
-                    <h2 class="underline underline-offset-4 font-light text-xl text-gray-800 leading-tight flex items-center text-center mb-2">
+                    <h2 class="font-bold  text-xl text-gray-800 text-center my-4">
                         {{ __('Saisie Des Notes') }}
                     </h2>
                     <div class="flex justify-end">
@@ -98,7 +98,7 @@
                         <div class="pt-4 grid grid-cols-3 gap-6">
                             <div>
                                 <label for="">Cycle</label>
-                                <select wire:model="cycle" multiple wire:change="updateSpecialties" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                                <select wire:model="cycle" mul wire:change="updateSpecialties" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                                     @isset($cycles)
                                     @foreach($cycles as $cycle)
                                     <option value="{{ $cycle->id }}">{{ $cycle->name }} | {{ $cycle->code }}</option>
@@ -109,7 +109,7 @@
                             <div>
                                 <form>
                                     <label>Specialite</label>
-                                    <select wire:model="specialty" multiple wire:change="updateLevels" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                                    <select wire:model="specialty" mul wire:change="updateLevels" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                                         @isset($specialties)
                                         @foreach($specialties as $specialty)
                                         <option value="{{ $specialty->id }}">{{ $specialty->name }} | {{ $specialty->code }}</option>
@@ -121,7 +121,7 @@
                             </div>
                             <div>
                                 <label for="">Niveau</label>
-                                <select wire:model="level" multiple wire:change="updateSemesters" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                                <select wire:model="level" mul wire:change="updateSemesters" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                                     @isset($levels)
                                     @foreach($levels as $level)
                                     <option value="{{ $level->id }}">Niveau {{ $level->name }}</option>
@@ -133,7 +133,7 @@
                         <div class="py-4 grid grid-cols-3 gap-6 items-center">
                             <div>
                                 <label>Semestre</label>
-                                <select wire:model="semester" multiple wire:change="updateCourses" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                                <select wire:model="semester" mul wire:change="updateCourses" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                                     @isset($semesters)
                                     @foreach($semesters as $semester)
                                     <option value="{{ $semester->id }}">Semestre {{ $semester->name }}</option>
@@ -143,7 +143,7 @@
                             </div>
                             <div>
                                 <label>Cours</label>
-                                <select wire:model.lazy.500ms="coursemod" multiple wire:change="updateStudents" name="course_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                                <select wire:model.lazy.500ms="coursemod" mul wire:change="updateStudents" name="course_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                                     @isset($courses)
                                     @foreach($courses as $course)
                                     <option value="{{ $course->id }}">{{ $course->code }} | {{ $course->name }}</option>
@@ -152,7 +152,7 @@
                                 </select>
                             </div>
                             <div class="">
-                                
+
                             </div>
                         </div>
                     </div>

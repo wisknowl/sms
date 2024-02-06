@@ -26,4 +26,7 @@ class course extends Model
     public function ue(){
         return $this->belongsTo(unite_enseignement::class);
     }
+    public function level(){
+        return $this->belongsTo(level::class);
+    }
 }

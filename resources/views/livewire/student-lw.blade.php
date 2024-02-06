@@ -2,7 +2,7 @@
     <div class="bg-white shadow">
         <div class="flex justify-between max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Structure') }} {{$academic_year}}
+                {{ __('Etudiant') }} {{$academic_year}}
             </h2>
             <div class="grid grid-cols-3 gap-4">
                 <div class="flex text-center items-center">
@@ -96,6 +96,9 @@
                     </div>
                     <!--Tabs content-->
                     <div class="mb-6">
+                        <h2 class="font-bold  text-xl text-gray-800 text-center my-4">
+                            {{ __('Etudiant') }}
+                        </h2>
                         <!-- Add Specialty -->
                         <div class="space-y-2 mb-2 flex justify-between items-center">
                             <div>

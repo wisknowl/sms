@@ -1,4 +1,6 @@
 <?php
+namespace App\Http\Controllers;
+use Session;
 
 use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\ProfileController;
@@ -16,10 +18,19 @@ use App\Livewire\StudentMarks;
 use Illuminate\Support\Facades\Route;
 use App\Exports\SpecialtyExport;
 use App\Livewire\ProcesVerbal;
+use App\Models\academic_year;
+use App\Models\course;
+use App\Models\course_student;
 use App\Models\level;
 use App\Models\semester;
 use App\Models\specialty as ModelsSpecialty;
+use App\Models\student;
+use App\Models\student_ue;
+use App\Models\unite_enseignement;
+use App\Models\User;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -36,8 +47,81 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/dashboard', function (Request $request) {
+    if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
+        // Get the value of the selected semester from the request
+        $semester_id = $request->has('semester_id');
+        Session::put('semester_id', $semester_id);
+    }
+    else{
+        $semester_id = 1;
+        Session::put('semester_id', $semester_id);
+    }
+    $students = student::orderBy('id', 'desc')->get();
+    $data = array();
+    $validated_ue = array();
+    $not_validated_ue = array();
+    foreach ($students as $student) {
+        $student_id = $student->id;
+        $st_ues = student_ue::with('ue')
+            ->where('student_id', $student_id)
+            ->whereHas('ue', function ($query) use ($student) {
+                $level_id = $student->currentLevel()->id;
+                $session = Session::get('semester_id');
+                // dump($session);
+                $query->where('level_id', $level_id)->where('semester_id', $session);
+            })->get();
+        $courses = course_student::with('course')
+            ->where('student_id', $student_id)
+            ->whereHas('course', function ($query) use ($student) {
+                $level_id = $student->currentLevel()->id;
+                $query->where('level_id', $level_id);
+            })->get();
+        $ue_credit_sum = 0;
+        $ue_sum = 0;
+        foreach ($st_ues as $st_ue) {
+            $course_sum = 0;
+            $course_credit_sum = 0;
+            foreach ($courses as $course) {
+                if ($course->course->ue_id == $st_ue->ue->id) {
+
+                    if ($course->exam_marks < $course->reseat_mark) {
+                        $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->reseat_mark) / 20) * 70)) / 100) * 20);
+                    } else {
+                        $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->exam_marks) / 20) * 70)) / 100) * 20);
+                    }
+                    $course_credit_multiply = $course_mark * $course->course->credit_points;
+                    $course_sum = $course_sum + $course_credit_multiply;
+                    $course_credit_sum = $course_credit_sum + $course->course->credit_points;
+                }
+            }
+            $ue_mark = $course_sum / $course_credit_sum;
+            if ($ue_mark < 10) {
+                $not_validated_ue[] = $ue_mark;
+            } else {
+                $validated_ue[] = $ue_mark;
+            }
+            $ue_credit_multiply = $ue_mark * $st_ue->ue->credit_points;
+            $ue_sum = $ue_sum + $ue_credit_multiply;
+            $ue_credit_sum = $ue_credit_sum + $st_ue->ue->credit_points;
+        }
+        $std_avg = $ue_sum / $ue_credit_sum;
+        $data[] = $std_avg;
+    }
+    $validated_ue_count = count($validated_ue);
+    $not_validated_ue_count = count($not_validated_ue);
+    $validated_ue_percent = ($validated_ue_count / ($validated_ue_count + $not_validated_ue_count)) * 100;
+    $not_validated_ue_percent = ($not_validated_ue_count / ($validated_ue_count + $not_validated_ue_count)) * 100;
+
+    $academic_years = academic_year::all();
+    $semesters = semester::all();
+    $user_count = User::count();
+    $count = student::count();
+    $specialty_count = ModelsSpecialty::count();
+    $ue_count = unite_enseignement::count();
+    $course_count = course::count();
+    config(['app.name' => 'Dashboard']);
+    return view('dashboard', compact('academic_years', 'semesters', 'user_count', 'count', 'specialty_count', 'ue_count', 'course_count', 'validated_ue_percent', 'not_validated_ue_percent'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('generateTranscript/{id}', [StudentMarks::class, 'generateTranscript'])->name('Transcript');
@@ -65,6 +149,8 @@ Route::get('export/{id}/{level_id}/{semester_id}/{a_year}', function ($id, $leve
 Route::resource('students', StudentController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified']);
+Route::get('/chart-data', [StudentController::class, 'getChartData']);
+Route::get('/semesterSession', [StudentController::class, 'getChartData'])->name('semesterSession');
 
 Route::resource('academic_years', AcademicYearController::class)
     ->only(['index', 'store'])

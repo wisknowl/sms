@@ -1,4 +1,4 @@
-<div class="flex justify-between mb-5 items-center">
+<div class="flex justify-between mb-5 border-b items-center">
     <div class="flex items-center">
         <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex uppercase p-3">
             <x-nav-link :href="route('notes.index')" :active="request()->routeIs('notes.index')">

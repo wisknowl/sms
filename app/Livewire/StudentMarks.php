@@ -144,7 +144,8 @@ class StudentMarks extends Component
 
         // $this->emit('specialtyUpdated');
     }
-    public function updatingCoursemod(){
+    public function updatingCoursemod()
+    {
         $this->resetPage();
     }
 
@@ -170,7 +171,6 @@ class StudentMarks extends Component
             })
             ->get();
 
-
         foreach ($this->course_students as $course_student) {
             $le = $course_student->student->currentLevel()->name;
             // dd($le);
@@ -188,13 +188,29 @@ class StudentMarks extends Component
         // update the marks using the update method
         DB::transaction(function () use ($request) {
             // get the indexes of the ca_marks and exam_mark arrays
-            $indexes = array_keys($this->ca_marks);
+            $i = 154;
+            $indexes = array(); // Initialize an empty array
+            if (!empty($this->ca_marks)) {
+                // Merge the keys of $this->ca_marks with the $indexes array
+                $indexes = array_merge($indexes, array_keys($this->ca_marks));
+            }
+            if (!empty($this->exam_mark)) {
+                // Merge the keys of $this->exam_mark with the $indexes array
+                $indexes = array_merge($indexes, array_keys($this->exam_mark));
+            }
+            if (!empty($this->reseat_mark)) {
+                // Merge the keys of $this->reseat_mark with the $indexes array
+                $indexes = array_merge($indexes, array_keys($this->reseat_mark));
+            }
+            $indexes = array_unique($indexes);
             // dd($this->ca_marks, $this->exam_mark, $this->reseat_mark, $indexes);
+
             // die();
             // initialize a variable to store the update status
             $updated = true;
             // loop through the indexes
             foreach ($indexes as $index) {
+                // dd($index);
                 // find the course_student record by the index
                 $course_student = course_student::find($index);
 
@@ -204,7 +220,7 @@ class StudentMarks extends Component
                 //     $this->average = (((((($this->ca_marks[$index]) / 20) * 30) + ((($this->exam_mark[$index]) / 20) * 70)) / 100) * 20);
                 // }
                 // // update the record with the ca_mark and exam_mark values
-                
+
                 if (array_key_exists($index, $this->ca_marks) && !empty($this->ca_marks[$index])) {
                     $updated = $updated && $course_student->update(['ca_marks' => $this->ca_marks[$index]]);
                 }
@@ -219,6 +235,7 @@ class StudentMarks extends Component
                 //     'exam_marks' => $this->exam_mark[$index],
                 //     'reseat_mark' => $this->reseat_mark[$index],
                 // ]);
+
             }
             DB::commit();
             // check if the update was successful
@@ -283,8 +300,13 @@ class StudentMarks extends Component
             $count = 0;
             foreach ($st_courses as $st_course) {
                 if ($st_course->course->ue_id == $st_ue->ue->id) {
-                    $sum = $sum + $st_course->average;
-                    if ($st_course->average >= 10) {
+                    if ($st_course->exam_marks < $st_course->reseat_mark) {
+                        $course_mark = (((((($st_course->ca_marks) / 20) * 30) + ((($st_course->reseat_mark) / 20) * 70)) / 100) * 20);
+                    } else {
+                        $course_mark = (((((($st_course->ca_marks) / 20) * 30) + ((($st_course->exam_marks) / 20) * 70)) / 100) * 20);
+                    }
+                    $sum = $sum + $course_mark;
+                    if ($course_mark >= 10) {
                         $c = $c + $st_course->course->credit_points;
                     }
                     $count = $count + 1;

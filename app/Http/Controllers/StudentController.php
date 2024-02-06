@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Session;
+
 use Illuminate\View\View;
 use App\Models\specialty;
 use App\Models\unite_enseignement;
@@ -10,6 +12,7 @@ use App\Models\course_student;
 use App\Models\cycle;
 use App\Models\level;
 use App\Models\student;
+use App\Models\student_ue;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +29,73 @@ class StudentController extends Controller
         $cycles = cycle::all();
         $levels = level::all();
         $students = student::orderBy('id', 'desc')->get();
-        return view('students.index', compact('levels', 'cycles', 'specialties', 'students'));
+        $labels = $students->pluck('matricule')->toArray();
+        $data = $students->pluck('id')->toArray();
+        return view('students.index', compact('levels', 'cycles', 'specialties', 'students', 'labels'));
+    }
+    public function getChartData(Request $request)
+    {
+        if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
+            // Get the value of the selected semester from the request
+            $semester_id = $request->has('semester_id');
+            Session::put('semester_id', $semester_id);
+        }
+        else{
+            $semester_id = 4;
+        }
+
+        $students = student::orderBy('id', 'desc')->get();
+        $data = array();
+        foreach ($students as $student) {
+            $student_id = $student->id;
+            $st_ues = student_ue::with('ue')
+                ->where('student_id', $student_id)
+                ->whereHas('ue', function ($query) use ($student, $semester_id) {
+                    $level_id = $student->currentLevel()->id;
+                    $query->where('level_id', $level_id)->where('semester_id', Session::get('semester_id'));
+                })->get();
+            $courses = course_student::with('course')
+                ->where('student_id', $student_id)
+                ->whereHas('course', function ($query) use ($student) {
+                    $level_id = $student->currentLevel()->id;
+                    $query->where('level_id', $level_id);
+                })->get();
+            $ue_credit_sum = 0;
+            $ue_sum = 0;
+            foreach ($st_ues as $st_ue) {
+                $course_sum = 0;
+                $course_credit_sum = 0;
+                foreach ($courses as $course) {
+                    if ($course->course->ue_id == $st_ue->ue->id) {
+
+                        if ($course->exam_marks < $course->reseat_mark) {
+                            $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->reseat_mark) / 20) * 70)) / 100) * 20);
+                        } else {
+                            $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->exam_marks) / 20) * 70)) / 100) * 20);
+                        }
+                        $course_credit_multiply = $course_mark * $course->course->credit_points;
+                        $course_sum = $course_sum + $course_credit_multiply;
+                        $course_credit_sum = $course_credit_sum + $course->course->credit_points;
+                    }
+                }
+                $ue_mark = $course_sum / $course_credit_sum;
+                $ue_credit_multiply = $ue_mark * $st_ue->ue->credit_points;
+                $ue_sum = $ue_sum + $ue_credit_multiply;
+                $ue_credit_sum = $ue_credit_sum + $st_ue->ue->credit_points;
+            }
+            $std_avg = $ue_sum / $ue_credit_sum;
+            $data[] = $std_avg;
+        }
+        $labels = $students->pluck('matricule')->toArray();
+        $student_name = $students->pluck('name')->toArray();
+        // $data = $students->pluck('id')->toArray();
+
+        // Return the data as a JSON response
+        return response()->json([
+            'student_name' => $student_name,
+            'labels' => $labels,
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -98,7 +167,7 @@ class StudentController extends Controller
 
         $ayear = $this->getAcademicYear();
 
-        
+
         try {
             $timestamp = Carbon::now()->format('Y-m-d H:i:s');
             $student = student::find($student_id);

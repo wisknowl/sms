@@ -87,7 +87,7 @@
 
                     <!--Tabs content-->
                     <div class="mb-6">
-                        <h2 class="font-light text-xl text-gray-800 leading-tight flex items-center text-center my-4">
+                        <h2 class="font-bold  text-xl text-gray-800 text-center my-4">
                             {{ __('Specialité') }}
                         </h2>
                         <!-- Add Specialty -->

@@ -23,7 +23,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('levels.index')" :active="request()->routeIs('levels.index')">
+                    <x-nav-link :href="route('specialties.index')" :active="request()->routeIs('specialties.index')">
                         <span class="mr-1.5 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                             <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="4" y="4" width="16" height="7" rx="1" stroke="#222222" />

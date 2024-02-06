@@ -88,7 +88,7 @@
                     <!-- @notifyCss -->
                     <x-notify::notify />
                     <!-- @notifyJs -->
-                    <h2 class="underline underline-offset-4 font-light text-xl text-gray-800 leading-tight flex items-center text-center mb-2">
+                    <h2 class="font-bold  text-xl text-gray-800 text-center my-4">
                         {{ __('Proces Verbal') }}
                     </h2>
 

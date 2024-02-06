@@ -87,9 +87,10 @@
 
                     <!--Tabs content-->
                     <div class="mb-6">
-                        <h2 id="hid" class="font-light text-xl text-gray-800 leading-tight flex items-center text-center my-4">
+                        <h2 class="font-bold  text-xl text-gray-800 text-center my-4">
                             {{ __('Cours') }}
                         </h2>
+
                         <!-- Add Specialty -->
                         <div class="space-y-2 mb-2 flex justify-between items-center">
                             <div>
