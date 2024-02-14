@@ -96,9 +96,46 @@ class SpecialtyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, specialty $specialty)
+    // public function update(Request $request, specialty $specialty)
+    // {
+    //     //
+    // }
+
+    public function updateSpec(Request $request)
     {
-        //
+        $specialty_id = strip_tags($request->input('id'));
+        $specialty_name = strip_tags($request->input('upName'));
+        $code = strip_tags($request->input('upCode'));
+        $cycle_id = strip_tags($request->input('cycle_id'));
+        $description = strip_tags($request->input('upDescription'));
+        // dd($ue_id);
+        // Validate the request data
+        $request->validate([
+            // Your validation rules here
+        ]);
+
+        // Get the id from the hidden field
+        // $id = $request->input('id');
+
+        // Find the model by id
+        $specialty = specialty::findOrFail($specialty_id);
+
+        // Update the model
+        $updated = $specialty->update([
+            'name' => $specialty_name,
+            'description' => $description,
+            'code' => $code,
+            'cycle_id' => $cycle_id,
+        ]); 
+
+        if ($updated) {
+            // flash a success message
+            notify()->success('Spécialité a été modifier avec succès');
+        } else {
+            // flash an error message
+            notify()->success('Something went wrong', 'Error');
+        }
+        return redirect()->back();
     }
 
     /**

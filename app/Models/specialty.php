@@ -13,6 +13,8 @@ class specialty extends Model
     // {
     //     return $this->belongsToMany('App\Models\unite_enseignement', 'specialty_ues','specialty_id', 'ue_id');
     // }
+    protected $guarded = [];
+
     public function ues(){
         return $this->hasMany(unite_enseignement::class);
     }

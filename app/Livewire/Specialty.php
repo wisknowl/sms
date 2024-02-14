@@ -27,6 +27,9 @@ class Specialty extends Component
 {
     use WithPagination;
     public $academic_year;
+    public $search;
+    public $cycle;
+    public $delete_id;
 
     public function mount()
     {
@@ -40,6 +43,12 @@ class Specialty extends Component
     public function export()
     {
         return Excel::download(new Ues, 'ues.xlsx');
+    }
+    public function fl(){
+
+    }
+    public function fs(){
+
     }
     public function generatePV($id)
     {
@@ -69,6 +78,19 @@ class Specialty extends Component
         $pdf->setPaper('a4', 'landscape');
         return $pdf->stream();
     }
+    public function setDeleteId($id)
+    {
+        $this->delete_id = $id;
+    }
+    public function deleteSpec()
+    {
+        $ues = ModelsSpecialty::where('id', $this->delete_id)->first();
+        $ues->delete();
+        // $this->emit('hide:delete-modal');
+        // $this->dispatch('hide:delete-modal');
+        // $this->closeModal();
+        notify()->success('La Spécialité a été supprimée avec succès');
+    }
     function getAcademicYear()
     {
         $currentYear = date('Y');
@@ -87,9 +109,21 @@ class Specialty extends Component
         $semesters = semester::all();
         $academic_years = academic_year::all();
         $cycles = cycle::all();
-        $specialties = ModelsSpecialty::with('cycle');
-        $specialties = $specialties->paginate(3);
+        $specs = ModelsSpecialty::with('cycle');
+
+        $specs->when($this->cycle, function ($query) {
+            return $query->where('cycle_id', $this->cycle);
+        })
+        ->when($this->search, function ($query) {
+            return $query->where(function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orwhere('code', 'like', '%' . $this->search . '%')
+                    ->orwhere('id', 'like', '%' . $this->search . '%');
+            });
+        })->get();
+        $sql = $specs->toSql();
+        $specialties = $specs->paginate(0);
         config(['app.name' => 'Specialite']);
-        return view('livewire.specialty', compact('specialties', 'academic_years', 'semesters', 'cycles'));
+        return view('livewire.specialty', compact('specialties', 'academic_years', 'semesters', 'cycles','sql'));
     }
 }

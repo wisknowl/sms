@@ -17,13 +17,13 @@
         </div>
         <div class="mb-6">
             <x-notify::notify />
-            <!-- <div> <label for="">{{ $sql }}</label></div> -->
+            <div> <label for="">{{ $sql }}</label></div>
             <!-- Add Specialty -->
             <div class="mb-2 flex justify-between items-center">
                 <!-- TW Elements is free under AGPL, with commercial license required for specific uses. See more details: https://tw-elements.com/license/ and contact us for queries at tailwind@mdbootstrap.com -->
                 <div>
                     <input wire:model="search" wire:change="fl" type="search" class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:border-0 focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary" id="exampleSearch" placeholder="Rechercher" />
-                </div>
+                </div> 
                 <div class="flex justify-end items-center">
 
                     <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="justify-between mx-3 border-2 text-neutral-900 bg-white hover:bg-slate-50 focus:outline-none  font-medium rounded-lg text-sm px-3 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
@@ -129,22 +129,22 @@
                                 <table class="min-w-full text-center text-sm font-light">
                                     <thead class="border-b font-medium dark:border-neutral-500">
                                         <tr>
-                                            <th scope="col" class="px-6 py-4">#</th>
-                                            <th scope="col" class="px-6 py-4">Name</th>
-                                            <th scope="col" class="px-6 py-4">Code</th>
-                                            <th scope="col" class="px-6 py-4">Type</th>
-                                            <th scope="col" class="px-6 py-4">Action</th>
+                                            <th scope="col" class="px-4 py-2 border">#</th>
+                                            <th scope="col" class="px-4 py-2 border">Name</th>
+                                            <th scope="col" class="px-4 py-2 border">Code</th>
+                                            <th scope="col" class="px-4 py-2 border">Type</th>
+                                            <th scope="col" class="px-4 py-2 border">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php($count = 1)
                                         @forelse ($ues as $ue)
                                         <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
-                                            <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $count }}</td>
-                                            <td class="whitespace-nowrap px-6 py-4">{{ $ue->name }} | Credit {{ $ue->credit_points }}</td>
-                                            <td class="whitespace-nowrap px-6 py-4">{{ $ue->code }}</td>
-                                            <td class="whitespace-nowrap px-6 py-4">{{ $ue->course_nature->name }}</td>
-                                            <td class="whitespace-nowrap px-6 py-4 flex justify-center items-center">
+                                            <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $count }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $ue->name }} | Credit {{ $ue->credit_points }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $ue->code }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $ue->course_nature->name }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
                                                 <button type="button" wire:click.prevent='setDeleteId({{ $ue->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -177,7 +177,7 @@
                                         @php($count = $count + 1)
                                         @empty
                                         <tr>
-                                            <td colspan="5" class="whitespace-nowrap px-6 py-4 text-center">No ues found</td>
+                                            <td colspan="5" class="whitespace-nowrap px-4 py-2 border text-center">No ues found</td>
                                         </tr>
                                         @endforelse
                                     </tbody>

@@ -203,6 +203,7 @@ Route::resource('levels', LevelController::class)
 Route::resource('specialties', SpecialtyController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified', 'set_session_values']);
+Route::put('/specialties/updateSpec', [SpecialtyController::class, 'updateSpec'])->name('specialties.updateSpec');
 
 Route::resource('uniteEseignements', UniteEnseignementController::class)
     ->only(['index', 'store', 'update'])
