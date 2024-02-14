@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Livewire;
-
+use Session;
 use App\Models\academic_year;
 use App\Models\course_nature;
 use App\Models\level;
@@ -90,11 +90,14 @@ class Ues extends Component
     }
     public function render(Request $request)
     {
+        if (session()->has('semester_id')) {
+            $semester_session = session('semester_id');
+        }
         $academic_years = academic_year::all();
-        $units = unite_enseignement::with('course_nature')->orderBy('code', 'asc');
+        $units = unite_enseignement::with('course_nature')->orderBy('code', 'asc')->where('semester_id',$semester_session);
         if (!empty($this->indexes)) {
             foreach ($this->indexes as $i) {
-                if ($this->levelcheck[$i] == true) {
+                if ($this->levelcheck[$i] == true) { 
                     // dump($i, $this->levelcheck[$i]);
                     $units->where('level_id', $i)->get();
                 }
@@ -110,10 +113,6 @@ class Ues extends Component
             ->when($this->specialty, function ($query) {
                 // dd($this->specialty);
                 return $query->where('specialty_id', $this->specialty);
-            })
-            ->when($this->semester, function ($query) {
-                // dd($this->specialty);
-                return $query->where('semester_id', $this->semester);
             })
             ->when($this->search, function ($query) {
                 return $query->where(function ($query) {

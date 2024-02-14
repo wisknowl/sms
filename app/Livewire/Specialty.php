@@ -82,7 +82,7 @@ class Specialty extends Component
         }
     }
 
-    public function render()
+    public function render() 
     {
         $semesters = semester::all();
         $academic_years = academic_year::all();

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Session;
 use App\Exports\Ues;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -27,6 +27,26 @@ class UniteEnseignementController extends Controller
      */
     public function index(Request $request): view
     {
+        if ($request->has('year_id') && !empty($request->input('year_id'))) {
+            $year_id = $request->input('year_id');
+            $year_name = academic_year::where('id', $year_id)->value('name');
+            Session::put('year_name', $year_name);
+            Session::put('year_id', $year_id);
+        } else {
+            // Use the session value as the default value
+            $year_id = Session::get('year_id');
+            $year_name = Session::get('year_name');
+        }
+        if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
+            $semester_id = $request->input('semester_id');
+            $semester_name = semester::where('id', $semester_id)->value('name');
+            Session::put('semester_name', $semester_name);
+            Session::put('semester_id', $semester_id);
+        } else {
+            // Use the session value as the default value
+            $semester_id = Session::get('semester_id');
+            $semester_name = Session::get('semester_name');
+        }
         $academic_years = academic_year::all();
         $ues = unite_enseignement::orderBy('id', 'desc')
             ->when($request->input('level'), function ($query) use ($request) {

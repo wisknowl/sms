@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Session;
 use App\Models\academic_year;
 use Illuminate\View\View;
 use App\Models\semester;
@@ -22,8 +22,28 @@ class CourseController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index(): view
+    public function index(Request $request): view
     {
+        if ($request->has('year_id') && !empty($request->input('year_id'))) {
+            $year_id = $request->input('year_id');
+            $year_name = academic_year::where('id', $year_id)->value('name');
+            Session::put('year_name', $year_name);
+            Session::put('year_id', $year_id);
+        } else {
+            // Use the session value as the default value
+            $year_id = Session::get('year_id');
+            $year_name = Session::get('year_name');
+        }
+        if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
+            $semester_id = $request->input('semester_id');
+            $semester_name = semester::where('id', $semester_id)->value('name');
+            Session::put('semester_name', $semester_name);
+            Session::put('semester_id', $semester_id);
+        } else {
+            // Use the session value as the default value
+            $semester_id = Session::get('semester_id');
+            $semester_name = Session::get('semester_name');
+        }
         $courses = course::all();
         $levels = level::all();
         $academic_years = academic_year::all();
@@ -90,8 +110,8 @@ class CourseController extends Controller
                 $result = array_merge($result, $student_id);
             }
             $query = student::whereIn('id', $result);
-            $students = $query->whereHas('levels', function ($query)  use ($level){
-                $query->where('level_id', $level);// STUDENTS IN LEVEL_N OF WHICH ADADEMIC YEAR
+            $students = $query->whereHas('levels', function ($query)  use ($level) {
+                $query->where('level_id', $level); // STUDENTS IN LEVEL_N OF WHICH ADADEMIC YEAR
             })->get();
             foreach ($students as $student) {
                 $timestamp = Carbon::now()->format('Y-m-d H:i:s');

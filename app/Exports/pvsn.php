@@ -22,8 +22,7 @@ use Maatwebsite\Excel\Sheet;
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
-
-class SpecialtyExport implements FromView, WithEvents
+class pvsn implements FromView, WithEvents
 {
     protected $id;
     protected $level_id;
@@ -65,35 +64,17 @@ class SpecialtyExport implements FromView, WithEvents
                 $highestColumn = $sheet->getHighestColumn();
                 $highestRow = $sheet->getHighestRow();
 
-                // Get the cell style object for a specific cell
-                $cellStyle = $event->sheet->getStyle('1:1');
-                $cellStyle->getAlignment()->setWrapText(true);
-                $cellStyle->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-                $sheet->getRowDimension(1)->setRowHeight(110);
 
-                $cellStyle1 = $event->sheet->getStyle('2:2');
-                $cellStyle1->getAlignment()->setWrapText(true);
-                $cellStyle1->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-                $sheet->getRowDimension(2)->setRowHeight(110);
-
-                $cellStyle2 = $event->sheet->getStyle("D4:{$highestColumn}4");
-                foreach (range('D', "{$highestColumn}") as $column) {
-                    // Get the column dimension object for each column
-                    $columnDimension = $sheet->getColumnDimension($column);
-
-                    // Set the column width to 20
-                    $columnDimension->setWidth(10);
-                }
-                foreach (range('A', 'C') as $column) {
-                    // Get the column dimension object for each column
-                    $columnDimension = $sheet->getColumnDimension($column);
-                    // Auto size the column
-                    if ($column == 'A' || $column == 'B') {
-                        $sheet->getStyle("{$column}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-                        $sheet->getStyle("{$column}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-                    }
-                    $columnDimension->setAutoSize(true);
-                }
+                // foreach (range('A', "{$highestColumn}") as $column) {
+                //     // Get the column dimension object for each column
+                //     $columnDimension = $sheet->getColumnDimension($column);
+                //     // Auto size the column
+                //     if ($column == 'A' || $column == 'B') {
+                //         $sheet->getStyle("{$column}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                //         $sheet->getStyle("{$column}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                //     }
+                //     $columnDimension->setAutoSize(true);
+                // }
 
                 foreach (range('D', "{$highestColumn}") as $column) {
                     $sheet->getStyle("{$column}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -108,9 +89,45 @@ class SpecialtyExport implements FromView, WithEvents
                                 'color' => ['argb' => '00000000'],
                             ],
                         ],
+                        'alignment' => [
+                            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                        ],
+                        'font' => [
+                            'size' => 11
+                        ],
                     ]
                 );
+                // $event->sheet->styleCells(
+                //     "A3:{$highestColumn}3",
+                //     [
+                //         'font' => [
+                //             'size' => 8
+                //         ],
+                //         'autoSize' => true
+                //     ]
+                // );
+                // Get the cell style object for a specific cell
+                $cellStyle = $event->sheet->getStyle('1:1');
+                $cellStyle->getAlignment()->setWrapText(true);
+                $cellStyle->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $cellStyle->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getRowDimension(1)->setRowHeight(50);
 
+                $cellStyle1 = $event->sheet->getStyle('2:2');
+                $cellStyle1->getAlignment()->setWrapText(true);
+                $cellStyle1->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $cellStyle1->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getRowDimension(2)->setRowHeight(50);
+
+                // $cellStyle2 = $event->sheet->getStyle("D4:{$highestColumn}4");
+                foreach (range('A', "{$highestColumn}") as $column) {
+                    // Get the column dimension object for each column
+                    $columnDimension = $sheet->getColumnDimension($column);
+
+                    // Set the column width to 20
+                    $columnDimension->setAutoSize(true);
+                }
                 // $sheet->getRowDimension(1)->setRowHeight(50);
 
                 // Define the highest column index
@@ -124,7 +141,7 @@ class SpecialtyExport implements FromView, WithEvents
                 // Create a new RichText object
                 $text = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
                 // Add the first part of the text without underline
-                $text->createText("PROCES VERBAL CONTROLE CONTINU\n");
+                $text->createText("PROCES VERBAL SESSION NORMALE\n");
                 $underline = $text->createTextRun("Annee academique:");
                 $underline->getFont()->setUnderline(true);
 
@@ -163,16 +180,6 @@ class SpecialtyExport implements FromView, WithEvents
                 $drawing->setOffsetX(5);
                 $drawing->setOffsetY(5);
                 $drawing->setWorksheet($sheet);
-                // $drawing1 = new Drawing();
-                // $drawing1->setPath(public_path('/images/Sans titre.png'));
-                // $drawing1->setCoordinates('S1');
-                // $drawing1->setHeight(90);
-                // $drawing1->setWidth(90);
-                // $drawing1->setOffsetX(5);
-                // $drawing1->setOffsetY(5);
-                // $drawing1->setWorksheet($sheet);
-
-
             },
         ];
     }
@@ -216,6 +223,6 @@ class SpecialtyExport implements FromView, WithEvents
             // dump($i, $stc_id, $res);
         }
         $st_courses = course_student::with('student', 'course')->whereIn('id', $res)->get();
-        return view('export.pvcc', compact('name', 'level_id', 'semester', 'students', 'ues', 'courses', 'st_courses'));
+        return view('export.pvsn', compact('name', 'level_id', 'semester', 'students', 'ues', 'courses', 'st_courses'));
     }
 }

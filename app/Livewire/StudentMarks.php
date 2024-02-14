@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Livewire;
+
 use Session;
+
 use App\Models\academic_year;
 use Barryvdh\DomPDF\Facade\Pdf;
 // use Barryvdh\DomPDF\Facade as PDF;
@@ -35,7 +37,7 @@ class StudentMarks extends Component
     public $specialty;
     public $coursemod;
     public $levels = [];
-    public $semesters = [];
+    // public $semesters = [];
     public $specialties = [];
     public $courses = [];
     public $course_students;
@@ -59,6 +61,12 @@ class StudentMarks extends Component
         // $this->academic_year = $this->getAcademicYear();
         // $first_a_year = academic_year::first();
         // $this->academic_year = $first_a_year->name;
+        // if (session()->has('semester_id')) {
+        //     $semester_session = session('semester_id');
+        // }
+        // if (session()->has('year_name')) {
+        //     $year_session = session('year_name');
+        // }
         $first_cycle = cycle::first();
         $this->cycle = $first_cycle->id;
         $this->updateSpecialties();
@@ -67,18 +75,12 @@ class StudentMarks extends Component
         $this->specialty = $first_specialty->id;
         $this->updateLevels();
 
-        $first_level = $this->levels[0];
-        $this->level = $first_level->id;
-        $this->updateSemesters();
-
         $first_specialty = $this->specialties[0];
         $this->specialty = $first_specialty->id;
         $first_level = $this->levels[0];
         $this->level = $first_level->id;
-        $first_semester = $this->semesters[0];
-        $this->semester = $first_semester->id;
         $this->updateCourses();
-
+        // dump($this->specialty, $this->level, $semester_session, $year_session);
         $first_course = $this->courses[0];
         $this->coursemod = $first_course->id;
         $this->updateStudents();
@@ -119,7 +121,9 @@ class StudentMarks extends Component
         // find the specialty by id
         // $ues = unite_enseignement::where(spec)
         $specialty = Specialty::find($this->specialty);
-
+        if (session()->has('semester_id')) {
+            $this->semester = session('semester_id');
+        }
         // get the ids of the unite_enseignement related to the specialty
         $ue_ids = unite_enseignement::where('specialty_id', $this->specialty)
             ->where('level_id', $this->level)
@@ -347,13 +351,13 @@ class StudentMarks extends Component
     {
         $courses = course::all();
         // $levels = level::all();
-        // $semesters = semester::all();
+        $semesters = semester::all();
         $ues = unite_enseignement::all();
         // $specialties = specialty::all();
         $cycles = cycle::all();
         $academic_years = academic_year::all();
         config(['app.name' => 'Notes']);
         // query for the students based on the selected course
-        return view('livewire.student-marks', compact('ues', 'cycles', 'academic_years'));
+        return view('livewire.student-marks', compact('ues', 'cycles', 'academic_years', 'semesters'));
     }
 }

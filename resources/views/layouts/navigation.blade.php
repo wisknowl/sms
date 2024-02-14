@@ -23,7 +23,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('specialties.index')" :active="request()->routeIs('specialties.index')">
+                    <x-nav-link :href="route('specialties.index')" :active="request()->routeIs('specialties.index')" id="dropdownHoverButton" data-dropdown-toggle="dropdownHover" data-dropdown-trigger="hover">
                         <span class="mr-1.5 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                             <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect x="4" y="4" width="16" height="7" rx="1" stroke="#222222" />
@@ -33,6 +33,26 @@
                         </span>
                         {{ __('Structure') }}
                     </x-nav-link>
+                    <!-- Dropdown menu -->
+                    <div id="dropdownHover" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
+                            <li>
+                                <a href="{{route('specialties.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    {{ __('Specialité') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{route('uniteEseignements.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    {{ __('Unité Denseignement') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{route('cours.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    {{ __('Cours') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('students.index')" :active="request()->routeIs('students.index')">
@@ -65,6 +85,7 @@
                         </span>
                         {{ __('Etudiant') }}
                     </x-nav-link>
+
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link>
@@ -86,7 +107,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('notes.index')" :active="request()->routeIs('notes.index')">
+                    <x-nav-link :href="route('notes.index')" :active="request()->routeIs('notes.index')" id="dropdownHoverButtonNotes" data-dropdown-toggle="dropdownHoverNotes" data-dropdown-trigger="hover">
                         <span class="mr-1.5 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
                                 <path style="fill:#FFFFFF;" d="M372.809,508H94.315c-15.735-0.04-28.477-12.783-28.517-28.517V32.517 C65.838,16.782,78.581,4.04,94.315,4h323.378c15.735,0.04,28.477,12.783,28.517,28.517v402.306" />
@@ -100,6 +121,26 @@
                         </span>
                         {{ __('Les Notes') }}
                     </x-nav-link>
+                    <!-- Dropdown menu -->
+                    <div id="dropdownHoverNotes" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButtonNotes">
+                            <li>
+                                <a href="{{route('notes.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    {{ __('Saisie De Notes') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{route('proces_verbal')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    {{ __('Proces verbal') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    {{ __('Relever') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 

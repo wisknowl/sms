@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SpecialtyExport;
+use App\Exports\pvsn;
 use Session;
 
 use App\Http\Controllers\AcademicYearController;
@@ -18,7 +20,6 @@ use App\Http\Controllers\UeCourseController;
 use App\Livewire\Specialty;
 use App\Livewire\StudentMarks;
 use Illuminate\Support\Facades\Route;
-use App\Exports\SpecialtyExport;
 use App\Livewire\ProcesVerbal;
 use App\Models\academic_year;
 use App\Models\course;
@@ -68,12 +69,10 @@ Route::get('/dashboard', function (Request $request) {
         Session::put('year_name', $year_name);
         Session::put('year_id', $year_id);
     } else {
-        $year = academic_year::first();
-        $year_id = $year->id;
-        $year_name = getAcademicYear();
-        // $year_name = $year->name;
-        Session::put('year_name', $year_name);
-        Session::put('year_id', $year_id);
+        // Use the session value as the default value
+        $year_id = Session::get('year_id');
+        $year_name = Session::get('year_name');
+        $semester_name = Session::get('semester_name');
     }
     if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
         $semester_id = $request->input('semester_id');
@@ -81,11 +80,9 @@ Route::get('/dashboard', function (Request $request) {
         Session::put('semester_name', $semester_name);
         Session::put('semester_id', $semester_id);
     } else {
-        $semester = semester::first();
-        $semester_id = $semester->id;
-        $semester_name = $semester->name;
-        Session::put('semester_name', $semester_name);
-        Session::put('semester_id', $semester_id);
+        // Use the session value as the default value
+        $semester_id = Session::get('semester_id');
+        $semester_name = Session::get('semester_name');
     }
     $students = student::orderBy('id', 'desc')->get();
     $data = array();
@@ -152,33 +149,42 @@ Route::get('/dashboard', function (Request $request) {
     $course_count = course::count();
     config(['app.name' => 'Dashboard']);
     return view('dashboard', compact('academic_years', 'semesters', 'user_count', 'count', 'specialty_count', 'ue_count', 'course_count', 'validated_ue_percent', 'not_validated_ue_percent'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'set_session_values'])->name('dashboard');
 
 Route::get('generateTranscript/{id}', [StudentMarks::class, 'generateTranscript'])->name('Transcript');
 Route::get('generatePV/{id}', [Specialty::class, 'generatePV'])->name('PV');
 Route::get('/student_marks', StudentMarks::class);
-Route::get('proces_verbal', ProcesVerbal::class)->name('proces_verbal');
+Route::get('proces_verbal', ProcesVerbal::class)->name('proces_verbal')->middleware(['auth', 'verified', 'set_session_values']);
 Route::get('ues', [UniteEnseignementController::class, 'export']);
 // Route::get('pvxls', [Specialty::class, 'export']);
 // Route::get('export/{id}', function ($id) {
 //     return Excel::download(new SpecialtyExport($id), 'students.xlsx');
 // });
-Route::get('export/{id}/{level_id}/{semester_id}/{a_year}', function ($id, $level_id, $semester_id, $a_year) {
+Route::get('exportpvcc/{id}/{level_id}/{semester_id}/{a_year}', function ($id, $level_id, $semester_id, $a_year) {
     // Get the models by their ids
     $specialty = ModelsSpecialty::find($id);
     $level = level::find($level_id);
     $semester = semester::find($semester_id);
-
     // Create the file name using the model attributes
     $file_name = $specialty->code . '_N' . $level->name . '_S' . $semester->name . '_' . $a_year . '.xlsx';
     // return Excel::download(new SpecialtyExport($id, $level_id, $semester_id, $a_year), '$file_name.xlsx');
     return Excel::download(new SpecialtyExport($id, $level_id, $semester_id, $a_year), $file_name);
 });
+Route::get('exportpvsn/{id}/{level_id}/{semester_id}/{a_year}', function ($id, $level_id, $semester_id, $a_year) {
+    // Get the models by their ids
+    $specialty = ModelsSpecialty::find($id);
+    $level = level::find($level_id);
+    $semester = semester::find($semester_id);
+    // Create the file name using the model attributes
+    $file_name = $specialty->code . '_N' . $level->name . '_S' . $semester->name . '_' . $a_year . '.xlsx';
+    // return Excel::download(new SpecialtyExport($id, $level_id, $semester_id, $a_year), '$file_name.xlsx');
+    return Excel::download(new pvsn($id, $level_id, $semester_id, $a_year), $file_name);
+});
 
 
 Route::resource('students', StudentController::class)
     ->only(['index', 'store'])
-    ->middleware(['auth', 'verified']);
+    ->middleware(['auth', 'verified', 'set_session_values']);
 Route::get('/chart-data', [StudentController::class, 'getChartData']);
 Route::get('/semesterSession', [StudentController::class, 'getChartData'])->name('semesterSession');
 
@@ -196,17 +202,17 @@ Route::resource('levels', LevelController::class)
 
 Route::resource('specialties', SpecialtyController::class)
     ->only(['index', 'store'])
-    ->middleware(['auth', 'verified']);
+    ->middleware(['auth', 'verified', 'set_session_values']);
 
 Route::resource('uniteEseignements', UniteEnseignementController::class)
     ->only(['index', 'store', 'update'])
-    ->middleware(['auth', 'verified']);
+    ->middleware(['auth', 'verified', 'set_session_values']);
 
 Route::put('/uniteEnseignements/updateUe', [UniteEnseignementController::class, 'updateUe'])->name('uniteEnseignements.updateUe');
 
 Route::resource('cours', CourseController::class)
     ->only(['index', 'store'])
-    ->middleware(['auth', 'verified']);
+    ->middleware(['auth', 'verified', 'set_session_values']);
 
 Route::resource('specialty_ue', SpecialtyUeController::class)
     ->only(['index', 'store'])
@@ -217,7 +223,7 @@ Route::resource('ue_cours', UeCourseController::class)
     ->middleware(['auth', 'verified']);
 Route::resource('notes', CourseStudentController::class)
     ->only(['index', 'store'])
-    ->middleware(['auth', 'verified']);
+    ->middleware(['auth', 'verified', 'set_session_values']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

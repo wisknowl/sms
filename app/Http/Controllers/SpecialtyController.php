@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Session;
 use App\Models\academic_year;
 use Illuminate\View\View;
 use App\Models\cycle;
@@ -16,14 +16,34 @@ class SpecialtyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): view
+    public function index(Request $request): view
     {
+        if ($request->has('year_id') && !empty($request->input('year_id'))) {
+            $year_id = $request->input('year_id');
+            $year_name = academic_year::where('id', $year_id)->value('name');
+            Session::put('year_name', $year_name);
+            Session::put('year_id', $year_id);
+        } else {
+            // Use the session value as the default value
+            $year_id = Session::get('year_id');
+            $year_name = Session::get('year_name');
+        }
+        if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
+            $semester_id = $request->input('semester_id');
+            $semester_name = semester::where('id', $semester_id)->value('name');
+            Session::put('semester_name', $semester_name);
+            Session::put('semester_id', $semester_id);
+        } else {
+            // Use the session value as the default value
+            $semester_id = Session::get('semester_id');
+            $semester_name = Session::get('semester_name');
+        }
         $semesters = semester::all();
         $academic_years = academic_year::all();
         $cycles = cycle::all();
         $specialties = Specialty::with('cycle')->get();
-    
-        return view('specialties.index', compact('specialties','academic_years','semesters','cycles'));
+
+        return view('specialties.index', compact('specialties', 'academic_years', 'semesters', 'cycles'));
     }
 
     /**
@@ -45,10 +65,10 @@ class SpecialtyController extends Controller
             $cycle = strip_tags($request->input('cycle'));
             $description = strip_tags($request->input('descript'));
             $specialty_obj = new specialty();
-            $specialty_obj->name=$specialty;
-            $specialty_obj->code=$code;
-            $specialty_obj->cycle_id=$cycle;
-            $specialty_obj->description=$description;
+            $specialty_obj->name = $specialty;
+            $specialty_obj->code = $code;
+            $specialty_obj->cycle_id = $cycle;
+            $specialty_obj->description = $description;
             $specialty_obj->save();
             $name = $specialty_obj->name;
         });
