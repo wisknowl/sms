@@ -9,17 +9,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class student extends Model
 {
     use HasFactory;
-    
+
 
     // The attributes that are mass assignable
-    protected $fillable = [
-        'name',
-        'email',
-        'gender',
-        'dob',
-        'mobile',
-        'specialty_id',
-    ];
+    // protected $fillable = [
+    //     'name',
+    //     'email',
+    //     'gender',
+    //     'dob',
+    //     'mobile',
+    //     'specialty_id',
+    // ];
+    protected $guarded = [];
+
 
     // The attributes that should be hidden for arrays
     // protected $hidden = [
@@ -40,11 +42,11 @@ class student extends Model
 
     public function course(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\course', 'course_students','student_id', 'course_id');
+        return $this->belongsToMany('App\Models\course', 'course_students', 'student_id', 'course_id');
     }
     public function levels()
     {
-        return $this->belongsToMany('App\Models\Level', 'student_levels','student_id', 'level_id')
+        return $this->belongsToMany('App\Models\Level', 'student_levels', 'student_id', 'level_id')
             ->withPivot('academic_year', 'pass_mark')
             ->withTimestamps();
     }
@@ -53,14 +55,18 @@ class student extends Model
     {
         return $this->levels()->latest('academic_year')->first();
     }
+    public function levelByYear($year)
+    {
+        return $this->levels()->where('academic_year', $year)->first();
+    }
 
     /**
      * The unite enseignements that belong to the student.
      */
     public function ues(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\unite_enseignement','student_ues','student_id','ue_id')
-                ->withPivot('average', 'credit')
-                ->withTimestamps();
+        return $this->belongsToMany('App\Models\unite_enseignement', 'student_ues', 'student_id', 'ue_id')
+            ->withPivot('average', 'credit')
+            ->withTimestamps();
     }
 }

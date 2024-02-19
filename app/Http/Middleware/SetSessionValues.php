@@ -33,7 +33,7 @@ class SetSessionValues
     public function handle(Request $request, Closure $next): Response
     {
         // Check if the session values are null
-        if (Session::get('year_id') == null || Session::get('semester_id') == null) {
+        if (Session::get('year_id') == null || Session::get('semester_id') == null || Session::get('year_name') == null) {
             // Set the default values
             $year = academic_year::first();
             $year_id = $year->id;

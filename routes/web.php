@@ -90,55 +90,71 @@ Route::get('/dashboard', function (Request $request) {
     $not_validated_ue = array();
     foreach ($students as $student) {
         $student_id = $student->id;
-        $st_ues = student_ue::with('ue')
-            ->where('student_id', $student_id)
-            ->whereHas('ue', function ($query) use ($student) {
-                $level_id = $student->currentLevel()->id;
-                $session = Session::get('semester_id');
-                // dump($session);
-                $query->where('level_id', $level_id)->where('semester_id', $session);
-            })->get();
-        $courses = course_student::with('course')
-            ->where('student_id', $student_id)
-            ->whereHas('course', function ($query) use ($student) {
-                $level_id = $student->currentLevel()->id;
-                $query->where('level_id', $level_id);
-            })->get();
+        $year_session = Session::get('year_name');
+        $level = $student->levelByYear($year_session); // get the level object or null
+        if ($level) { // if the level is not null
+            $level_id = $level->id; // get the level id
+            $session = Session::get('semester_id');
+            $st_ues = student_ue::with('ue')
+                ->where('student_id', $student_id)
+                ->whereHas('ue', function ($query) use ($level_id, $session) {
+                    $query->where('level_id', $level_id)->where('semester_id', $session);
+                })->get();
+            $courses = course_student::with('course')
+                ->where('student_id', $student_id)
+                ->whereHas('course', function ($query) use ($level_id) {
+                    $query->where('level_id', $level_id);
+                })->get();
+        } else {
+            $st_ues = null;
+        }
+
+
         $ue_credit_sum = 0;
         $ue_sum = 0;
-        foreach ($st_ues as $st_ue) {
-            $course_sum = 0;
-            $course_credit_sum = 0;
-            foreach ($courses as $course) {
-                if ($course->course->ue_id == $st_ue->ue->id) {
+        if ($st_ues) {
+            foreach ($st_ues as $st_ue) {
+                $course_sum = 0;
+                $course_credit_sum = 0;
+                foreach ($courses as $course) {
+                    if ($course->course->ue_id == $st_ue->ue->id) {
 
-                    if ($course->exam_marks < $course->reseat_mark) {
-                        $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->reseat_mark) / 20) * 70)) / 100) * 20);
-                    } else {
-                        $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->exam_marks) / 20) * 70)) / 100) * 20);
+                        if ($course->exam_marks < $course->reseat_mark) {
+                            $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->reseat_mark) / 20) * 70)) / 100) * 20);
+                        } else {
+                            $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->exam_marks) / 20) * 70)) / 100) * 20);
+                        }
+                        $course_credit_multiply = $course_mark * $course->course->credit_points;
+                        $course_sum = $course_sum + $course_credit_multiply;
+                        $course_credit_sum = $course_credit_sum + $course->course->credit_points;
                     }
-                    $course_credit_multiply = $course_mark * $course->course->credit_points;
-                    $course_sum = $course_sum + $course_credit_multiply;
-                    $course_credit_sum = $course_credit_sum + $course->course->credit_points;
                 }
+                $ue_mark = $course_sum / $course_credit_sum;
+                if ($ue_mark < 10) {
+                    $not_validated_ue[] = $ue_mark;
+                } else {
+                    $validated_ue[] = $ue_mark;
+                }
+                $ue_credit_multiply = $ue_mark * $st_ue->ue->credit_points;
+                $ue_sum = $ue_sum + $ue_credit_multiply;
+                $ue_credit_sum = $ue_credit_sum + $st_ue->ue->credit_points;
             }
-            $ue_mark = $course_sum / $course_credit_sum;
-            if ($ue_mark < 10) {
-                $not_validated_ue[] = $ue_mark;
-            } else {
-                $validated_ue[] = $ue_mark;
-            }
-            $ue_credit_multiply = $ue_mark * $st_ue->ue->credit_points;
-            $ue_sum = $ue_sum + $ue_credit_multiply;
-            $ue_credit_sum = $ue_credit_sum + $st_ue->ue->credit_points;
+            $std_avg = $ue_sum / $ue_credit_sum;
+            $data[] = $std_avg;
+        } else {
+            $validated_ue_count[] = null;
+            $not_validated_ue_count[] = null;
         }
-        $std_avg = $ue_sum / $ue_credit_sum;
-        $data[] = $std_avg;
     }
     $validated_ue_count = count($validated_ue);
     $not_validated_ue_count = count($not_validated_ue);
-    $validated_ue_percent = ($validated_ue_count / ($validated_ue_count + $not_validated_ue_count)) * 100;
-    $not_validated_ue_percent = ($not_validated_ue_count / ($validated_ue_count + $not_validated_ue_count)) * 100;
+    if ($validated_ue_count != 0 || $not_validated_ue_count != 0) {
+        $validated_ue_percent = ($validated_ue_count / ($validated_ue_count + $not_validated_ue_count)) * 100;
+        $not_validated_ue_percent = ($not_validated_ue_count / ($validated_ue_count + $not_validated_ue_count)) * 100;
+    } else {
+        $validated_ue_percent = 0;
+        $not_validated_ue_percent = 0;
+    }
 
     $academic_years = academic_year::all();
     $semesters = semester::all();
@@ -187,6 +203,7 @@ Route::resource('students', StudentController::class)
     ->middleware(['auth', 'verified', 'set_session_values']);
 Route::get('/chart-data', [StudentController::class, 'getChartData']);
 Route::get('/semesterSession', [StudentController::class, 'getChartData'])->name('semesterSession');
+Route::put('/students/updateStudent', [StudentController::class, 'updateStudent'])->name('students.updateStudent');
 
 Route::resource('academic_years', AcademicYearController::class)
     ->only(['index', 'store'])
@@ -210,10 +227,12 @@ Route::resource('uniteEseignements', UniteEnseignementController::class)
     ->middleware(['auth', 'verified', 'set_session_values']);
 
 Route::put('/uniteEnseignements/updateUe', [UniteEnseignementController::class, 'updateUe'])->name('uniteEnseignements.updateUe');
+Route::put('/cours/updateCo', [CourseController::class, 'updateCo'])->name('cours.updateCo');
 
 Route::resource('cours', CourseController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified', 'set_session_values']);
+
 
 Route::resource('specialty_ue', SpecialtyUeController::class)
     ->only(['index', 'store'])

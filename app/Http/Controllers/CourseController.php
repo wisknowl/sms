@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Session;
 use App\Models\academic_year;
 use Illuminate\View\View;
@@ -142,10 +143,56 @@ class CourseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, course $course)
+    // public function update(Request $request, course $course)
+    // {
+    //     //
+    // } 
+    public function updateCo(Request $request)
     {
-        //
+        $course_name = strip_tags($request->input('upName'));
+        $course_id = strip_tags($request->input('id'));
+        $code = strip_tags($request->input('upCode'));
+        $credit_point = strip_tags($request->input('upCredit_point'));
+        $cost_per_hour = strip_tags($request->input('cost_per_hour'));
+        $duration = strip_tags($request->input('duration'));
+        $level = strip_tags($request->input('upLevel'));
+        $semester = strip_tags($request->input('upSemester'));
+        $course_nature = strip_tags($request->input('upCourse_nature'));
+        $ue_id = strip_tags($request->input('upue_id'));
+        $description = strip_tags($request->input('upDescription'));
+        // dd($ue_id);
+        // Validate the request data
+        $request->validate([
+            // Your validation rules here
+        ]);
+
+        // Find the model by id
+        $course = course::findOrFail($course_id);
+
+        // Update the model
+        $updated = $course->update([
+            'name' => $course_name,
+            'code' => $code,
+            'credit_points' => $credit_point,
+            'description' => $description,
+            'duration' => $duration,
+            'cost_per_hour' => $cost_per_hour,
+            'course_nature' => $course_nature,
+            'level_id' => $level,
+            'semester_id' => $semester,
+            'ue_id' => $ue_id,
+        ]);
+
+        if ($updated) {
+            // flash a success message
+            notify()->success('Le Cours a été modifier avec succès');
+        } else {
+            // flash an error message
+            notify()->success('Something went wrong', 'Error');
+        }
+        return redirect()->back();
     }
+
 
     /**
      * Remove the specified resource from storage.

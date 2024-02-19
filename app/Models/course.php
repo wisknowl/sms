@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class course extends Model
 {
     use HasFactory;
-    
+    protected $guarded = [];
 
     public function student(): BelongsToMany
     {

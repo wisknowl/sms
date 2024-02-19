@@ -167,8 +167,9 @@ class StudentMarks extends Component
             ->whereHas('student', function ($query) {
                 // Assuming you have a function to get the current academic year
                 $current_year = $this->getAcademicYear();
+                $query->where('specialty_id', $this->specialty)
                 // Assuming the student model has a level relation
-                $query->whereHas('levels', function ($query) use ($current_year) {
+                ->whereHas('levels', function ($query) use ($current_year) {
                     // Assuming the level model has a year column
                     $query->where('academic_year', $this->academic_year)->where('level_id', $this->level);
                 });
@@ -243,10 +244,11 @@ class StudentMarks extends Component
             }
             DB::commit();
             // check if the update was successful
+            $this->updateStudents();
             if ($updated) {
                 // flash a success message
                 session()->flash('message', 'Les Notes ont été mises à jour avec succès');
-                notify()->success('Les Notes ont été mises à jour avec succès');
+                // notify()->success('Les Notes ont été mises à jour avec succès');
             } else {
                 // flash an error message
                 session()->flash('error', 'Something went wrong.');
@@ -257,6 +259,7 @@ class StudentMarks extends Component
         $queryLog = DB::getQueryLog();
         // dump the query log
         // dump($queryLog);
+
     }
 
     public function generateTranscript($id)

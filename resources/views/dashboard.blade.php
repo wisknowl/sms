@@ -320,8 +320,10 @@
                                     Ce semestre
                                 </h4>
                             </div>
+                            @if($validated_ue_percent != 0 || $not_validated_ue_percent != 0)
                             <canvas data-te-chart="doughnut" data-te-dataset-label="Traffic" data-te-labels="['% Validé', '% Non validé']" data-te-dataset-data="[{{$validated_ue_percent}}, {{$not_validated_ue_percent}}]" data-te-dataset-background-color="['rgb(144,238,144)', 'rgba(255,0,0)']">
                             </canvas>
+                            @endif
                         </div>
                         <div class="w-1/2 overflow-hidden">
                             <div>

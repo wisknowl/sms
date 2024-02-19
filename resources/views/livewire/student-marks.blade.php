@@ -1,4 +1,3 @@
-
 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg relative">
     <div wire:loading class="absolute right-6 top-6">
         <div role="status">
@@ -75,15 +74,15 @@
                         <table class="min-w-full text-center text-sm font-light">
                             <thead class="border-b font-medium dark:border-neutral-500">
                                 <tr>
-                                    <th scope="col" class="px-4 py-2 border">Index</th>
-                                    <th scope="col" class="px-4 py-2 border">Matricule</th>
-                                    <th scope="col" class="px-4 py-2 border">Nom</th>
-                                    <th scope="col" class="px-4 py-2 border">Note CC</th>
-                                    <th scope="col" class="px-4 py-2 border">Note Examen</th>
-                                    <th scope="col" class="px-4 py-2 border">Note Rattrapage</th>
-                                    <th scope="col" class="px-4 py-2 border">Note Semestriel</th>
+                                    <th scope="col" class="px-4 py-1 border">Index</th>
+                                    <th scope="col" class="px-4 py-1 border">Matricule</th>
+                                    <th scope="col" class="px-4 py-1 border">Nom</th>
+                                    <th scope="col" class="px-4 py-1 border">Note CC</th>
+                                    <th scope="col" class="px-4 py-1 border">Note Examen</th>
+                                    <th scope="col" class="px-4 py-1 border">Note Rattrapage</th>
+                                    <th scope="col" class="px-4 py-1 border">Note Semestriel</th>
 
-                                    <!-- <th scope="col" class="px-4 py-2 border">Index</th> -->
+                                    <!-- <th scope="col" class="px-4 py-1 border">Index</th> -->
                                 </tr>
                             </thead>
                             <style>
@@ -96,32 +95,62 @@
                                 }
                             </style>
                             <tbody>
+                                @php($count = 1)
                                 @forelse($course_students as $course_student)
                                 <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
-                                    <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $course_student->id }}</td>
-                                    
-                                    <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $course_student->student->matricule }}</td>
-                                    <td class="whitespace-nowrap px-4 py-2 border">{{ $course_student->student->name }} {{ $course_student->student->id }}</td>
-                                    <td class="whitespace-nowrap px-4 py-2 border">
-                                        <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
-                                    </td>
+                                    <td class="whitespace-nowrap px-4 py-1 border font-medium">{{ $course_student->id }}</td>
 
-                                    <td class="whitespace-nowrap px-4 py-2 border">
-                                        <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
-                                    </td>
-                                    <td class="whitespace-nowrap px-4 py-2 border">
-                                        <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
-                                    </td>
-                                    <td class="whitespace-nowrap px-4 py-2 border">
-                                        <input placeholder="{{ $course_student->average }}" type="number" wire:key="{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
-                                    </td>
+                                    <td class="whitespace-nowrap px-4 py-1 border font-medium">{{ $course_student->student->matricule }}</td>
+                                    <td class="whitespace-nowrap px-4 py-1 border">{{ $course_student->student->name }} {{ $course_student->student->id }}</td>
+                                    @if($count % 2 == 0)
+                                        <td class="whitespace-nowrap px-4 py-1 border">
+                                            <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-3/4 focus:border-t-0 border-0 bg-neutral-200">
+                                        </td>
+
+                                        <td class="whitespace-nowrap px-4 py-1 border">
+                                            <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-3/4 border-0 bg-neutral-200">
+                                        </td>
+                                        <td class="whitespace-nowrap px-4 py-1 border">
+                                            <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-3/4 border-0 bg-neutral-200">
+                                        </td>
+                                        @if($course_student->exam_marks < $course_student->reseat_mark)
+                                        @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->reseat_mark) / 20) * 70)) / 100) * 20))
+                                        <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
+                                        @else
+                                        @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->exam_marks) / 20) * 70)) / 100) * 20))
+                                        <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
+                                        @endif
+
+                                    @else
+                                        <td class="whitespace-nowrap px-4 py-1 border">
+                                            <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-3/4 focus:border-t-0 border-0 bg-neutral-100">
+                                        </td>
+
+                                        <td class="whitespace-nowrap px-4 py-1 border">
+                                            <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-3/4 border-0 bg-neutral-100">
+                                        </td>
+                                        <td class="whitespace-nowrap px-4 py-1 border">
+                                            <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-3/4 border-0 bg-neutral-100">
+                                        </td>
+
+                                        @if($course_student->exam_marks < $course_student->reseat_mark)
+                                        @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->reseat_mark) / 20) * 70)) / 100) * 20))
+                                        <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
+                                        @else
+                                        @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->exam_marks) / 20) * 70)) / 100) * 20))
+                                        <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
+                                        @endif
+
+                                    @endif
+
                                     <!-- <td>
-                            <input type="text" placeholder="{{ $course_student->id }}" wire:model="course_student_id" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-b-2 border-neutral-300">
+                            <input type="text" placeholder="{{ $course_student->id }}" wire:model="course_student_id" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-0">
                         </td> -->
                                 </tr>
+                                @php($count = $count + 1)
                                 @empty
                                 <tr>
-                                    <td colspan="8" class="whitespace-nowrap px-4 py-2 border">No Students found</td>
+                                    <td colspan="8" class="whitespace-nowrap px-4 py-1 border">No Students found</td>
                                 </tr>
                                 @endforelse
                             </tbody>

@@ -13,10 +13,17 @@ function fillModalForm(event) {
     var specialty = button.getAttribute("data-te-specialty");
     var level = button.getAttribute("data-te-level");
     var semester = button.getAttribute("data-te-semester");
-    
+
+    //student
+    var email = button.getAttribute("data-te-email");
+    var phone = button.getAttribute("data-te-phone");
+    var pob = button.getAttribute("data-te-pob");
+    var dob = button.getAttribute("data-te-dob");
+
     if (id) {
         // Do something if the value is not empty
         console.log("The value is " + id);
+        console.log(email);
     } else {
         // Do something else if the value is empty
         console.log("The value is empty");
@@ -32,15 +39,39 @@ function fillModalForm(event) {
     var inputLevel = document.getElementById("level");
     var inputSemester = document.getElementById("semester");
 
+    //student
+    var inputEmail = document.getElementById("email");
+    var inputPhone = document.getElementById("phone");
+    var inputPob = document.getElementById("pob");
+    var inputDob = document.getElementById("dob");
+
     // Assign the data attributes to the input fields
     inputId.value = id;
     inputName.value = name;
-    inputCode.value = code;
-    inputCredit_point.value = credit_point;
-    inputCourse_nature.value = course_nature;
-    inputSpecialty.value = specialty;
-    inputLevel.value = level;
-    inputSemester.value = semester;
+    if (code) {
+        inputCode.value = code;
+        inputCredit_point.value = credit_point;
+        inputCourse_nature.value = course_nature;
+        inputSpecialty.value = specialty;
+        inputLevel.value = level;
+        inputSemester.value = semester;
+    }
+
+
+    //student
+    inputEmail.value = email;
+    inputPhone.value = phone;
+    inputPob.value = pob;
+    inputDob.value = dob;
+
+    if (id) {
+        // Do something if the value is not empty
+        console.log("The value is " + id);
+        console.log(email);
+    } else {
+        // Do something else if the value is empty
+        console.log("The value is empty");
+    }
 }
 // Get the modal element
 var modal = document.getElementById("updateModal");

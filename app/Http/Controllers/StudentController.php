@@ -12,6 +12,7 @@ use App\Models\course_student;
 use App\Models\cycle;
 use App\Models\level;
 use App\Models\student;
+use App\Models\student_level;
 use App\Models\student_ue;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -110,6 +111,8 @@ class StudentController extends Controller
         $level_id = strip_tags($request->input('level_id'));
         // dd ($request->all (), $dob);
         $matricule = $this->generateMatricule();
+        //check if the cycle_id corresponds to the specialty_cycle_id
+        $specialty = specialty::find($specialty_id);
         // Create a new student with the name, specialty, and matricule
         $student_obj = new Student();
         $student_obj->name = $name;
@@ -154,7 +157,7 @@ class StudentController extends Controller
         // echo '<pre>';
         // print_r($ue_ids);
         // echo '</pre>';
-        // die();
+        // dd($result);
 
         $ayear = $this->getAcademicYear();
 
@@ -182,7 +185,7 @@ class StudentController extends Controller
             return "$currentYear/$nextYear";
         } else { // If the month is July or below
             $previousYear = $currentYear - 1;
-            return "$previousYear/$currentYear";
+            return "$previousYear-$currentYear";
         }
     }
 
@@ -228,9 +231,125 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, student $student)
+    // public function update(Request $request, student $student)
+    // {
+    //     //
+    // }
+    public function updateStudent(Request $request)
     {
-        //
+        $student_id = strip_tags($request->input('id'));
+        $name = strip_tags($request->input('upName'));
+        $email = strip_tags($request->input('upEmail'));
+        $mobile = strip_tags($request->input('upMobile'));
+        $dob = date('Y-m-d', strtotime(str_replace('/', '-', strip_tags($request->input('upDob')))));
+        $gender = strip_tags($request->input('upGender'));
+        $pob = strip_tags($request->input('upPob'));
+        $cycle_id = strip_tags($request->input('upCycle_id'));
+
+
+        // Validate the request data
+        $request->validate([
+            // Your validation rules here
+        ]);
+
+
+        // Find the model by id
+        $student = student::findOrFail($student_id);
+        // Get the old and new specialty and level ids
+        $old_specialty_id = $student->specialty_id;
+        $new_specialty_id = $request->input('upSpecialty_id');
+        $old_level_id = $student->levels()->wherePivot('academic_year', $this->getAcademicYear())->first()->id;
+        $new_level_id = strip_tags($request->input('upLevel_id'));
+
+        // Update the model
+        $updated = $student->update([
+            'name' => $name,
+            'email' => $email,
+            'gender' => $gender,
+            'dob' => $dob,
+            'mobile' => $mobile,
+            'specialty_id' => $new_specialty_id,
+            'pob' => $pob,
+            'cycle_id' => $cycle_id,
+        ]);
+
+        // If the specialty has changed, delete the old ues and courses and attach the new ones
+        if ($old_specialty_id != $new_specialty_id || $old_level_id != $new_level_id) {
+            // Delete the old ues
+            // $student->ues()->whereHas('ue', function ($query) use ($old_specialty_id) {
+            //     $query->where('specialty_id', $old_specialty_id);
+            // })->detach();
+           $re=student_ue::where('student_id', $student_id)->whereHas('ue', function ($query) use ($old_specialty_id) {
+                $query->where('specialty_id', $old_specialty_id);
+            })->delete();
+            $tes=student_ue::where('student_id', $student_id)->whereHas('ue', function ($query) use ($old_specialty_id) {
+                $query->where('specialty_id', $old_specialty_id);
+            })->pluck('id')->toArray();
+            // Delete the old courses
+            $test=course_student::where('student_id', $student_id)->delete();
+            // Get the new ues and courses ids
+            $ue_ids = unite_enseignement::where('specialty_id', $new_specialty_id)->where('level_id', $new_level_id)->pluck('id')->toArray();
+            $course_ids = course::whereIn('ue_id', $ue_ids)->pluck('id')->toArray();
+            // dd($ue_ids, $course_ids);
+
+            // Attach the new ues and courses
+            $timestamp = Carbon::now()->format('Y-m-d H:i:s');
+            $student->ues()->sync($ue_ids, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+            $student->course()->sync($course_ids, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+        }
+
+        // If the level has changed, update the student's level
+        if ($old_level_id != $new_level_id) {
+            // dd($old_level_id, $new_level_id);
+            $student->levels()->updateExistingPivot($old_level_id, ['level_id' => $new_level_id, 'academic_year' => $this->getAcademicYear(), 'pass_mark' => 50]);
+        }
+
+        // $st_ues = student_ue::where('student_id', $student_id);
+        // $deleted = $st_ues->whereHas('ue', function ($query) use ($specialty_id) {
+        //     $query->where('specialty_id', '!=', $specialty_id);
+        // })->delete();
+
+        // if ($deleted > 0) {
+        //     // dd($deleted);
+        //     $st_courses = course_student::where('student_id', $student_id);
+        //     $st_courses->delete();
+        //     dd($deleted,  $st_courses->delete());
+        // } else {
+        //     // deletion failed or no records matched the condition
+        // }
+
+
+        // $level = level::find($level_id);
+        // $id = $level->id;
+        // $ue_ids =  unite_enseignement::where('specialty_id', $specialty_id)->where('level_id', $id)->pluck('id')->toArray();
+        // $result = array();
+        // foreach ($ue_ids as $ue_id) {
+        //     $course_id = course::where('ue_id', $ue_id)->get()->pluck('id')->toArray();
+        //     $result = array_merge($result, $course_id);
+        // }
+        // $ayear = $this->getAcademicYear();
+        // try {
+        //     $timestamp = Carbon::now()->format('Y-m-d H:i:s');
+        //     $student = student::find($student_id);
+        //     $student->ues()->attach($ue_ids, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+        //     $student->course()->attach($result, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+        // } catch (\Carbon\Exceptions\InvalidFormatException $e) {
+        //     echo $e->getMessage();
+        // }
+        // $st_level = student_level::where('student_id', $student_id)->where('academi_year', $ayear);
+        // $st_level->where('academi_year', $ayear)->delete();
+        // $updlev = $student->levels()->updateExistingPivot($level, ['academic_year' => $ayear, 'pass_mark' => 50]);
+        // if ($updlev) {
+        //     dd(1);
+        // }
+        if ($updated) {
+            // flash a success message
+            notify()->success('L\'information sur L\'Etudiant a été modifier avec succès');
+        } else {
+            // flash an error message
+            notify()->success('Something went wrong', 'Error');
+        }
+        return redirect()->back();
     }
 
     /**

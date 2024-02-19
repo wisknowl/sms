@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire;
+
 use App\Models\specialty;
 use App\Models\unite_enseignement;
 use App\Models\course;
@@ -23,6 +24,10 @@ class StudentLw extends Component
 
     public $academic_year;
     public $search;
+    public $delete_id;
+    public $cycle;
+    public $specialty;
+    public $level;
     public function mount()
     {
         $this->academic_year = $this->getAcademicYear();
@@ -32,10 +37,25 @@ class StudentLw extends Component
         // $this->level=$first_level->id;
         // dd($this->level);
     }
-    public function nf(){
+    public function nf()
+    {
         // dd($this->level);
     }
-    public function updatingSearch(){
+    public function fs()
+    {
+    }
+    public function setDeleteId($id)
+    {
+        $this->delete_id = $id;
+    }
+    public function deleteStudent()
+    {
+        $student = student::where('id', $this->delete_id)->first();
+        $student->delete();
+        notify()->success('L\'Etudiant a été supprimée avec succès');
+    }
+    public function updatingSearch()
+    {
         $this->resetPage();
     }
     function getAcademicYear()
@@ -58,15 +78,30 @@ class StudentLw extends Component
         $cycles = cycle::all();
         $levels = level::all();
         $students = student::with('specialty', 'levels', 'cycle')->orderBy('id', 'desc');
-        $students->when($this->search, function ($query) {
-            return $query->where(function ($query){
-                $query->where('name','like', '%' . $this->search . '%')
-                    ->orwhere('matricule','like', '%' . $this->search . '%')
-                    ->orwhere('id','like', '%' .$this->search . '%');
-            });
-        })->get();
+        $students->when($this->cycle, function ($query) {
+            return $query->where('cycle_id', $this->cycle);
+        })
+            ->when($this->level, function ($query) {
+                $query->whereHas('levels', function ($query) {
+                    if (session()->has('year_name')) {
+                        $year_session = session('year_name');
+                    }
+                    return $query->where('academic_year', $year_session)->where('level_id', $this->level);
+                });
+            })
+            ->when($this->specialty, function ($query) {
+                return $query->where('specialty_id', $this->specialty);
+            })
+            ->when($this->search, function ($query) {
+                return $query->where(function ($query) {
+                    $query->where('name', 'like', '%' . $this->search . '%')
+                        ->orwhere('matricule', 'like', '%' . $this->search . '%')
+                        ->orwhere('id', 'like', '%' . $this->search . '%');
+                });
+            })->get();
+        $sql = $students->toSql();
         $students = $students->paginate(10);
         config(['app.name' => 'Etudiant']);
-        return view('livewire.student-lw', compact('levels', 'cycles', 'specialties', 'students', 'academic_years'));
+        return view('livewire.student-lw', compact('levels', 'cycles', 'specialties', 'students', 'academic_years','sql'));
     }
 }
