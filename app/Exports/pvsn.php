@@ -173,7 +173,7 @@ class pvsn implements FromView, WithEvents
 
                 // Inserting Image
                 $drawing = new Drawing();
-                $drawing->setPath(public_path('/images/isig.png'));
+                $drawing->setPath(public_path('/img/isig.png'));
                 $drawing->setCoordinates('A1');
                 $drawing->setHeight(90);
                 $drawing->setWidth(90);

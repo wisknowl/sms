@@ -17,7 +17,7 @@
         <!--Tabs content-->
         <div class="mb-6">
             <x-notify::notify />
-            <div> <label for="">{{ $sql }}</label></div>
+            <!-- <div> <label for="">{{ $sql }}</label></div> -->
             <!-- Add Specialty -->
             <div class="space-y-2 mb-2 flex justify-between items-center">
                 <div>
@@ -161,8 +161,7 @@
                                             <th scope="col" class="px-4 py-2 border">#</th>
                                             <th scope="col" class="px-4 py-2 border">Matricule</th>
                                             <th scope="col" class="px-4 py-2 border">Name</th>
-                                            <th scope="col" class="px-4 py-2 border">Cycle</th>
-                                            <th scope="col" class="px-4 py-2 border">Specialite</th>
+                                            <th scope="col" class="px-4 py-2 border">Email</th>
                                             <th scope="col" class="px-4 py-2 border">Action</th>
                                         </tr>
                                     </thead>
@@ -173,7 +172,6 @@
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $student->matricule }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $student->name }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $student->email }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $student->specialty->name }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
                                                 <button type="button" wire:click.prevent='setDeleteId({{ $student->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">

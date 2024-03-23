@@ -16,7 +16,7 @@
         </div>
         <div class="mb-6">
             <x-notify::notify />
-            <div> <label for="">{{ $sql }}</label></div>
+            <!-- <div> <label for="">{{ $sql }}</label></div> -->
             <!-- Add Specialty -->
             <div class="mb-2 flex justify-between items-center">
                 <!-- TW Elements is free under AGPL, with commercial license required for specific uses. See more details: https://tw-elements.com/license/ and contact us for queries at tailwind@mdbootstrap.com -->

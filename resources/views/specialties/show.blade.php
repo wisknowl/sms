@@ -172,5 +172,4 @@
 </div>
 @endsection
 @section('content')
-@livewire('specialty')
 @endsection

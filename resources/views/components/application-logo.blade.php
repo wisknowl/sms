@@ -1,1 +1,1 @@
-<img src="{{ asset('images/Sans titre.png') }}" alt="">
+<img src="{{ asset('img/logo.png') }}" alt="">

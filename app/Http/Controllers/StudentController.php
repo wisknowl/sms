@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\academic_year;
 use Session;
 
 use Illuminate\View\View;
@@ -11,6 +12,7 @@ use App\Models\course;
 use App\Models\course_student;
 use App\Models\cycle;
 use App\Models\level;
+use App\Models\semester;
 use App\Models\student;
 use App\Models\student_level;
 use App\Models\student_ue;
@@ -26,13 +28,35 @@ class StudentController extends Controller
      */
     public function index(Request $request): view
     {
+        if ($request->has('year_id') && !empty($request->input('year_id'))) {
+            $year_id = $request->input('year_id');
+            $year_name = academic_year::where('id', $year_id)->value('name');
+            Session::put('year_name', $year_name);
+            Session::put('year_id', $year_id);
+        } else {
+            // Use the session value as the default value
+            $year_id = Session::get('year_id');
+            $year_name = Session::get('year_name');
+        }
+        if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
+            $semester_id = $request->input('semester_id');
+            $semester_name = semester::where('id', $semester_id)->value('name');
+            Session::put('semester_name', $semester_name);
+            Session::put('semester_id', $semester_id);
+        } else {
+            // Use the session value as the default value
+            $semester_id = Session::get('semester_id');
+            $semester_name = Session::get('semester_name');
+        }
         $specialties = specialty::all();
         $cycles = cycle::all();
+        $semesters = semester::all();
+        $academic_years = academic_year::all();
         $levels = level::all();
         $students = student::orderBy('id', 'desc')->get();
         $labels = $students->pluck('matricule')->toArray();
         $data = $students->pluck('id')->toArray();
-        return view('students.index', compact('levels', 'cycles', 'specialties', 'students', 'labels'));
+        return view('students.index', compact('levels', 'cycles', 'academic_years', 'semesters', 'specialties', 'students', 'labels'));
     }
     public function getChartData(Request $request)
     {
@@ -279,14 +303,14 @@ class StudentController extends Controller
             // $student->ues()->whereHas('ue', function ($query) use ($old_specialty_id) {
             //     $query->where('specialty_id', $old_specialty_id);
             // })->detach();
-           $re=student_ue::where('student_id', $student_id)->whereHas('ue', function ($query) use ($old_specialty_id) {
+            $re = student_ue::where('student_id', $student_id)->whereHas('ue', function ($query) use ($old_specialty_id) {
                 $query->where('specialty_id', $old_specialty_id);
             })->delete();
-            $tes=student_ue::where('student_id', $student_id)->whereHas('ue', function ($query) use ($old_specialty_id) {
+            $tes = student_ue::where('student_id', $student_id)->whereHas('ue', function ($query) use ($old_specialty_id) {
                 $query->where('specialty_id', $old_specialty_id);
             })->pluck('id')->toArray();
             // Delete the old courses
-            $test=course_student::where('student_id', $student_id)->delete();
+            $test = course_student::where('student_id', $student_id)->delete();
             // Get the new ues and courses ids
             $ue_ids = unite_enseignement::where('specialty_id', $new_specialty_id)->where('level_id', $new_level_id)->pluck('id')->toArray();
             $course_ids = course::whereIn('ue_id', $ue_ids)->pluck('id')->toArray();

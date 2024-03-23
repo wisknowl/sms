@@ -80,9 +80,10 @@ class SpecialtyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(specialty $specialty)
+    public function show(string $specialty)
     {
-        //
+        $specialty = Specialty::findOrFail($specialty);
+        return view('specialties.show', compact('specialty'));
     }
 
     /**

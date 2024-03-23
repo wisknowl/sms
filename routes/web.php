@@ -61,6 +61,134 @@ function getAcademicYear()
         return "$previousYear-$currentYear";
     }
 }
+Route::get('/admin', function (Request $request) {
+    if ($request->has('year_id') && !empty($request->input('year_id'))) {
+        $year_id = $request->input('year_id');
+        $year_name = academic_year::where('id', $year_id)->value('name');
+        Session::put('year_name', $year_name);
+        Session::put('year_id', $year_id);
+    } else {
+        // Use the session value as the default value
+        $year_id = Session::get('year_id');
+        $year_name = Session::get('year_name');
+        $semester_name = Session::get('semester_name');
+    }
+    if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
+        $semester_id = $request->input('semester_id');
+        $semester_name = semester::where('id', $semester_id)->value('name');
+        Session::put('semester_name', $semester_name);
+        Session::put('semester_id', $semester_id);
+    } else {
+        // Use the session value as the default value
+        $semester_id = Session::get('semester_id');
+        $semester_name = Session::get('semester_name');
+    }
+    $students = student::orderBy('id', 'desc')->get();
+    $data = array();
+    $validated_ue = array();
+    $not_validated_ue = array();
+
+    $studentValidatedCount = 0;
+    $studentNotValidatedCount = 0;
+
+    foreach ($students as $student) {
+        $student_id = $student->id;
+        $year_session = Session::get('year_name');
+        $level = $student->levelByYear($year_session); // get the level object or null
+        if ($level) { // if the level is not null
+            $level_id = $level->id; // get the level id
+            $session = Session::get('semester_id');
+            $st_ues = student_ue::with('ue')
+                ->where('student_id', $student_id)
+                ->whereHas('ue', function ($query) use ($level_id, $session) {
+                    $query->where('level_id', $level_id)->where('semester_id', $session);
+                })->get();
+            $courses = course_student::with('course')
+                ->where('student_id', $student_id)
+                ->whereHas('course', function ($query) use ($level_id) {
+                    $query->where('level_id', $level_id);
+                })->get();
+        } else {
+            $st_ues = null;
+        }
+
+
+        $ue_credit_sum = 0;
+        $ue_sum = 0;
+        $credit_obtained = 0;
+
+        if ($st_ues) {
+            foreach ($st_ues as $st_ue) {
+                $course_sum = 0;
+                $course_credit_sum = 0;
+                foreach ($courses as $course) {
+                    if ($course->course->ue_id == $st_ue->ue->id) {
+                        $check_credit_sum = 0;
+
+                        if ($course->exam_marks < $course->reseat_mark) {
+                            $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->reseat_mark) / 20) * 70)) / 100) * 20);
+                        } else {
+                            $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->exam_marks) / 20) * 70)) / 100) * 20);
+                        }
+                        if ($course_mark >= 10) {
+                            $check_credit_sum = $check_credit_sum + $course->course->credit_points;
+                        }
+                        $course_credit_multiply = $course_mark * $course->course->credit_points;
+                        $course_sum = $course_sum + $course_credit_multiply;
+                        $course_credit_sum = $course_credit_sum + $course->course->credit_points;
+                    }
+                }
+                $ue_mark = $course_sum / $course_credit_sum;
+                if ($ue_mark < 10) {
+                    $not_validated_ue[] = $ue_mark;
+                } else {
+                    $validated_ue[] = $ue_mark;
+                }
+                $ue_credit_multiply = $ue_mark * $st_ue->ue->credit_points;
+                $ue_sum = $ue_sum + $ue_credit_multiply;
+                $ue_credit_sum = $ue_credit_sum + $st_ue->ue->credit_points;
+                $credit_obtained = $credit_obtained + $check_credit_sum;
+            }
+            $std_avg = $ue_sum / $ue_credit_sum;
+            $data[] = $std_avg;
+            if($credit_obtained >= 30){
+                $studentValidatedCount = $studentValidatedCount + 1;
+            }
+            else{
+                $studentNotValidatedCount = $studentNotValidatedCount + 1;
+            }
+        } else {
+            $validated_ue_count[] = null;
+            $not_validated_ue_count[] = null;
+        }
+    }
+
+
+    $validated_ue_count = count($validated_ue);
+    $not_validated_ue_count = count($not_validated_ue);
+    if ($validated_ue_count != 0 || $not_validated_ue_count != 0) {
+        $validated_ue_percent = ($validated_ue_count / ($validated_ue_count + $not_validated_ue_count)) * 100;
+        $not_validated_ue_percent = ($not_validated_ue_count / ($validated_ue_count + $not_validated_ue_count)) * 100;
+    } else {
+        $validated_ue_percent = 0;
+        $not_validated_ue_percent = 0;
+    }
+    // if($studentValidatedCount != 0 || $studentNotValidatedCount != 0){
+
+    // }
+
+    $academic_years = academic_year::all();
+    $semesters = semester::all();
+    $user_count = User::count();
+    $count = student::count();
+    $specialty_count = ModelsSpecialty::count();
+    $ue_count = unite_enseignement::count();
+    $course_count = course::count();
+    config(['app.name' => 'Dashboard']);
+    // notify()->warning('Etudiant inscrire avec succès');
+
+    return view('admin', compact('academic_years', 'semesters', 'user_count', 'count', 'specialty_count', 'ue_count', 'course_count', 'validated_ue_percent', 'not_validated_ue_percent', 'studentValidatedCount', 'studentNotValidatedCount'));
+})->middleware(['auth', 'verified', 'set_session_values'])->name('admin');
 
 Route::get('/dashboard', function (Request $request) {
     if ($request->has('year_id') && !empty($request->input('year_id'))) {
@@ -164,13 +292,15 @@ Route::get('/dashboard', function (Request $request) {
     $ue_count = unite_enseignement::count();
     $course_count = course::count();
     config(['app.name' => 'Dashboard']);
+    notify()->success('Etudiant inscrire avec succès');
+
     return view('dashboard', compact('academic_years', 'semesters', 'user_count', 'count', 'specialty_count', 'ue_count', 'course_count', 'validated_ue_percent', 'not_validated_ue_percent'));
 })->middleware(['auth', 'verified', 'set_session_values'])->name('dashboard');
 
 Route::get('generateTranscript/{id}', [StudentMarks::class, 'generateTranscript'])->name('Transcript');
 Route::get('generatePV/{id}', [Specialty::class, 'generatePV'])->name('PV');
 Route::get('/student_marks', StudentMarks::class);
-Route::get('proces_verbal', ProcesVerbal::class)->name('proces_verbal')->middleware(['auth', 'verified', 'set_session_values']);
+// Route::get('proces_verbal', ProcesVerbal::class)->name('proces_verbal')->middleware(['auth', 'verified', 'set_session_values']);
 Route::get('ues', [UniteEnseignementController::class, 'export']);
 // Route::get('pvxls', [Specialty::class, 'export']);
 // Route::get('export/{id}', function ($id) {
@@ -218,7 +348,7 @@ Route::resource('levels', LevelController::class)
     ->middleware(['auth', 'verified']);
 
 Route::resource('specialties', SpecialtyController::class)
-    ->only(['index', 'store'])
+    // ->only(['index', 'store'])
     ->middleware(['auth', 'verified', 'set_session_values']);
 Route::put('/specialties/updateSpec', [SpecialtyController::class, 'updateSpec'])->name('specialties.updateSpec');
 
@@ -242,6 +372,9 @@ Route::resource('ue_cours', UeCourseController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified']);
 Route::resource('notes', CourseStudentController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified', 'set_session_values']);
+Route::resource('proces_verbal', ProcesVerbalController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified', 'set_session_values']);
 

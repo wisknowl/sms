@@ -98,20 +98,20 @@
                                 @php($count = 1)
                                 @forelse($course_students as $course_student)
                                 <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
-                                    <td class="whitespace-nowrap px-4 py-1 border font-medium">{{ $course_student->id }}</td>
+                                    <td class="whitespace-nowrap px-4 py-1 border font-medium">{{ $count }}</td>
 
                                     <td class="whitespace-nowrap px-4 py-1 border font-medium">{{ $course_student->student->matricule }}</td>
-                                    <td class="whitespace-nowrap px-4 py-1 border">{{ $course_student->student->name }} {{ $course_student->student->id }}</td>
+                                    <td class="whitespace-nowrap px-4 py-1 border">{{ $course_student->student->name }}</td>
                                     @if($count % 2 == 0)
                                         <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-3/4 focus:border-t-0 border-0 bg-neutral-200">
+                                            <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-full focus:border-t-0 border-0 bg-neutral-200">
                                         </td>
 
                                         <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-3/4 border-0 bg-neutral-200">
+                                            <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-200">
                                         </td>
                                         <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-3/4 border-0 bg-neutral-200">
+                                            <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-200">
                                         </td>
                                         @if($course_student->exam_marks < $course_student->reseat_mark)
                                         @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->reseat_mark) / 20) * 70)) / 100) * 20))
@@ -123,14 +123,14 @@
 
                                     @else
                                         <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-3/4 focus:border-t-0 border-0 bg-neutral-100">
+                                            <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-full focus:border-t-0 border-0 bg-neutral-100">
                                         </td>
 
                                         <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-3/4 border-0 bg-neutral-100">
+                                            <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-100">
                                         </td>
                                         <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-3/4 border-0 bg-neutral-100">
+                                            <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-100">
                                         </td>
 
                                         @if($course_student->exam_marks < $course_student->reseat_mark)

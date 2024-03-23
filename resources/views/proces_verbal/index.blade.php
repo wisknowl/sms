@@ -17,7 +17,7 @@
 
         <!-- Dropdown menu -->
         <div id="dropdownRadioBgHover" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-            <form action="{{ route('specialties.index', ['year_id' => Session::get('year_id'), 'semester_id' => Session::get('semester_id')]) }}" method="get">
+            <form action="{{ route('proces_verbal.index', ['year_id' => Session::get('year_id'), 'semester_id' => Session::get('semester_id')]) }}" method="get">
                 <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
                     @isset($academic_years)
                     @foreach($academic_years as $academic_year)
@@ -102,7 +102,7 @@
 
         <!-- Dropdown menu -->
         <div id="dropdownDefaultRadio" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-            <form action="{{ route('specialties.index', ['year_id' => Session::get('year_id'), 'semester_id' => Session::get('semester_id')]) }}" method="get">
+            <form action="{{ route('proces_verbal.index', ['year_id' => Session::get('year_id'), 'semester_id' => Session::get('semester_id')]) }}" method="get">
                 <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
                     @isset($semesters)
                     @foreach($semesters as $semester)
@@ -172,5 +172,5 @@
 </div>
 @endsection
 @section('content')
-@livewire('specialty')
+@livewire('proces-verbal')
 @endsection

@@ -17,7 +17,7 @@
         <!--Tabs content-->
         <div class="mb-6">
             <x-notify::notify />
-            <div> <label for="">{{ $sql }}</label></div>
+            <!-- <div> <label for="">{{ $sql }}</label></div> -->
             <!-- Add Specialty -->
             <div class="mb-2 flex justify-between items-center">
                 <div>
@@ -38,7 +38,7 @@
                         </svg>
                     </button>
                     <!-- Dropdown menu -->
-                    <div id="dropdown" class="z-20 !visible hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-60 dark:bg-gray-700">
+                    <div id="dropdown" class="z-40 !visible hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-60 dark:bg-gray-700">
                         <ul class="text-start py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                             <li>
                                 <h2 class="mb-0" id="headingTwo">
