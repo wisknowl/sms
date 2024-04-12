@@ -53,6 +53,7 @@ class StudentMarks extends Component
     public $a_year;
     public $level_id;
     public $greeting = [];
+    public $noteDeliberation;
 
     public function mount()
     {
@@ -168,11 +169,11 @@ class StudentMarks extends Component
                 // Assuming you have a function to get the current academic year
                 $current_year = $this->getAcademicYear();
                 $query->where('specialty_id', $this->specialty)
-                // Assuming the student model has a level relation
-                ->whereHas('levels', function ($query) use ($current_year) {
-                    // Assuming the level model has a year column
-                    $query->where('academic_year', $this->academic_year)->where('level_id', $this->level);
-                });
+                    // Assuming the student model has a level relation
+                    ->whereHas('levels', function ($query) use ($current_year) {
+                        // Assuming the level model has a year column
+                        $query->where('academic_year', $this->academic_year)->where('level_id', $this->level);
+                    });
             })
             ->get();
 
@@ -190,10 +191,27 @@ class StudentMarks extends Component
         // // // enable the query log
         // DB::enableQueryLog();
 
+
+
         // update the marks using the update method
         DB::transaction(function () use ($request) {
             // get the indexes of the ca_marks and exam_mark arrays
             $i = 154;
+            if ($this->noteDeliberation) {
+                $courseStudents = course_student::all();
+
+                // Loop through each record and update the exam_marks
+                foreach ($courseStudents as $courseStudent) {
+                    // Calculate the new exam mark with the deliberation mark added
+                    $newExamMark = $courseStudent->exam_marks + $this->noteDeliberation;
+                    if ($newExamMark > 20) {
+                        $newExamMark = 20;
+                    }
+
+                    // Update the exam_marks column with the new value
+                    $updateDel = $courseStudent->update(['exam_marks' => $newExamMark]);
+                }
+            }
             $indexes = array(); // Initialize an empty array
             if (!empty($this->ca_marks)) {
                 // Merge the keys of $this->ca_marks with the $indexes array
@@ -245,6 +263,9 @@ class StudentMarks extends Component
             DB::commit();
             // check if the update was successful
             $this->updateStudents();
+            // if ($updateDel) {
+            //     dd(1);
+            // }
             if ($updated) {
                 // flash a success message
                 session()->flash('message', 'Les Notes ont été mises à jour avec succès');

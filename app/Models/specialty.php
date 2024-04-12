@@ -32,4 +32,9 @@ class specialty extends Model
     public function students(){
         return $this->hasMany(student::class);
     }
+
+    public function tranche(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\tranche', 'specialty_id', 'tranche_id', 'tranche_amount');
+    }
 }

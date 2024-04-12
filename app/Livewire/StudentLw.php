@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\academic_year;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -70,17 +72,65 @@ class StudentLw extends Component
             return "$previousYear-$currentYear";
         }
     }
-
-    public function render()
+    // public function convert_to_utf8_recursively($data)
+    // {
+    //     if (is_string($data)) {
+    //         dump(1);
+    //         return mb_convert_encoding($data, 'UTF-8', 'UTF-8');
+    //     } elseif (is_array($data)) {
+    //         dump(1);
+    //         $convertedData = [];
+    //         foreach ($data as $key => $value) {
+    //             $convertedData[$key] = $this->convert_to_utf8_recursively($value);
+    //         }
+    //         return $convertedData;
+    //     } elseif (is_object($data)) {
+    //         // dd(1);
+    //         foreach ($data as $key => $value) {
+    //             $data->$key = $this->convert_to_utf8_recursively($value);
+    //             dump($data->$key);
+    //         }
+    //         return $data;
+    //     } else {
+    //         return $data;
+    //     }
+    // }
+    public function student_list()
     {
-        $academic_years = academic_year::all();
-        $specialties = specialty::all();
-        $cycles = cycle::all();
-        $levels = level::all();
-        $students = student::with('specialty', 'levels', 'cycle')->orderBy('id', 'desc');
-        $students->when($this->cycle, function ($query) {
-            return $query->where('cycle_id', $this->cycle);
-        })
+        $students = $this->getFilteredStudents()->get();
+
+        // $students = $this->convert_to_utf8_recursively($students);
+        if($this->specialty){
+            $spec = specialty::findOrFail($this->specialty);
+            $spec = $spec->name;
+        }
+        else{
+            $spec = null;
+        }
+        if($this->level){
+            $level = level::findOrFail($this->level);
+            $level = $level->name;
+        }
+        else{
+            $level = null;
+        }
+        
+        $file_name = $spec . '_N' . $level. '.pdf';
+
+        // dd($students);
+        $pdf = Pdf::loadView('students.pdf', compact('students', 'spec', 'level'))->output();
+        return response()->streamDownload(
+            fn () => print($pdf),
+            $file_name
+        );
+    }
+
+    public function getFilteredStudents()
+    {
+        return student::with('specialty', 'levels', 'cycle')->orderBy('id', 'desc')
+            ->when($this->cycle, function ($query) {
+                return $query->where('cycle_id', $this->cycle);
+            })
             ->when($this->level, function ($query) {
                 $query->whereHas('levels', function ($query) {
                     if (session()->has('year_name')) {
@@ -98,10 +148,20 @@ class StudentLw extends Component
                         ->orwhere('matricule', 'like', '%' . $this->search . '%')
                         ->orwhere('id', 'like', '%' . $this->search . '%');
                 });
-            })->get();
-        $sql = $students->toSql();
+            });
+    }
+
+    public function render()
+    {
+        $academic_years = academic_year::all();
+        $specialties = specialty::all();
+        $cycles = cycle::all();
+        $levels = level::all();
+
+        // $sql = $students->toSql();
+        $students = $this->getFilteredStudents();
         $students = $students->paginate(10);
         config(['app.name' => 'Etudiant']);
-        return view('livewire.student-lw', compact('levels', 'cycles', 'specialties', 'students', 'academic_years','sql'));
+        return view('livewire.student-lw', compact('levels', 'cycles', 'specialties', 'students', 'academic_years',));
     }
 }

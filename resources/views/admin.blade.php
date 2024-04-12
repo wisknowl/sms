@@ -258,7 +258,7 @@
     <div class="flex justify-evenly w-full items-center my-4">
       <div class="w-1/4 overflow-hidden">
         @if($studentValidatedCount != 0 || $studentNotValidatedCount != 0)
-        <canvas data-te-chart="doughnut" data-te-dataset-label="Traffic" data-te-labels="['Nombre Validé', 'Nombre Non validé']" data-te-dataset-data="[{{$studentValidatedCount}}, {{$studentNotValidatedCount}}]" data-te-dataset-background-color="['rgb(144,238,144)', 'rgba(255,0,0)']">
+        <canvas data-te-chart="doughnut" data-te-dataset-label="Traffic" data-te-labels="['Nombre De Validé', 'Nombre De Non validé']" data-te-dataset-data="[{{$studentValidatedCount}}, {{$studentNotValidatedCount}}]" data-te-dataset-background-color="['rgb(144,238,144)', 'rgba(255,0,0)']">
         </canvas>
         @endif
       </div>

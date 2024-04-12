@@ -181,7 +181,7 @@
                             <td><b>{{$student->matricule}}</b></td>
                             <td><b>{{$student->name}}</b></td>
                             @php($semester_avg = $ue_sum / $ue_credit_sum)
-                            <td>{{$semester_avg}}</td>
+                            <td>{{ number_format(ceil($semester_avg * 100) / 100, 2, '.', '') }}</td>
                             <td>{{$credit_obtained}}</td>
                             @if($credit_obtained == 30)
                             <td>Fermé</td>

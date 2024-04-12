@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class student extends Model
 {
@@ -68,5 +69,15 @@ class student extends Model
         return $this->belongsToMany('App\Models\unite_enseignement', 'student_ues', 'student_id', 'ue_id')
             ->withPivot('average', 'credit')
             ->withTimestamps();
+    }
+
+    public function faturation(): HasMany
+    {
+        return $this->hasMany(facturation::class);
+    }
+
+    public function fature(): HasMany
+    {
+        return $this->hasMany(facture::class);
     }
 }

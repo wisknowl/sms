@@ -44,17 +44,28 @@
             100% {
                 transform: translateX(-12%);
             }
+
+
         }
-        #laravel-notify > div > div{
+
+        @supports (scrollbar-color: hsl(240 100% 27%) hsl(240 100% 90%)) {
+            * {
+                scrollbar-color: hsl(0deg 90.95% 49.97%) hsl(0deg 0% 100%);
+                scrollbar-width: thin;
+            }
+        }
+
+        #laravel-notify>div>div {
             position: absolute;
             bottom: 25px;
             right: 25px;
         }
+
     </style>
 
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased h-full">
 
     <!--Main Navigation-->
     <header>
@@ -199,12 +210,12 @@
     <!--Main Navigation-->
 
     <!--Main layout-->
-    <main style="margin-top: 58px">
+    <main style="margin-top: 58px" class="h-full">
         <div class="container pt-4">
             @yield('content')
         </div>
     </main>
-    
+
     <!-- MDB -->
     <script src="{{ asset('js/mdb.min.js') }}"></script>
     <!-- Custom scripts -->

@@ -1,4 +1,4 @@
-<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg relative">
+<div class="bg-white overflow-y-visible overflow-x-hidden shadow-sm sm:rounded-lg relative">
     <div wire:loading class="absolute right-6 top-6">
         <div role="status">
             <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,6 +21,7 @@
             <button wire:click="updateMarks" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Enregistrer</button>
         </div>
         <div class="my-2 px-3 rounded bg-slate-100">
+
             <div class="py-4 grid grid-cols-4 gap-4">
                 <div>
                     <label for="">Cycle</label>
@@ -66,6 +67,18 @@
                     </select>
                 </div>
             </div>
+            <div class="pb-4 grid grid-cols-4 gap-4">
+                <button id="dropdownRadioBgHoverButton" data-dropdown-toggle="delib" class="flex justify-evenly items-center whitespace-nowrap rounded bg-primary-100  pb-1 pt-1.5 text-xs font-medium uppercase leading-normal text-neutral-800 shadow-[0_4px_9px_-4px_#fbfbfb] transition duration-150 ease-in-out hover:bg-neutral-100 hover:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:bg-neutral-100 focus:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:outline-none focus:ring-0 active:bg-neutral-200 active:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] motion-reduce:transition-none" type="button">
+                    Saisir La note de Déliberation
+                    <svg class="w-2.5 h-2.5 ms-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Dropdown menu -->
+            <div id="delib" class="z-10 hidden p-4 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+                <input placeholder="0.00" type="number" wire:model="noteDeliberation" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-200">
+            </div>
         </div>
         <div class="flex flex-col">
             <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -103,17 +116,17 @@
                                     <td class="whitespace-nowrap px-4 py-1 border font-medium">{{ $course_student->student->matricule }}</td>
                                     <td class="whitespace-nowrap px-4 py-1 border">{{ $course_student->student->name }}</td>
                                     @if($count % 2 == 0)
-                                        <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-full focus:border-t-0 border-0 bg-neutral-200">
-                                        </td>
+                                    <td class="whitespace-nowrap px-4 py-1 border">
+                                        <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-full focus:border-t-0 border-0 bg-neutral-200">
+                                    </td>
 
-                                        <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-200">
-                                        </td>
-                                        <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-200">
-                                        </td>
-                                        @if($course_student->exam_marks < $course_student->reseat_mark)
+                                    <td class="whitespace-nowrap px-4 py-1 border">
+                                        <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-200">
+                                    </td>
+                                    <td class="whitespace-nowrap px-4 py-1 border">
+                                        <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-200">
+                                    </td>
+                                    @if($course_student->exam_marks < $course_student->reseat_mark)
                                         @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->reseat_mark) / 20) * 70)) / 100) * 20))
                                         <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
                                         @else
@@ -121,7 +134,7 @@
                                         <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
                                         @endif
 
-                                    @else
+                                        @else
                                         <td class="whitespace-nowrap px-4 py-1 border">
                                             <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-full focus:border-t-0 border-0 bg-neutral-100">
                                         </td>
@@ -134,16 +147,16 @@
                                         </td>
 
                                         @if($course_student->exam_marks < $course_student->reseat_mark)
-                                        @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->reseat_mark) / 20) * 70)) / 100) * 20))
-                                        <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
-                                        @else
-                                        @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->exam_marks) / 20) * 70)) / 100) * 20))
-                                        <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
-                                        @endif
+                                            @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->reseat_mark) / 20) * 70)) / 100) * 20))
+                                            <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
+                                            @else
+                                            @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->exam_marks) / 20) * 70)) / 100) * 20))
+                                            <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
+                                            @endif
 
-                                    @endif
+                                            @endif
 
-                                    <!-- <td>
+                                            <!-- <td>
                             <input type="text" placeholder="{{ $course_student->id }}" wire:model="course_student_id" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-0">
                         </td> -->
                                 </tr>

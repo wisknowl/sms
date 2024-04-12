@@ -1,4 +1,4 @@
-<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg relative">
+<div class="bg-white overflow-y-visible overflow-x-hidden shadow-sm sm:rounded-lg relative">
     <div wire:loading class="absolute right-6 top-6">
         <div role="status">
             <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -99,13 +99,13 @@
                                     @php($n = $n+1)
                                     @endif
                                     @endforeach
-                                    <th colspan="{{ $n }}" class=" px-4 py-2 border"><b>{{ $ue->code }} {{ $ue->name }}</b></th>
+                                    <th colspan="{{ $n }}" class=" px-4 py-2 border"><b>{{ $ue->code }} {{ $ue->name }} | Credit {{ $ue->credit_points }}</b></th>
                                     @endforeach
                                 </tr>
                                 <tr style="font-size: small;">
                                     <td colspan="3" class=" px-4 py-2 border"></td>
                                     @foreach($courses as $course)
-                                    <th class=" px-4 py-2 border"><b>{{$course->code}} {{$course->name}}</b></th>
+                                    <th class=" px-4 py-2 border"><b>{{$course->code}} {{$course->name}} | Credit {{ $course->credit_points }}</b></th>
                                     @endforeach
                                 </tr>
                                 <tr>
@@ -165,7 +165,7 @@
                                     @php($n = $n+6)
                                     @endif
                                     @endforeach
-                                    <th colspan="{{ $n }}" class="px-4 py-2 border"><b>{{ $ue->code }} {{ $ue->name }}</b></th>
+                                    <th colspan="{{ $n }}" class="px-4 py-2 border"><b>{{ $ue->code }} {{ $ue->name }} | Credit {{ $ue->credit_points }}</b></th>
                                     <th colspan="3" class="px-4 py-2 border"></th>
                                     @endforeach
                                     <th class="px-4 py-2"></th>
@@ -175,7 +175,7 @@
                                     @foreach($ues as $ue)
                                     @foreach($courses as $course)
                                     @if($course->ue_id == $ue->id)
-                                    <th colspan="6" class="px-4 py-2 border"><b>{{$course->code}} {{$course->name}}</b></th>
+                                    <th colspan="6" class="px-4 py-2 border"><b>{{$course->code}} {{$course->name}} | Credit {{ $course->credit_points }}</b></th>
                                     @endif
                                     @endforeach
                                     <th colspan="3" class="whitespace-nowrap px-4 py-2" style="background-color: lightgray;"><b>Result UE</b></th>
@@ -323,7 +323,7 @@
                                                                                     <th class="whitespace-nowrap px-4 py-2 border"><b>{{$student->matricule}}</b></th>
                                                                                     <th class="whitespace-nowrap px-4 py-2 border"><b>{{$student->name}}</b></th>
                                                                                     @php($semester_avg = $ue_sum / $ue_credit_sum)
-                                                                                    <td class="whitespace-nowrap px-4 py-2 border">{{$semester_avg}}</td>
+                                                                                    <td class="whitespace-nowrap px-4 py-2 border">{{ number_format(ceil($semester_avg * 100) / 100, 2, '.', '') }}</td>
                                                                                     <td class="whitespace-nowrap px-4 py-2 border">{{$credit_obtained}}</td>
                                                                                     @if($credit_obtained == 30)
                                                                                     <td class="whitespace-nowrap px-4 py-2 border">Fermé</td>

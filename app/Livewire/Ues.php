@@ -133,6 +133,6 @@ class Ues extends Component
         $semesters = semester::all();
         config(['app.name' => 'Unite Denseignement']);
 
-        return view('livewire.ues', compact('ues', 'levels', 'academic_years', 'semesters', 'specialties', 'course_natures', 'sql'));
+        return view('livewire.ues', compact('ues', 'levels', 'academic_years', 'semesters', 'specialties', 'course_natures', 'sql'))->with('paginator', $ues->links('pagination::tailwind'));
     }
 }

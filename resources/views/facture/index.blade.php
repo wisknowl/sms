@@ -172,5 +172,5 @@
 </div>
 @endsection
 @section('content')
-@livewire('specialty-detail', ['specialtyId' => $specialty['id']])
+@livewire('facture')
 @endsection

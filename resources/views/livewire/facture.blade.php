@@ -1,4 +1,4 @@
-<div class="bg-white overflow-x-hidden overflow-visible  shadow-sm sm:rounded-lg relative">
+<div class="bg-white overflow-y-visible overflow-x-hidden shadow-sm sm:rounded-lg relative">
     <div wire:loading class="absolute right-6 top-6">
         <div role="status">
             <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,20 +11,19 @@
     <div class="p-6 text-gray-900">
         <div class="border-b mb-2">
             <h2 class="font-bold uppercase text-xl text-gray-800 text-center mb-4">
-                {{ __('Specialité') }}
+                {{ __('Facturation') }}
             </h2>
         </div>
         <!--Tabs content-->
         <div class="mb-6">
             <x-notify::notify />
-            <!-- <div> <label for="">{{ $sql }}</label></div> -->
             <!-- Add Specialty -->
             <div class=" mb-2 flex justify-between items-center">
-
                 <!-- Button trigger vertically centered modal-->
                 <button type="button" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-toggle="modal" data-te-target="#exampleModalCenter" data-te-ripple-init data-te-ripple-color="light">
-                    Ajouter
+                    Créer
                 </button>
+
                 <div class="flex justify-end items-center">
 
                     <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="justify-between mx-1 border-2 text-neutral-900 bg-white hover:bg-slate-50 focus:outline-none  font-medium rounded-lg text-sm px-3 py-1.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
@@ -84,7 +83,6 @@
                     <div>
                         <input wire:model="search" wire:change="fl" type="search" class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:border-0 focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary" id="exampleSearch" placeholder="Rechercher" />
                     </div>
-
                     <div class="ml-1 inline-flex rounded-md shadow-sm" role="group">
 
                         <!-- <a href="{{ route('students.pdf') }}" target="_blank"> -->
@@ -125,7 +123,7 @@
 
                             </span>
                         </button>
-                        <button wire:click="ues_list" type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-500 focus:text-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                        <button wire:click="facture_list" type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-500 focus:text-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                             <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 309.529 309.529" style="enable-background:new 0 0 309.529 309.529;" xml:space="preserve">
                                     <g>
@@ -155,7 +153,8 @@
                     </div>
                 </div>
             </div>
-
+            <div>
+            </div>
             <div class="hidden opacity-100 transition-opacity duration-150 ease-linear data-[te-tab-active]:block" id="tabs-home" role="tabpanel" aria-labelledby="tabs-home-tab" data-te-tab-active>
                 <!-- Specialty List -->
                 <div class="flex flex-col">
@@ -166,22 +165,25 @@
                                     <thead class="border-b font-medium dark:border-neutral-500">
                                         <tr>
                                             <th scope="col" class="px-4 py-2 border">#</th>
-                                            <th scope="col" class="px-4 py-2 border">Name</th>
-                                            <th scope="col" class="px-4 py-2 border">Code</th>
-                                            <th scope="col" class="px-4 py-2 border">Cycle</th>
+                                            <th scope="col" class="px-4 py-2 border">Montant Verser</th>
+                                            <th scope="col" class="px-4 py-2 border">Etudiant</th>
+                                            <th scope="col" class="px-4 py-2 border">Jour et L'heur du versement</th>
+                                            <th scope="col" class="px-4 py-2 border">Jour et L'heur modifier</th>
                                             <th scope="col" class="px-4 py-2 border">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php($count = 1)
-                                        @forelse($specialties as $specialty)
+                                        @forelse($factures as $facture)
+                                        @php($tranche_sum = $facture->tranche1 + $facture->tranche2 + $facture->tranche3)
                                         <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
                                             <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $count }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $specialty->name }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $specialty->code }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $specialty->cycle->code }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $tranche_sum }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->student->name }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->created_at }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->updated_at }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
-                                                <button type="button" wire:click.prevent='setDeleteId({{ $specialty->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
+                                                <button type="button" wire:click.prevent='setDeleteId({{ $facture->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4V4zm2 2h6V4H9v2zM6.074 8l.857 12H17.07l.857-12H6.074zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1z" fill="#FF0000" />
@@ -192,7 +194,7 @@
 
                                                 <!-- <button wire:click="$emit('openModal', 'mymodal')">Open Modal</button> X-->
                                                 <!-- <button wire:click="$dispatch('openModal', {component: 'mymodal'})"></button> -->
-                                                <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal" data-te-id="{{ $specialty->id }}" data-te-name="{{ $specialty->name }}" data-te-code="{{ $specialty->code }}" data-te-target="#updateModal">
+                                                <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal" data-te-id="" data-te-name="" data-te-code="" data-te-target="#updateModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" id="edit" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
                                                             <path id="secondary" d="M21,22H3a1,1,0,0,1,0-2H21a1,1,0,0,1,0,2Z" style="fill: rgb(44, 169, 188);"></path>
@@ -200,11 +202,47 @@
                                                         </svg>
                                                     </span>
                                                 </button>
-                                                <a href="{{ route('specialties.show', ['specialty' => $specialty['id']]) }}">
-                                                    <button class="font-medium text-blue-600 dark:text-red-500 hover:underline">
+                                                <a href="{{ asset('storage/factures/' . $facture->pdf_name) }}" target="_blank">
+                                                    <button class="font-medium text-blue-600 dark:text-red-500 hover:underline flex items-center">
                                                         <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
-                                                            <svg width="800px" height="800px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                <path fill="#4A4A4A" fill-rule="evenodd" d="M2.5,7.5 C3.88071187,7.5 5,8.61928813 5,10 C5,11.3807119 3.88071187,12.5 2.5,12.5 C1.11928813,12.5 0,11.3807119 0,10 C0,8.61928813 1.11928813,7.5 2.5,7.5 Z M17.5,7.5 C18.8807119,7.5 20,8.61928813 20,10 C20,11.3807119 18.8807119,12.5 17.5,12.5 C16.1192881,12.5 15,11.3807119 15,10 C15,8.61928813 16.1192881,7.5 17.5,7.5 Z M10.226404,7.5 C11.6071159,7.5 12.726404,8.61928813 12.726404,10 C12.726404,11.3807119 11.6071159,12.5 10.226404,12.5 C8.84569215,12.5 7.72640403,11.3807119 7.72640403,10 C7.72640403,8.61928813 8.84569215,7.5 10.226404,7.5 Z" />
+                                                            <svg width="800px" height="800px" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--noto" preserveAspectRatio="xMidYMid meet">
+
+                                                                <path d="M64.32 103.32c-34.03 0-53.56-33.13-56.94-39.38c3.07-6.27 20.91-39.26 56.94-39.26s53.87 32.98 56.94 39.26c-3.38 6.25-22.92 39.38-56.94 39.38z" fill="#fafafa">
+
+                                                                </path>
+
+                                                                <path d="M64.32 27.12c15.81 0 29.84 6.42 41.7 19.09c6.63 7.08 10.73 14.26 12.49 17.67c-4.51 7.99-23.05 36.99-54.19 36.99c-14.88 0-28.63-6.45-40.89-19.17c-6.89-7.15-11.37-14.41-13.3-17.82c1.75-3.41 5.86-10.6 12.49-17.67c11.86-12.67 25.89-19.09 41.7-19.09m0-4.88C22.56 22.24 4.66 64 4.66 64s20.25 41.76 59.66 41.76S123.97 64 123.97 64s-17.9-41.76-59.65-41.76z" fill="#b0bec5">
+
+                                                                </path>
+
+                                                                <path d="M64.32 37c26.97 0 45.47 16.51 53.66 27.71c.96 1.31 1.99-4.99 1.12-6.36c-7.84-12.26-25.41-32.91-54.77-32.91S17.38 46.1 9.54 58.36c-.88 1.37.3 6.83 1.41 5.64c8.54-9.17 26.39-27 53.37-27z" fill="#b0bec5">
+
+                                                                </path>
+
+                                                                <circle cx="64.32" cy="60.79" r="33.15" fill="#9c7a63">
+
+                                                                </circle>
+
+                                                                <path d="M64.32 37c10.87 0 20.36 2.68 28.36 6.62c-5.81-9.58-16.34-15.97-28.36-15.97c-12.28 0-23 6.69-28.72 16.61C43.61 40.04 53.18 37 64.32 37z" fill="#806451">
+
+                                                                </path>
+
+                                                                <circle cx="64.32" cy="60.79" r="15.43" fill="#212121">
+
+                                                                </circle>
+
+                                                                <circle cx="88.86" cy="59.37" r="7.72" fill="#d9baa5">
+
+                                                                </circle>
+
+                                                                <g>
+
+                                                                    <path d="M7.21 67.21c-.52 0-1.05-.13-1.54-.4a3.207 3.207 0 0 1-1.27-4.35c.85-1.55 21.28-40.21 59.92-40.21s58.47 37.89 59.29 39.41c.84 1.56.27 3.5-1.29 4.35c-1.56.84-3.5.27-4.35-1.29c-.18-.34-18.88-33.86-53.66-33.86c-34.79 0-54.11 34.34-54.3 34.69a3.185 3.185 0 0 1-2.8 1.66z" fill="#616161">
+
+                                                                    </path>
+
+                                                                </g>
+
                                                             </svg>
                                                         </span>
                                                     </button>
@@ -215,7 +253,7 @@
                                         @php($count = $count + 1)
                                         @empty
                                         <tr>
-                                            <td class="whitespace-nowrap px-4 py-2 border">No specialty found</td>
+                                            <td colspan="6" class="whitespace-nowrap px-4 py-2 border">Aucune facture créée pour le moment</td>
                                         </tr>
                                         @endforelse
                                     </tbody>
@@ -233,7 +271,7 @@
                             <div class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
                                 <!--Modal title-->
                                 <h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="exampleModalCenterTitle">
-                                    SPECIALITE
+                                    Creer une Facture
                                 </h5>
                                 <!--Close button-->
                                 <button type="button" class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" data-te-modal-dismiss aria-label="Close">
@@ -244,45 +282,35 @@
                             </div>
 
                             <!--Modal body-->
-                            <form method="POST" action="">
+                            <form method="POST" action="{{route('facture.index')}}">
                                 @csrf
                                 <div class="relative p-4">
-                                    <!-- Specialty Name -->
-                                    <div class="relative mb-3" data-te-input-wrapper-init>
-                                        <input name="title" type="text" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" required />
-                                        <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Intitule
-                                        </label>
-                                    </div>
+
                                     <!-- Code -->
                                     <div class="relative mb-3" data-te-input-wrapper-init>
-                                        <input name="code" type="text" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" required />
-                                        <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Code
+                                        <input name="montant" type="number" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" required />
+                                        <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Montant
                                         </label>
                                     </div>
-                                    <div class="mb-3">
-                                        <select name="cycle" data-te-select-init data-te-select-placeholder="Cycle">
-                                            @isset($cycles)
-                                            @foreach($cycles as $cycle)
-                                            <option value="{{ $cycle->id }}">{{$cycle->code}} | {{ $cycle->name }}</option>
+                                    <div class="mb-0">
+                                        <select name="student_id" data-te-select-init data-te-select-filter="true" data-te-select-init data-te-select-placeholder="Etudiant">
+                                            @isset($students)
+                                            @foreach($students as $student)
+                                            <option value="{{ $student->id }}">{{$student->matricule}} | {{ $student->name }}</option>
                                             @endforeach
                                             @endisset
                                         </select>
                                     </div>
-                                    <!-- Description -->
-                                    <div class="relative mb-3" data-te-input-wrapper-init>
-                                        <textarea name="descript" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlTextarea1" rows="3" placeholder="Your message" required></textarea>
-                                        <label for="exampleFormControlTextarea1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Description
-                                        </label>
-                                    </div>
+
                                 </div>
 
                                 <!--Modal footer-->
                                 <div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
                                     <button type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
-                                        Close
+                                        Fermer
                                     </button>
-                                    <button type="submit" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
-                                        Save
+                                    <button type="submit" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
+                                        Creer
                                     </button>
                                 </div>
                             </form>
@@ -400,7 +428,7 @@
                 </div>
             </div>
             <div>
-                {{ $specialties->links() }}
+                {{ $factures->links() }}
             </div>
         </div>
     </div>

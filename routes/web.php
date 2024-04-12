@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\SpecialtyExport;
 use App\Exports\pvsn;
+use App\Livewire\StudentLw;
 use Session;
 
 use App\Http\Controllers\AcademicYearController;
@@ -334,6 +335,7 @@ Route::resource('students', StudentController::class)
 Route::get('/chart-data', [StudentController::class, 'getChartData']);
 Route::get('/semesterSession', [StudentController::class, 'getChartData'])->name('semesterSession');
 Route::put('/students/updateStudent', [StudentController::class, 'updateStudent'])->name('students.updateStudent');
+Route::get('/students/pdf', [StudentLw::class, 'student_list'])->name('students.pdf');
 
 Route::resource('academic_years', AcademicYearController::class)
     ->only(['index', 'store'])
@@ -375,6 +377,10 @@ Route::resource('notes', CourseStudentController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified', 'set_session_values']);
 Route::resource('proces_verbal', ProcesVerbalController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified', 'set_session_values']);
+
+Route::resource('facture', FacturationController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified', 'set_session_values']);
 
