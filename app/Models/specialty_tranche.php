@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class specialty_tranche extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+
     public function specialty()
     {
         return $this->belongsTo(specialty::class);

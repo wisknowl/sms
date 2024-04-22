@@ -11,7 +11,7 @@
     <div class="p-6 text-gray-900">
         <div class="border-b mb-2">
             <h2 class="font-bold uppercase text-xl text-gray-800 text-center mb-4">
-                {{$name}}
+                {{$specialty_name}}
             </h2>
         </div>
         <!--Tabs content-->
@@ -35,7 +35,7 @@
                                             <table class="min-w-full text-center text-sm font-light bg-inherit">
                                                 <thead class="border-b font-medium dark:border-neutral-500 bg-inherit">
                                                     <tr>
-                                                        <th scope="col" class="px-4 py-2  border-r">Inscription</th>
+                                                        <th scope="col" class="px-4 py-2  border-r">Inscription et Frais Medicale</th>
                                                         <th scope="col" class="px-4 py-2  border-r">1ere Tranche</th>
                                                         <th scope="col" class="px-4 py-2  border-r">2eme Tranche</th>
                                                         <th scope="col" class="px-4 py-2  border-r">3eme Tranche</th>
@@ -64,7 +64,6 @@
 
                                                         @forelse($specialty_tranches as $specialty_tranche)
                                                         @if($specialty_tranche->tranche_id == $tranche->id && $specialty_tranche->period == 'jour')
-                                                        @if($tranche->name)
                                                         <td class="whitespace-nowrap px-4 py-2   border-r font-medium">
                                                             <div class="">
                                                                 <span>{{ $specialty_tranche->tranche_amount }}</span>
@@ -83,23 +82,22 @@
                                                                 </button>
                                                             </div>
                                                         </td>
-                                                        @php 
-                                                        $matchFound = true; 
+                                                        @php
+                                                        $matchFound = true;
                                                         @endphp
                                                         @endif
-                                                        @endif
                                                         @empty
-                                                        <td colspan="3" class="whitespace-nowrap px-4 py-2   border-r font-medium">
+                                                        <td colspan="4" class="whitespace-nowrap px-4 py-2   border-r font-medium">
                                                             <div>Aucune tranche n'a été créée pour cette filière</div>
-                                                            <div class="flex justify-center items hover:cursor-pointer">
-                                                                <button class="edit mx-2 font-medium text-blue-600  dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal">
+                                                            <div class="flex justify-center items-center">
+                                                                <button class="edit flex justify-center items hover:cursor-pointer mx-2 font-medium text-blue-600  dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#exampleModalCenter">
                                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                                         <svg fill="blue" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" enable-background="new 0 0 0 0" xml:space="preserve">
                                                                             <path d="M256,0C114.6,0,0,114.6,0,256s114.6,256,256,256s256-114.6,256-256S397.4,0,256,0z M405.3,277.3c0,11.8-9.5,21.3-21.3,21.3 h-85.3V384c0,11.8-9.5,21.3-21.3,21.3h-42.7c-11.8,0-21.3-9.6-21.3-21.3v-85.3H128c-11.8,0-21.3-9.6-21.3-21.3v-42.7 c0-11.8,9.5-21.3,21.3-21.3h85.3V128c0-11.8,9.5-21.3,21.3-21.3h42.7c11.8,0,21.3,9.6,21.3,21.3v85.3H384c11.8,0,21.3,9.6,21.3,21.3 V277.3z" />
                                                                         </svg>
                                                                     </span>
+                                                                    <div class="ml-1 uppercase">Creer</div>
                                                                 </button>
-                                                                <div>Creer</div>
                                                             </div>
                                                         </td>
                                                         @php
@@ -108,16 +106,16 @@
                                                         @endforelse
                                                         @if($specialty_tranches->isNotEmpty())
                                                         @if(!$matchFound)
-                                                        <td>
-                                                            <div class="flex justify-center items hover:cursor-pointer">
-                                                                <button class="edit mx-2 font-medium text-blue-600  dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal">
+                                                        <td class="whitespace-nowrap px-4 py-2   border-r font-medium">
+                                                            <div class="flex justify-center items-center">
+                                                                <button class="edit flex justify-center items hover:cursor-pointer mx-2 font-medium text-blue-600  dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#exampleModalCenter">
                                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                                         <svg fill="blue" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" enable-background="new 0 0 0 0" xml:space="preserve">
                                                                             <path d="M256,0C114.6,0,0,114.6,0,256s114.6,256,256,256s256-114.6,256-256S397.4,0,256,0z M405.3,277.3c0,11.8-9.5,21.3-21.3,21.3 h-85.3V384c0,11.8-9.5,21.3-21.3,21.3h-42.7c-11.8,0-21.3-9.6-21.3-21.3v-85.3H128c-11.8,0-21.3-9.6-21.3-21.3v-42.7 c0-11.8,9.5-21.3,21.3-21.3h85.3V128c0-11.8,9.5-21.3,21.3-21.3h42.7c11.8,0,21.3,9.6,21.3,21.3v85.3H384c11.8,0,21.3,9.6,21.3,21.3 V277.3z" />
                                                                         </svg>
                                                                     </span>
+                                                                    <div class="ml-1 uppercase">Creer</div>
                                                                 </button>
-                                                                <div>Creer</div>
                                                             </div>
                                                         </td>
                                                         @endif
@@ -134,11 +132,11 @@
                                     </div>
                                     <div class="block rounded-lg bg-gray-800 text-white p-2 text-surface shadow-secondary-1 dark:bg-surface-dark dark:text-white">
                                         <h5 class="mb-2 text-xl text-center font-medium leading-tight">Cour du Soir</h5>
-                                        <div class="overflow-x-auto text-nowrap border rounded bg-inherit h-max">
-                                            <table class="min-w-full text-center text-sm font-light bg-inherit h-max">
+                                        <div class="overflow-x-auto text-nowrap border rounded bg-inherit">
+                                            <table class="min-w-full text-center text-sm font-light bg-inherit">
                                                 <thead class="border-b font-medium dark:border-neutral-500 bg-inherit">
                                                     <tr>
-                                                        <th scope="col" class="px-4 py-2  border-r">Inscription</th>
+                                                        <th scope="col" class="px-4 py-2  border-r">Inscription et Frais Medicale</th>
                                                         <th scope="col" class="px-4 py-2  border-r">1ere Tranche</th>
                                                         <th scope="col" class="px-4 py-2  border-r">2eme Tranche</th>
                                                         <th scope="col" class="px-4 py-2  border-r">3eme Tranche</th>
@@ -147,18 +145,23 @@
                                                 <tbody>
                                                     <tr class=" border-r transition duration-300 ease-in-out dark:border-neutral-300 dark:hover:bg-neutral-200 bg-inherit">
 
+
                                                         @php
                                                         $breakOuterLoop = false;
                                                         @endphp
+                                                        @foreach($tranche_names as $name)
                                                         @foreach($tranches as $tranche)
+                                                        @if($tranche->name == $name)
                                                         @if ($breakOuterLoop)
                                                         @break
                                                         @endif
-                                                        @php $matchFound = false; @endphp
+                                                        @php
+                                                        $matchFound = false;
+                                                        @endphp
 
                                                         @forelse($specialty_tranches as $specialty_tranche)
-                                                        @if($specialty_tranche->tranche->id == $tranche->id && $specialty_tranche->period == 'soir')
-                                                        <td class="whitespace-nowrap px-4 py-2   border-r font-medium">
+                                                        @if($specialty_tranche->tranche_id == $tranche->id && $specialty_tranche->period == 'soir')
+                                                        <td class="whitespace-nowrap p-4 border-r font-medium">
                                                             <div class="">
                                                                 <span>{{ $specialty_tranche->tranche_amount }}</span>
                                                             </div>
@@ -176,20 +179,22 @@
                                                                 </button>
                                                             </div>
                                                         </td>
-                                                        @php $matchFound = true; @endphp
+                                                        @php
+                                                        $matchFound = true;
+                                                        @endphp
                                                         @endif
                                                         @empty
-                                                        <td colspan="3" class="whitespace-nowrap px-4 py-2   border-r font-medium">
+                                                        <td colspan="4" class="whitespace-nowrap px-4 py-2   border-r font-medium">
                                                             <div>Aucune tranche n'a été créée pour cette filière</div>
-                                                            <div class="flex justify-center items hover:cursor-pointer">
-                                                                <button class="edit mx-2 font-medium text-blue-600  dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal">
+                                                            <div class="flex justify-center items-center">
+                                                                <button class="edit flex justify-center items hover:cursor-pointer mx-2 font-medium text-blue-600  dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#exampleModalCenter">
                                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                                         <svg fill="blue" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" enable-background="new 0 0 0 0" xml:space="preserve">
                                                                             <path d="M256,0C114.6,0,0,114.6,0,256s114.6,256,256,256s256-114.6,256-256S397.4,0,256,0z M405.3,277.3c0,11.8-9.5,21.3-21.3,21.3 h-85.3V384c0,11.8-9.5,21.3-21.3,21.3h-42.7c-11.8,0-21.3-9.6-21.3-21.3v-85.3H128c-11.8,0-21.3-9.6-21.3-21.3v-42.7 c0-11.8,9.5-21.3,21.3-21.3h85.3V128c0-11.8,9.5-21.3,21.3-21.3h42.7c11.8,0,21.3,9.6,21.3,21.3v85.3H384c11.8,0,21.3,9.6,21.3,21.3 V277.3z" />
                                                                         </svg>
                                                                     </span>
+                                                                    <div class="ml-1 uppercase">Creer</div>
                                                                 </button>
-                                                                <div>Creer</div>
                                                             </div>
                                                         </td>
                                                         @php
@@ -198,20 +203,22 @@
                                                         @endforelse
                                                         @if($specialty_tranches->isNotEmpty())
                                                         @if(!$matchFound)
-                                                        <td>
-                                                            <div class="flex justify-center items hover:cursor-pointer">
-                                                                <button class="edit mx-2 font-medium text-blue-600  dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal">
+                                                        <td class="whitespace-nowrap p-4 border-r font-medium">
+                                                            <div class="flex justify-center items-center">
+                                                                <button class="edit flex justify-center items hover:cursor-pointer mx-2 font-medium text-blue-600  dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#exampleModalCenter">
                                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                                         <svg fill="blue" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" enable-background="new 0 0 0 0" xml:space="preserve">
                                                                             <path d="M256,0C114.6,0,0,114.6,0,256s114.6,256,256,256s256-114.6,256-256S397.4,0,256,0z M405.3,277.3c0,11.8-9.5,21.3-21.3,21.3 h-85.3V384c0,11.8-9.5,21.3-21.3,21.3h-42.7c-11.8,0-21.3-9.6-21.3-21.3v-85.3H128c-11.8,0-21.3-9.6-21.3-21.3v-42.7 c0-11.8,9.5-21.3,21.3-21.3h85.3V128c0-11.8,9.5-21.3,21.3-21.3h42.7c11.8,0,21.3,9.6,21.3,21.3v85.3H384c11.8,0,21.3,9.6,21.3,21.3 V277.3z" />
                                                                         </svg>
                                                                     </span>
+                                                                    <div class="ml-1 uppercase">Creer</div>
                                                                 </button>
-                                                                <div>Creer</div>
                                                             </div>
                                                         </td>
                                                         @endif
                                                         @endif
+                                                        @endif
+                                                        @endforeach
                                                         @endforeach
                                                     </tr>
 
@@ -282,6 +289,89 @@
                                 </div>
                             </div>
 
+                        </div>
+                    </div>
+                </div>
+
+                <!--Create modal-->
+                <div wire:ignore data-te-modal-init class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-modal="true" role="dialog">
+                    <div data-te-modal-dialog-ref class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
+                        <div class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
+                            <div class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                                <!--Modal title-->
+                                <h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="exampleModalCenterTitle">
+                                    Creer une Tranche
+                                </h5>
+                                <!--Close button-->
+                                <button type="button" class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" data-te-modal-dismiss aria-label="Close">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!--Modal body-->
+                            <form method="POST" action="{{route('specialty_tranche.store')}}">
+                                @csrf
+                                <div class="relative p-4">
+                                    <div class="relative ">
+                                        <input type="hidden" name="id" value="{{$specialtyId}}">
+                                    </div>
+                                    <!-- Code -->
+                                    <div class="relative mb-3" data-te-input-wrapper-init>
+                                        <input name="montant" type="number" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" required />
+                                        <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Montant
+                                        </label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <select name="tranche_id" data-te-select-filter="false" data-te-select-init data-te-select-placeholder="Type">
+                                            @isset($tranches)
+                                            @foreach($tranche_names as $name)
+
+                                            @foreach($tranches as $tranche)
+                                            @if($tranche->name == $name)
+
+                                            @if($tranche->name == 'first')
+                                            <option value="{{ $tranche->id }}">{{strtoupper('1ere Tranche')}}</option>
+                                            @elseif($tranche->name == 'second')
+                                            <option value="{{ $tranche->id }}">{{strtoupper('2eme Tranche')}}</option>
+                                            @elseif($tranche->name == 'third')
+                                            <option value="{{ $tranche->id }}">{{strtoupper('3eme Tranche')}}</option>
+                                            @else
+                                            <option value="{{ $tranche->id }}">{{strtoupper($tranche->name)}} | et {{strtoupper('Frais Medicale')}}</option>
+                                            @endif
+                                            @endif
+                                            @endforeach
+                                            @endforeach
+                                            @endisset
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <select name="level_id" data-te-select-init data-te-select-filter="false" data-te-select-init data-te-select-placeholder="Niveau">
+                                            @foreach($levels as $level)
+                                            <option value="{{$level->id}}">Niveau {{$level->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-0">
+                                        <select name="period" data-te-select-init data-te-select-filter="false" data-te-select-init data-te-select-placeholder="Period">
+                                            <option value="jour">Jour</option>
+                                            <option value="soir">Soir</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <!--Modal footer-->
+                                <div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
+                                    <button type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
+                                        Fermer
+                                    </button>
+                                    <button type="submit" class="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">
+                                        Creer
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -164,21 +164,23 @@
                                 <table class="min-w-full text-center text-sm font-light">
                                     <thead class="border-b font-medium dark:border-neutral-500">
                                         <tr>
-                                            <th scope="col" class="px-4 py-2 border">#</th>
-                                            <th scope="col" class="px-4 py-2 border">Montant Verser</th>
-                                            <th scope="col" class="px-4 py-2 border">Etudiant</th>
-                                            <th scope="col" class="px-4 py-2 border">Jour et L'heur du versement</th>
-                                            <th scope="col" class="px-4 py-2 border">Jour et L'heur modifier</th>
-                                            <th scope="col" class="px-4 py-2 border">Action</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">#</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Montant Verser</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Référence</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Etudiant</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Jour et L'heur du versement</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Jour et L'heur modifier</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php($count = 1)
                                         @forelse($factures as $facture)
-                                        @php($tranche_sum = $facture->tranche1 + $facture->tranche2 + $facture->tranche3)
+                                        @php($tranche_sum = $facture->inscription + $facture->tranche1 + $facture->tranche2 + $facture->tranche3)
                                         <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
                                             <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $count }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $tranche_sum }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->reference_id }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->student->name }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->created_at }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->updated_at }}</td>
@@ -253,7 +255,7 @@
                                         @php($count = $count + 1)
                                         @empty
                                         <tr>
-                                            <td colspan="6" class="whitespace-nowrap px-4 py-2 border">Aucune facture créée pour le moment</td>
+                                            <td colspan="7" class="whitespace-nowrap px-4 py-2 border">Aucune facture créée pour le moment</td>
                                         </tr>
                                         @endforelse
                                     </tbody>

@@ -1,7 +1,0 @@
-<td class="whitespace-nowrap px-4 py-2 border font-medium">
-                                        <a href="{{ URL::to('generateTranscript/'. $course_student->student->id) }}" target="_blank">
-                                            <x-primary-button wire:change="generateTranscript({{$a_year}})" class=" ml-3">
-                                                {{ __('Relever') }}
-                                            </x-primary-button>
-                                        </a>
-                                    </td>

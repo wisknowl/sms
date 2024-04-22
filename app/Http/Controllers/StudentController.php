@@ -194,6 +194,7 @@ class StudentController extends Controller
         } catch (\Carbon\Exceptions\InvalidFormatException $e) {
             echo $e->getMessage();
         }
+        
 
         $student->levels()->attach($level, ['academic_year' => $ayear, 'pass_mark' => 50]);
         // Return a response with the student data and a success message

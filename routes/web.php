@@ -354,6 +354,8 @@ Route::resource('specialties', SpecialtyController::class)
     ->middleware(['auth', 'verified', 'set_session_values']);
 Route::put('/specialties/updateSpec', [SpecialtyController::class, 'updateSpec'])->name('specialties.updateSpec');
 
+Route::resource('specialty_tranche', SpecialtyTrancheController::class)->only(['store']);
+
 Route::resource('uniteEseignements', UniteEnseignementController::class)
     ->only(['index', 'store', 'update'])
     ->middleware(['auth', 'verified', 'set_session_values']);
@@ -383,6 +385,7 @@ Route::resource('proces_verbal', ProcesVerbalController::class)
 Route::resource('facture', FacturationController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified', 'set_session_values']);
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

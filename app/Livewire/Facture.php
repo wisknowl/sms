@@ -27,7 +27,7 @@ class Facture extends Component
         $semesters = semester::all();
         $academic_years = academic_year::all();
         $cycles = cycle::all();
-        $factures = facturation::with('student');
+        $factures = facturation::with('student')->orderBy('id', 'desc');
         $students = student::all();
 // dd($factures);
         // $factures->when($this->cycle, function ($query) {
