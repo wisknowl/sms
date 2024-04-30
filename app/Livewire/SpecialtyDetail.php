@@ -12,7 +12,7 @@ class SpecialtyDetail extends Component
 {
     public $specialtyId;
     public $specialty_name;
-
+    public $level_id;
     public $tranches;
     public $specialty_tranches;
 
@@ -23,13 +23,19 @@ class SpecialtyDetail extends Component
         $this->specialty_name = $name->name;
 
         $this->tranches = tranche::orderBy('id', 'asc')->get();
-        $this->specialty_tranches = specialty_tranche::where('specialty_id', $specialtyId)->get();
-        // die($this->tranches);
+        $this->level_id = level::first()->id;
+        $this->specialty_tranches = specialty_tranche::where('specialty_id', $specialtyId)->where('level_id', $this->level_id)->get();
+        // dd($this->tranches);
+    }
+    public function info()
+    {
+        $this->specialty_tranches = specialty_tranche::where('specialty_id', $this->specialtyId)->where('level_id', $this->level_id)->get();
+        // dd($this->level_id, $this->specialty_tranches);
     }
     public function render()
     {
         $specialties = specialty::all();
         $levels = level::all();
-        return view('livewire.specialty-detail', compact('specialties','levels'));
+        return view('livewire.specialty-detail', compact('specialties', 'levels'));
     }
 }

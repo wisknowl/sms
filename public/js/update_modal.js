@@ -20,6 +20,20 @@ function fillModalForm(event) {
     var pob = button.getAttribute("data-te-pob");
     var dob = button.getAttribute("data-te-dob");
 
+    //factureUpdateModal
+    var facture_id = button.getAttribute("data-te-facture-id");
+    var student_name = button.getAttribute("data-te-st-name");
+    var montant = button.getAttribute("data-te-montant");
+
+    //factureUpdateModal
+    var input_facture_id = document.getElementById("facture_id");
+    var input_student_name = document.getElementById("st_name");
+    var input_montant = document.getElementById("montant");
+
+    input_facture_id.value = facture_id;
+    input_student_name.value = student_name;
+    input_montant.value = montant;
+
     if (id) {
         // Do something if the value is not empty
         console.log("The value is " + id);
@@ -45,6 +59,10 @@ function fillModalForm(event) {
     var inputPob = document.getElementById("pob");
     var inputDob = document.getElementById("dob");
 
+    
+
+
+
     // Assign the data attributes to the input fields
     inputId.value = id;
     inputName.value = name;
@@ -56,7 +74,6 @@ function fillModalForm(event) {
         inputLevel.value = level;
         inputSemester.value = semester;
     }
-
 
     //student
     inputEmail.value = email;

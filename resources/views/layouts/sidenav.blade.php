@@ -7,7 +7,7 @@
 
             $structureActiveRoutes = ['specialties', 'uniteEseignements', 'cours'];
             $studentActiveRoutes = ['students','facture'];
-            $NoteActiveRoutes =['notes', 'proces_verbal'];
+            $NoteActiveRoutes =['notes', 'proces_verbal', 'relever'];
 
             $currentPath = request()->path();
             $isActive = false;
@@ -93,7 +93,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                        <a href="{{route('relever.index')}}" class="{{ request()->is('relever') ? 'bg-blue-500 text-neutral-900' : '' }} block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                             {{ __('Relever') }}
                         </a>
                     </li>

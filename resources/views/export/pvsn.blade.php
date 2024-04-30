@@ -162,7 +162,7 @@
 
 
                                 @php($ue_mark = $courseavg_sum / $course_credit_sum)
-                                <td style="background-color: lightgray;">{{$ue_mark}}</td>
+                                <td style="background-color: lightgray;">{{ number_format(ceil($ue_mark * 100) / 100, 2, '.', '')}}</td>
                                 <td style="background-color: lightgray;">{{$check_credit_sum}}</td>
 
                                 @if($ue_mark >= 10)

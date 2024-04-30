@@ -7,6 +7,7 @@ use App\Exports\pvsn;
 use App\Livewire\StudentLw;
 use Session;
 
+// use App\Http\Controller\FacturationController;
 use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
@@ -22,10 +23,12 @@ use App\Livewire\Specialty;
 use App\Livewire\StudentMarks;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\ProcesVerbal;
+use App\Livewire\Relever as LivewireRelever;
 use App\Models\academic_year;
 use App\Models\course;
 use App\Models\course_student;
 use App\Models\level;
+use App\Models\relever;
 use App\Models\semester;
 use App\Models\specialty as ModelsSpecialty;
 use App\Models\student;
@@ -34,6 +37,7 @@ use App\Models\unite_enseignement;
 use App\Models\User;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 
 /*
@@ -152,10 +156,9 @@ Route::get('/admin', function (Request $request) {
             }
             $std_avg = $ue_sum / $ue_credit_sum;
             $data[] = $std_avg;
-            if($credit_obtained >= 30){
+            if ($credit_obtained >= 30) {
                 $studentValidatedCount = $studentValidatedCount + 1;
-            }
-            else{
+            } else {
                 $studentNotValidatedCount = $studentNotValidatedCount + 1;
             }
         } else {
@@ -298,7 +301,8 @@ Route::get('/dashboard', function (Request $request) {
     return view('dashboard', compact('academic_years', 'semesters', 'user_count', 'count', 'specialty_count', 'ue_count', 'course_count', 'validated_ue_percent', 'not_validated_ue_percent'));
 })->middleware(['auth', 'verified', 'set_session_values'])->name('dashboard');
 
-Route::get('generateTranscript/{id}', [StudentMarks::class, 'generateTranscript'])->name('Transcript');
+Route::get('transcript_list/{student_list}/{academic_year_mod}/{tdr}/{semester_mod}', [LivewireRelever::class, 'transcript_list'])->name('Transcript_list');
+Route::get('generateTranscript/{id}/{academic_year_mod}/{tdr}/{semester_mod}', [LivewireRelever::class, 'generateTranscript'])->name('Transcript');
 Route::get('generatePV/{id}', [Specialty::class, 'generatePV'])->name('PV');
 Route::get('/student_marks', StudentMarks::class);
 // Route::get('proces_verbal', ProcesVerbal::class)->name('proces_verbal')->middleware(['auth', 'verified', 'set_session_values']);
@@ -328,6 +332,13 @@ Route::get('exportpvsn/{id}/{level_id}/{semester_id}/{a_year}', function ($id, $
     return Excel::download(new pvsn($id, $level_id, $semester_id, $a_year), $file_name);
 });
 
+Route::get('/welcome/{locale}', function (string $locale){
+    if (!in_array($locale, ['en', 'fr'])){
+        abort(400);
+    }
+    App::setlocale($locale);
+    return view('welcome');
+});
 
 Route::resource('students', StudentController::class)
     ->only(['index', 'store'])
@@ -362,6 +373,7 @@ Route::resource('uniteEseignements', UniteEnseignementController::class)
 
 Route::put('/uniteEnseignements/updateUe', [UniteEnseignementController::class, 'updateUe'])->name('uniteEnseignements.updateUe');
 Route::put('/cours/updateCo', [CourseController::class, 'updateCo'])->name('cours.updateCo');
+Route::put('/facture/updateFacture', [FacturationController::class, 'updateFacture'])->name('facture.updateFacture');
 
 Route::resource('cours', CourseController::class)
     ->only(['index', 'store'])
@@ -385,7 +397,9 @@ Route::resource('proces_verbal', ProcesVerbalController::class)
 Route::resource('facture', FacturationController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified', 'set_session_values']);
-
+Route::resource('relever', ReleverController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified', 'set_session_values']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

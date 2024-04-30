@@ -8,6 +8,15 @@
             <span class="sr-only">Loading...</span>
         </div>
     </div>
+    <div class="absolute right-24 top-6">
+        <select wire:model.lazy="level_id" mul wire:change="info" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+            @isset($levels)
+            @foreach($levels as $level)
+            <option value="{{ $level->id }}">Niveau {{ $level->name }}</option>
+            @endforeach
+            @endisset
+        </select>
+    </div>
     <div class="p-6 text-gray-900">
         <div class="border-b mb-2">
             <h2 class="font-bold uppercase text-xl text-gray-800 text-center mb-4">
@@ -161,7 +170,7 @@
 
                                                         @forelse($specialty_tranches as $specialty_tranche)
                                                         @if($specialty_tranche->tranche_id == $tranche->id && $specialty_tranche->period == 'soir')
-                                                        <td class="whitespace-nowrap p-4 border-r font-medium">
+                                                        <td class="whitespace-nowrap px-4 py-2 border-r font-medium">
                                                             <div class="">
                                                                 <span>{{ $specialty_tranche->tranche_amount }}</span>
                                                             </div>
@@ -227,65 +236,6 @@
                                             </table>
                                         </div>
                                     </div>
-                                </div>
-
-
-                                <div class="overflow-hidden border rounded">
-                                    <table class="min-w-full text-center text-sm font-light">
-                                        <thead class="border-b font-medium dark:border-neutral-500 bg-white">
-                                            <tr>
-                                                <th scope="col" class="px-4 py-2 border">Inscription</th>
-                                                <th scope="col" class="px-4 py-2 border">Frais Medicale</th>
-                                                <th scope="col" class="px-4 py-2 border">1ere Tranche</th>
-                                                <th scope="col" class="px-4 py-2 border">2eme Tranche</th>
-                                                <th scope="col" class="px-4 py-2 border">3eme Tranche</th>
-                                                <th scope="col" class="px-4 py-2 border">Period</th>
-                                                <th scope="col" class="px-4 py-2 border">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
-                                                <td class="whitespace-nowrap px-4 py-2 border font-medium">35000</td>
-                                                <td class="whitespace-nowrap px-4 py-2 border font-medium">5000</td>
-                                                <td class="whitespace-nowrap px-4 py-2 border">230000</td>
-                                                <td class="whitespace-nowrap px-4 py-2 border">85000</td>
-                                                <td class="whitespace-nowrap px-4 py-2 border">35000</td>
-                                                <td class="whitespace-nowrap px-4 py-2 border">Jour</td>
-                                                <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
-                                                    <button type="button" wire:click.prevent='' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
-                                                        <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
-                                                            <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4V4zm2 2h6V4H9v2zM6.074 8l.857 12H17.07l.857-12H6.074zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1z" fill="#FF0000" />
-                                                            </svg>
-                                                        </span>
-                                                        <span></span>
-                                                    </button>
-
-                                                    <!-- <button wire:click="$emit('openModal', 'mymodal')">Open Modal</button> X-->
-                                                    <!-- <button wire:click="$dispatch('openModal', {component: 'mymodal'})"></button> -->
-                                                    <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal">
-                                                        <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
-                                                            <svg fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" id="edit" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
-                                                                <path id="secondary" d="M21,22H3a1,1,0,0,1,0-2H21a1,1,0,0,1,0,2Z" style="fill: rgb(44, 169, 188);"></path>
-                                                                <path id="primary" d="M20.71,3.29a2.93,2.93,0,0,0-2.2-.84,3.25,3.25,0,0,0-2.17,1L7.46,12.29a1.16,1.16,0,0,0-.25.43L6,16.72A1,1,0,0,0,7,18a.9.9,0,0,0,.28,0l4-1.17a1.16,1.16,0,0,0,.43-.25l8.87-8.88a3.25,3.25,0,0,0,1-2.17A2.91,2.91,0,0,0,20.71,3.29Z" style="fill: #0000FF;"></path>
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <a href="#">
-                                                        <button class="font-medium text-blue-600 dark:text-red-500 hover:underline">
-                                                            <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
-                                                                <svg width="800px" height="800px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path fill="#4A4A4A" fill-rule="evenodd" d="M2.5,7.5 C3.88071187,7.5 5,8.61928813 5,10 C5,11.3807119 3.88071187,12.5 2.5,12.5 C1.11928813,12.5 0,11.3807119 0,10 C0,8.61928813 1.11928813,7.5 2.5,7.5 Z M17.5,7.5 C18.8807119,7.5 20,8.61928813 20,10 C20,11.3807119 18.8807119,12.5 17.5,12.5 C16.1192881,12.5 15,11.3807119 15,10 C15,8.61928813 16.1192881,7.5 17.5,7.5 Z M10.226404,7.5 C11.6071159,7.5 12.726404,8.61928813 12.726404,10 C12.726404,11.3807119 11.6071159,12.5 10.226404,12.5 C8.84569215,12.5 7.72640403,11.3807119 7.72640403,10 C7.72640403,8.61928813 8.84569215,7.5 10.226404,7.5 Z" />
-                                                                </svg>
-                                                            </span>
-                                                        </button>
-                                                    </a>
-
-                                                </td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
 

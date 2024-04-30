@@ -172,7 +172,7 @@
                     <table border="0px" class="text-xs w-full border-0 border-collapse">
                         <tr>
                             <td class="border-0"><span class="w-50">Année académique : {{$year_session}}</span></td>
-                            <td class="border-0"><span class="text-end">Le 03/05/2023</span></td>
+                            <td class="border-0"><span class="text-end">Le : {{ $deposit_date }}</span></td>
                         </tr>
                     </table>
                 </td>
@@ -181,7 +181,7 @@
                     <table border="0px" class="text-xs w-full border-0 border-collapse">
                         <tr>
                             <td class="border-0"><span class="w-50">Année académique : {{$year_session}}</span></td>
-                            <td class="border-0"><span class="text-end">Le 03/05/2023</span></td>
+                            <td class="border-0"><span class="text-end">Le : {{ $deposit_date }}</span></td>
                         </tr>
                     </table>
                 </td>
@@ -192,7 +192,7 @@
                 <td class="text-center underline border-0" style="width: 48%;">RECU PENSION/FRAIS DIVERS</td>
             </tr>
             <tr>
-                <td class="border-tb-0" style="width: 48%;">
+                <td class="border-tb-0 p-4" style="width: 48%;">
                     <table border="0px" class="text-small border-collapse border-0">
                         <tr>
                             <td class="border-0">Matricule : </td>
@@ -208,13 +208,13 @@
                         </tr>
                         <tr>
                             <td class="border-0">Niveau: {{ $level->name }}</td>
-                            <td class="border-0">Périod : Jour</td>
+                            <td class="border-0">Périod : {{$period}}</td>
                         </tr>
 
                     </table>
                 </td>
                 <td style="width: 4%;" class="border-tb-0 text-center">|</td>
-                <td class="border-tb-0" style="width: 48%;">
+                <td class="border-tb-0 p-4" style="width: 48%;">
                     <table border="0px" class="text-small border-collapse border-0">
                         <tr>
                             <td class="border-0">Matricule : </td>
@@ -230,7 +230,7 @@
                         </tr>
                         <tr>
                             <td class="border-0">Niveau: {{ $level->name }}</td>
-                            <td class="border-0">Périod : Jour</td>
+                            <td class="border-0">Périod : {{$period}}</td>
                         </tr>
 
                     </table>
@@ -241,8 +241,8 @@
                     <table border="0px" class="text-small w-full border-collapse border-0">
                         <tr>
                             <td class="border-0">Versement: {{ $deposited_amount }}</td>
+                            <td class="border-0">Type de versement : {{$tdv}}</td>
                             <td class="border-0"></td>
-                            <td class="border-0">Date du versement : {{ $deposit_date }}</td>
                         </tr>
                     </table>
                 </td>
@@ -251,8 +251,8 @@
                     <table border="0px" class="text-small w-full border-collapse border-0">
                         <tr>
                             <td class="border-0">Versement: {{ $deposited_amount }}</td>
+                            <td class="border-0">Type de versement : {{$tdv}}</td>
                             <td class="border-0"></td>
-                            <td class="border-0">Date du versement : {{ $deposit_date }}</td>
                         </tr>
                     </table>
                 </td>
@@ -307,7 +307,7 @@
             </tr>
             @endforeach
 
-            <tr style="page-break-before: always;">
+            <tr style="page-break-inside: avoid;">
                 <td style="width: 48%;">
                     <table border="0px" class="text-small w-full border-collapse">
                         <tbody>
@@ -323,7 +323,7 @@
                                 <th>Total</th>
                             </tr>
                             <tr class="text-center">
-                                <td>Date linite de paiement</td>
+                                <td>Date limite de paiement</td>
                                 @foreach($tranche_names as $name)
                                 @foreach($tranches as $tranche)
                                 @if($tranche->name == $name)
@@ -384,7 +384,7 @@
                                 <th>Total</th>
                             </tr>
                             <tr class="text-center">
-                                <td>Date linite de paiement</td>
+                                <td>Date limite de paiement</td>
                                 @foreach($tranche_names as $name)
                                 @foreach($tranches as $tranche)
                                 @if($tranche->name == $name)

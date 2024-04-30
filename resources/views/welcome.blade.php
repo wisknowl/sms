@@ -853,6 +853,9 @@
         @endif
 
         <div class="max-w-7xl mx-auto p-6 lg:p-8">
+            <div>
+                <h1>{{__('welcome.welcome')}}</h1>
+            </div>
             <div class="flex justify-center">
                 <img src="{{ asset('img/logo.png') }}" alt="">
                 <h2 class="font-semibold text-xl text-gray-800 ml-2 leading-tight flex text-center items-center">
@@ -957,7 +960,9 @@
                 </div>
             </div>
         </div>
+
     </div>
+
     <!-- @livewire ('wire-elements-modal') -->
 
     @livewire('livewire-ui-modal')

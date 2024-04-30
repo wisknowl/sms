@@ -43,7 +43,7 @@
                             <li>
                                 <h2 class="mb-0" id="headingTwo">
                                     <button class="group relative flex w-full items-center rounded-none border-0 bg-white px-3 py-2 text-left text-base text-neutral-800 transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white [&:not([data-te-collapse-collapsed])]:bg-white [&:not([data-te-collapse-collapsed])]:text-primary [&:not([data-te-collapse-collapsed])]:[box-shadow:inset_0_-1px_0_rgba(229,231,235)] dark:[&:not([data-te-collapse-collapsed])]:bg-neutral-800 dark:[&:not([data-te-collapse-collapsed])]:text-primary-400 dark:[&:not([data-te-collapse-collapsed])]:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]" type="button" data-te-collapse-init data-te-collapse-collapsed data-te-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        Cycle
+                                        Date
                                         <span class="-mr-1 ml-auto h-5 w-5 shrink-0 rotate-[-180deg] fill-[#336dec] transition-transform duration-200 ease-in-out group-[[data-te-collapse-collapsed]]:mr-0 group-[[data-te-collapse-collapsed]]:rotate-0 group-[[data-te-collapse-collapsed]]:fill-[#212529] motion-reduce:transition-none dark:fill-blue-300 dark:group-[[data-te-collapse-collapsed]]:fill-white">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -52,28 +52,19 @@
                                     </button>
                                 </h2>
                                 <div id="collapseTwo" class="!visible" data-te-collapse-item aria-labelledby="headingTwo" data-te-parent="#accordionExample">
-                                    <div class="">
-                                        <ul class="overflow-auto w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                            <form action="{{ route('students.index') }}" method='get'>
-                                                @csrf
-                                                <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                                    <div class="flex items-center pl-3 hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                        <input type="radio" name="all" id="radio" value="some_value" onclick="this.form.submit()" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                                        <label for="radio" class="ms-2 py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 uppercase">Tout</label>
-                                                    </div>
-                                                </li>
-                                            </form>
-                                            @foreach($cycles as $cycle)
-                                            <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                                <div>
-                                                    <div class="flex items-center pl-3 hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                        <input id="{{ $cycle->id }}" type="radio" wire:model="cycle" wire:click="fs" value="{{ $cycle->id }}" name="{{ $cycle->code }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                                        <label for="{{ $cycle->id }}" class="ms-2 py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $cycle->code }}</label>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            @endforeach
-                                        </ul>
+                                    <div class="p-2">
+                                        <div class="relative mb-3" data-te-datepicker-init data-te-input-wrapper-init>
+                                            <input name="start_date" type="text" wire:model.lazy="start_date" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" placeholder="Select a date" />
+                                            @error('start_date') <span class="error">{{ $message }}</span> @enderror
+                                            <label for="floatingInput" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Du</label>
+                                        </div>
+                                        <div class="relative mb-0" data-te-datepicker-init data-te-input-wrapper-init>
+                                            <input name="end_date" type="text" wire:model.lazy="end_date" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" placeholder="Select a date" />
+                                            <label for="floatingInput" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Au</label>
+                                        </div>
+                                        <div>
+                                            <button wire:click="fs" class="w-full text-center hover:text-blue-600">Filtrer par date</button>
+                                        </div>
                                     </div>
                                 </div>
                             </li>
@@ -165,11 +156,12 @@
                                     <thead class="border-b font-medium dark:border-neutral-500">
                                         <tr>
                                             <th scope="col" class="whitespace-nowrap px-4 py-2 border">#</th>
-                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Montant Verser</th>
-                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Référence</th>
                                             <th scope="col" class="whitespace-nowrap px-4 py-2 border">Etudiant</th>
-                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Jour et L'heur du versement</th>
-                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Jour et L'heur modifier</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Montant Verser (xaf)</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Type de Versement</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Reste (xaf)</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Référence</th>
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">Jour du versement</th>
                                             <th scope="col" class="whitespace-nowrap px-4 py-2 border">Action</th>
                                         </tr>
                                     </thead>
@@ -179,13 +171,17 @@
                                         @php($tranche_sum = $facture->inscription + $facture->tranche1 + $facture->tranche2 + $facture->tranche3)
                                         <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
                                             <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $count }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $tranche_sum }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->reference_id }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->student->name }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->created_at }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->updated_at }}</td>
+                                            @php($formattedNumber = number_format($tranche_sum, 0, '.', ','))
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $formattedNumber }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->tdv }}</td>
+                                            @if (array_key_exists($facture->id, $facture_remaining_amount))
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ number_format($facture_remaining_amount[$facture->id], 0, '.', ',') }}</td>
+                                            @endif
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->reference_id }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ \Carbon\Carbon::parse($facture->created_at)->format('d-m-Y H:i:s') }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
-                                                <button type="button" wire:click.prevent='setDeleteId({{ $facture->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
+                                                <button type="button" wire:click.prevent='setDeleteId({{ $facture->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" disabled data-te-toggle="modal" data-te-target="#deleteModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4V4zm2 2h6V4H9v2zM6.074 8l.857 12H17.07l.857-12H6.074zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1z" fill="#FF0000" />
@@ -196,7 +192,7 @@
 
                                                 <!-- <button wire:click="$emit('openModal', 'mymodal')">Open Modal</button> X-->
                                                 <!-- <button wire:click="$dispatch('openModal', {component: 'mymodal'})"></button> -->
-                                                <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal" data-te-id="" data-te-name="" data-te-code="" data-te-target="#updateModal">
+                                                <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" disabled data-te-toggle="modal" id="btnModal" data-te-facture-id="{{ $facture->id }}" data-te-montant="{{ $tranche_sum }}" data-te-st-name="{{ $facture->student->name }}" data-te-code="" data-te-target="#updateModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" id="edit" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
                                                             <path id="secondary" d="M21,22H3a1,1,0,0,1,0-2H21a1,1,0,0,1,0,2Z" style="fill: rgb(44, 169, 188);"></path>
@@ -272,7 +268,7 @@
                         <div class="pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none dark:bg-neutral-600">
                             <div class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
                                 <!--Modal title-->
-                                <h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="exampleModalCenterTitle">
+                                <h5 class="text-xl uppercase font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="exampleModalCenterTitle">
                                     Creer une Facture
                                 </h5>
                                 <!--Close button-->
@@ -287,12 +283,20 @@
                             <form method="POST" action="{{route('facture.index')}}">
                                 @csrf
                                 <div class="relative p-4">
-
+                                    <div class="relative mb-3 rounded bg-danger-500 text-white text-lg text-center p-3">
+                                        <span>Assurez-vous que le montant que vous saisissez est égal à l'argent en main</span>
+                                    </div>
                                     <!-- Code -->
                                     <div class="relative mb-3" data-te-input-wrapper-init>
                                         <input name="montant" type="number" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" required />
                                         <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Montant
                                         </label>
+                                    </div>
+                                    <div class="mb-3">
+                                        <select name="TDV" data-te-select-init data-te-select-filter="false" data-te-select-init data-te-select-placeholder="Type De Versement">
+                                            <option value="Paie">Paie</option>
+                                            <option value="Bourse">Bourse</option>
+                                        </select>
                                     </div>
                                     <div class="mb-0">
                                         <select name="student_id" data-te-select-init data-te-select-filter="true" data-te-select-init data-te-select-placeholder="Etudiant">
@@ -368,7 +372,7 @@
                             <div class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
                                 <!--Modal title-->
                                 <h5 class="text-xl font-medium uppercase leading-normal text-neutral-800 dark:text-neutral-200" id="updateModalLabel">
-                                    MODIFIER Spécialité
+                                    MODIFIER le Versement
                                 </h5>
                                 <!--Close button-->
                                 <button type="button" class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" data-te-modal-dismiss aria-label="Close">
@@ -379,42 +383,24 @@
                             </div>
 
                             <!--Modal body-->
-                            <form id="updateForm" method="POST" action="{{ route('specialties.updateSpec') }}">
+                            <form id="updateForm" method="POST" action="{{ route('facture.updateFacture') }}">
                                 @csrf
                                 @method('PUT')
-                                <input type="hidden" name="id" id="id">
+                                <input type="hidden" name="id" id="facture_id">
                                 <div class="relative p-4">
-                                    <!-- Units Name -->
-                                    <div class="relative mb-3" data-te-input-wrapper-init>
-                                        <input name="upName" id="name" type="text" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" />
-                                        <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Intitule
-                                        </label>
-                                    </div>
                                     <!-- Code -->
                                     <div class="relative mb-3" data-te-input-wrapper-init>
-                                        <input name="upCode" id="code" type="text" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" />
-                                        <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Code
+                                        <input name="upMontant" id="montant" type="number" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" required />
+                                        <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Montant
+                                        </label>
+                                    </div>
+                                    <div class="relative mb-0" data-te-input-wrapper-init>
+                                        <input name="upName" id="st_name" type="text" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" disabled placeholder="Example label" />
+                                        <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Etudiant
                                         </label>
                                     </div>
 
-                                    <div class="mb-3">
-                                        <select name="cycle_id" data-te-select-init data-te-select-placeholder="Cycle">
-                                            @isset($cycles)
-                                            @foreach($cycles as $cycle)
-                                            <option value="{{ $cycle->id }}">{{$cycle->code}} | {{ $cycle->name }}</option>
-                                            @endforeach
-                                            @endisset
-                                        </select>
-                                    </div>
-
-                                    <!-- Description -->
-                                    <div class="relative my-3" data-te-input-wrapper-init>
-                                        <textarea name="upDescription" id="description" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlTextarea1" rows="3" placeholder="Your message"></textarea>
-                                        <label for="exampleFormControlTextarea1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Description
-                                        </label>
-                                    </div>
                                 </div>
-
                                 <!--Modal footer-->
                                 <div class="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
                                     <button type="button" class="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200" data-te-modal-dismiss data-te-ripple-init data-te-ripple-color="light">

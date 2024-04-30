@@ -60,8 +60,10 @@
             bottom: 25px;
             right: 25px;
         }
-
     </style>
+
+   
+
 
 </head>
 
@@ -215,13 +217,23 @@
             @yield('content')
         </div>
     </main>
-
+    <script type="text/php">
+        if (isset($pdf)) {
+        $text = "Page {PAGE_NUM} of {PAGE_COUNT}";
+        $size = 10; 
+        $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif"); 
+        $width = $fontMetrics->get_text_width($text, $font, $size); 
+        $x = ($pdf->get_width() - $width) / 2; 
+        $y = $pdf->get_height() - 35; 
+        $pdf->page_text($x, $y, $text, $font, $size);
+    }
+</script>
     <!-- MDB -->
     <script src="{{ asset('js/mdb.min.js') }}"></script>
     <!-- Custom scripts -->
     <script src="{{ asset('js/admin.js') }}"></script>
 
-    <script src="{{ asset('js/modal.js') }}"></script>
+    <script src="{{ asset('js/update_modal.js') }}"></script>
     <x-notify::notify />
     @notifyJs
     @livewire('livewire-ui-modal')
