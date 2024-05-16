@@ -62,7 +62,7 @@
         }
     </style>
 
-   
+
 
 
 </head>
@@ -131,41 +131,42 @@
                     <!-- Icon dropdown -->
                     <li class="nav-item dropdown">
                         <a class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow" href="#" id="navbarDropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                            @if(app()->getLocale() == 'en')
                             <i class="united kingdom flag m-0"></i>
+                            @else
+                            <i class="france flag"></i>
+                            @endif
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li>
+                                @if(app()->getLocale() == 'en')
                                 <a class="dropdown-item" href="#"><i class="united kingdom flag"></i>English
                                     <i class="fa fa-check text-success ms-2"></i></a>
+                                @else
+                                <a class="dropdown-item" href="#"><i class="france flag"></i>Français
+                                    <i class="fa fa-check text-success ms-2"></i></a>
+                                @endif
                             </li>
                             <li>
                                 <hr class="dropdown-divider" />
                             </li>
+
                             <li>
-                                <a class="dropdown-item" href="#"><i class="poland flag"></i>Polski</a>
+                                <a class="dropdown-item" href="{{ route('lang.switch', 'en') }}"><i class="united kingdom flag"></i>English</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#"><i class="china flag"></i>中文</a>
+                                <a class="dropdown-item" href="{{ route('lang.switch', 'fr') }}"><i class="france flag"></i>Français</a>
                             </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="japan flag"></i>日本語</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="germany flag"></i>Deutsch</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="france flag"></i>Français</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="spain flag"></i>Español</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="russia flag"></i>Русский</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="#"><i class="portugal flag"></i>Português</a>
-                            </li>
+
                         </ul>
+                        <!-- <select onchange="location = this.value;">
+                            @foreach(config('laravellocalization.supportedLocales') as $localeCode => $properties)
+                            <option value="{{ route('lang.switch', $localeCode) }}" {{ app()->getLocale() == $localeCode ? 'selected' : '' }}>
+                                {{ $properties['native'] }}
+                            </option>
+                            @endforeach
+                        </select> -->
+
                     </li>
 
                     <!-- Avatar -->

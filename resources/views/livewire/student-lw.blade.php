@@ -11,7 +11,7 @@
     <div class="p-6 text-gray-900">
         <div class="border-b mb-2">
             <h2 class="font-bold uppercase text-xl text-gray-800 text-center mb-4">
-                {{ __('Etudiant') }}
+                {{ __('student_page.student') }}
             </h2>
         </div>
         <!--Tabs content-->

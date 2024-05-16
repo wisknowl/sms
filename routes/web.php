@@ -7,7 +7,7 @@ use App\Exports\pvsn;
 use App\Livewire\StudentLw;
 use Session;
 
-// use App\Http\Controller\FacturationController;
+use App\Http\Middleware\localization;
 use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
@@ -51,6 +51,14 @@ use Illuminate\Support\Facades\App;
 |
 */
 
+// Route::get('/', function () {
+//     return redirect(app()->getLocale());
+// });
+
+// Route::prefix('{locale}')
+//     ->middleware(Localization::class)
+//     ->group(function () {--v
+//     });
 Route::get('/', function () {
     return view('welcome');
 });
@@ -155,7 +163,8 @@ Route::get('/admin', function (Request $request) {
                 $credit_obtained = $credit_obtained + $check_credit_sum;
             }
             $std_avg = $ue_sum / $ue_credit_sum;
-            $data[] = $std_avg;
+            $data[] = number_format(ceil($std_avg * 100) / 100, 2, '.', '');
+            // dump($data);
             if ($credit_obtained >= 30) {
                 $studentValidatedCount = $studentValidatedCount + 1;
             } else {
@@ -192,7 +201,7 @@ Route::get('/admin', function (Request $request) {
     // notify()->warning('Etudiant inscrire avec succès');
 
     return view('admin', compact('academic_years', 'semesters', 'user_count', 'count', 'specialty_count', 'ue_count', 'course_count', 'validated_ue_percent', 'not_validated_ue_percent', 'studentValidatedCount', 'studentNotValidatedCount'));
-})->middleware(['auth', 'verified', 'set_session_values'])->name('admin');
+})->middleware(['auth', 'verified', 'set_session_values', 'localization'])->name('admin');
 
 Route::get('/dashboard', function (Request $request) {
     if ($request->has('year_id') && !empty($request->input('year_id'))) {
@@ -299,13 +308,17 @@ Route::get('/dashboard', function (Request $request) {
     notify()->success('Etudiant inscrire avec succès');
 
     return view('dashboard', compact('academic_years', 'semesters', 'user_count', 'count', 'specialty_count', 'ue_count', 'course_count', 'validated_ue_percent', 'not_validated_ue_percent'));
-})->middleware(['auth', 'verified', 'set_session_values'])->name('dashboard');
+})->middleware(['auth', 'verified', 'set_session_values', 'localization'])->name('dashboard');
 
-Route::get('transcript_list/{student_list}/{academic_year_mod}/{tdr}/{semester_mod}', [LivewireRelever::class, 'transcript_list'])->name('Transcript_list');
-Route::get('generateTranscript/{id}/{academic_year_mod}/{tdr}/{semester_mod}', [LivewireRelever::class, 'generateTranscript'])->name('Transcript');
+Route::get('transcript_list/{student_list}/{academic_year_mod}/{tdr}/{semester_mod}', [LivewireRelever::class, 'transcript_list'])
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization'])
+    ->name('Transcript_list');
+Route::get('generateTranscript/{id}/{academic_year_mod}/{tdr}/{semester_mod}', [LivewireRelever::class, 'generateTranscript'])
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization'])
+    ->name('Transcript');
 Route::get('generatePV/{id}', [Specialty::class, 'generatePV'])->name('PV');
 Route::get('/student_marks', StudentMarks::class);
-// Route::get('proces_verbal', ProcesVerbal::class)->name('proces_verbal')->middleware(['auth', 'verified', 'set_session_values']);
+// Route::get('proces_verbal', ProcesVerbal::class)->name('proces_verbal')->middleware(['auth', 'verified', 'set_session_values', 'localization']);
 Route::get('ues', [UniteEnseignementController::class, 'export']);
 // Route::get('pvxls', [Specialty::class, 'export']);
 // Route::get('export/{id}', function ($id) {
@@ -332,17 +345,20 @@ Route::get('exportpvsn/{id}/{level_id}/{semester_id}/{a_year}', function ($id, $
     return Excel::download(new pvsn($id, $level_id, $semester_id, $a_year), $file_name);
 });
 
-Route::get('/welcome/{locale}', function (string $locale){
-    if (!in_array($locale, ['en', 'fr'])){
-        abort(400);
-    }
-    App::setlocale($locale);
-    return view('welcome');
-});
+Route::get('/switch/{locale}', [LanguageController::class, 'switch'])->name('lang.switch');
+
+// Route::get('/welcome/{locale}', function (string $locale) {
+//     if (!in_array($locale, ['en', 'fr'])) {
+//         abort(400);
+
+//     }
+//     App::setlocale($locale);
+//     return view('welcome');
+// });
 
 Route::resource('students', StudentController::class)
     ->only(['index', 'store'])
-    ->middleware(['auth', 'verified', 'set_session_values']);
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
 Route::get('/chart-data', [StudentController::class, 'getChartData']);
 Route::get('/semesterSession', [StudentController::class, 'getChartData'])->name('semesterSession');
 Route::put('/students/updateStudent', [StudentController::class, 'updateStudent'])->name('students.updateStudent');
@@ -362,14 +378,14 @@ Route::resource('levels', LevelController::class)
 
 Route::resource('specialties', SpecialtyController::class)
     // ->only(['index', 'store'])
-    ->middleware(['auth', 'verified', 'set_session_values']);
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
 Route::put('/specialties/updateSpec', [SpecialtyController::class, 'updateSpec'])->name('specialties.updateSpec');
 
 Route::resource('specialty_tranche', SpecialtyTrancheController::class)->only(['store']);
 
 Route::resource('uniteEseignements', UniteEnseignementController::class)
     ->only(['index', 'store', 'update'])
-    ->middleware(['auth', 'verified', 'set_session_values']);
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
 
 Route::put('/uniteEnseignements/updateUe', [UniteEnseignementController::class, 'updateUe'])->name('uniteEnseignements.updateUe');
 Route::put('/cours/updateCo', [CourseController::class, 'updateCo'])->name('cours.updateCo');
@@ -377,7 +393,10 @@ Route::put('/facture/updateFacture', [FacturationController::class, 'updateFactu
 
 Route::resource('cours', CourseController::class)
     ->only(['index', 'store'])
-    ->middleware(['auth', 'verified', 'set_session_values']);
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
+Route::resource('bts_blanc', PaperController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
 
 
 Route::resource('specialty_ue', SpecialtyUeController::class)
@@ -389,17 +408,17 @@ Route::resource('ue_cours', UeCourseController::class)
     ->middleware(['auth', 'verified']);
 Route::resource('notes', CourseStudentController::class)
     ->only(['index', 'store'])
-    ->middleware(['auth', 'verified', 'set_session_values']);
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
 Route::resource('proces_verbal', ProcesVerbalController::class)
     ->only(['index', 'store'])
-    ->middleware(['auth', 'verified', 'set_session_values']);
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
 
 Route::resource('facture', FacturationController::class)
     ->only(['index', 'store'])
-    ->middleware(['auth', 'verified', 'set_session_values']);
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
 Route::resource('relever', ReleverController::class)
     ->only(['index', 'store'])
-    ->middleware(['auth', 'verified', 'set_session_values']);
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

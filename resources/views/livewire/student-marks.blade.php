@@ -36,7 +36,7 @@
                 <div>
                     <form>
                         <label>Specialite</label>
-                        <select wire:model="specialty" mul wire:change="updateLevels" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                        <select wire:model="specialty" mul wire:change="updateCourses" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                             @isset($specialties)
                             @foreach($specialties as $specialty)
                             <option value="{{ $specialty->id }}">{{ $specialty->name }} | {{ $specialty->code }}</option>
@@ -57,18 +57,32 @@
                     </select>
                 </div>
                 <div>
-                    <label>Cours</label>
+                    <div class="mt-1 flex items-center">
+                        <div class="mr-3 rounded flex items-center">
+                            <input id="1" type="radio" wire:model="pvmod" wire:click="updatePV" value="1" name="PV" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                            <label>EC</label>
+                        </div>
+                        <div class="rounded flex items-center">
+                            <input id="2" type="radio" wire:model="pvmod" wire:click="updatePV" value="2" name="PV" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                            <label>Epreuve BTS Blanc</label>
+                        </div>
+                    </div>
                     <select wire:model.lazy.500ms="coursemod" mul wire:change="updateStudents" name="course_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                         @isset($courses)
+                        @php($sum_credit = 0)
                         @foreach($courses as $course)
-                        <option value="{{ $course->id }}">{{ $course->code }} | {{ $course->name }}</option>
+                        <option value="{{ $course->id }}">{{ $course->code }} | {{ strtoupper($course->name) }} ___ {{$course->credit_points}}</option>
+                        @php($sum_credit = $sum_credit + $course->credit_points)
                         @endforeach
+                        <option value="1" class="text-bold">Crédit Total : {{$sum_credit}}</option>
+                        @else
+                        <option value="0">Aucun cours trouver</option>
                         @endisset
                     </select>
                 </div>
             </div>
             <div class="pb-4 grid grid-cols-4 gap-4">
-                <button id="dropdownRadioBgHoverButton" data-dropdown-toggle="delib" class="flex justify-evenly items-center whitespace-nowrap rounded bg-primary-100  pb-1 pt-1.5 text-xs font-medium uppercase leading-normal text-neutral-800 shadow-[0_4px_9px_-4px_#fbfbfb] transition duration-150 ease-in-out hover:bg-neutral-100 hover:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:bg-neutral-100 focus:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:outline-none focus:ring-0 active:bg-neutral-200 active:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] motion-reduce:transition-none" type="button">
+                <button id="dropdownRadioBgHoverButton" data-dropdown-toggle="delib" class="flex justify-evenly items-center whitespace-nowrap rounded bg-white  pb-1 pt-1.5 text-xs font-medium uppercase leading-normal text-neutral-800 shadow-[0_4px_9px_-4px_#fbfbfb] transition duration-150 ease-in-out hover:bg-neutral-100 hover:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:bg-neutral-100 focus:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:outline-none focus:ring-0 active:bg-neutral-200 active:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] motion-reduce:transition-none" type="button">
                     Saisir La note de Déliberation
                     <svg class="w-2.5 h-2.5 ms-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />

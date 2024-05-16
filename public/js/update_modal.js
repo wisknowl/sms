@@ -21,18 +21,18 @@ function fillModalForm(event) {
     var dob = button.getAttribute("data-te-dob");
 
     //factureUpdateModal
-    var facture_id = button.getAttribute("data-te-facture-id");
-    var student_name = button.getAttribute("data-te-st-name");
-    var montant = button.getAttribute("data-te-montant");
+    // var facture_id = button.getAttribute("data-te-facture-id");
+    // var student_name = button.getAttribute("data-te-st-name");
+    // var montant = button.getAttribute("data-te-montant");
 
     //factureUpdateModal
-    var input_facture_id = document.getElementById("facture_id");
-    var input_student_name = document.getElementById("st_name");
-    var input_montant = document.getElementById("montant");
+    // var input_facture_id = document.getElementById("facture_id");
+    // var input_student_name = document.getElementById("st_name");
+    // var input_montant = document.getElementById("montant");
 
-    input_facture_id.value = facture_id;
-    input_student_name.value = student_name;
-    input_montant.value = montant;
+    // input_facture_id.value = facture_id;
+    // input_student_name.value = student_name;
+    // input_montant.value = montant;
 
     if (id) {
         // Do something if the value is not empty

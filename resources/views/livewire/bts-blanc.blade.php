@@ -11,7 +11,7 @@
     <div class="p-6 text-gray-900">
         <div class="border-b mb-2">
             <h2 class="font-bold uppercase text-xl text-gray-800 text-center mb-4 textwrap-none">
-                {{ __('Element Constitutif') }}
+                {{ __('Les Matiere de BTS Blanc') }}
             </h2>
         </div>
         <!--Tabs content-->
@@ -302,7 +302,7 @@
                             <div class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
                                 <!--Modal title-->
                                 <h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="exampleModalCenterTitle">
-                                    COURS
+                                    Epreuve BTS Blanc
                                 </h5>
                                 <!--Close button-->
                                 <button type="button" class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" data-te-modal-dismiss aria-label="Close">
@@ -316,54 +316,24 @@
                             <form method="POST" action="">
                                 @csrf
                                 <div class="relative p-4">
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <!-- Specialty Name -->
-                                        <div class="relative mb-3" data-te-input-wrapper-init>
+                                    <div class="grid grid-cols-1 gap-3">
+                                        <div class="relative mb-0" data-te-input-wrapper-init>
                                             <input name="name" type="text" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" />
                                             <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Intitule
                                             </label>
                                         </div>
-                                        <!-- Code -->
-                                        <div class="relative mb-3" data-te-input-wrapper-init>
-                                            <input name="code" type="text" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" />
-                                            <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Code
-                                            </label>
-                                        </div>
+
                                         <!-- Credit Points -->
-                                        <div class="relative mb-3" data-te-input-wrapper-init>
+                                        <div class="relative mb-0" data-te-input-wrapper-init>
                                             <input name="credit_point" type="number" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" />
                                             <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Credit
                                             </label>
-                                        </div>
-                                        <!-- Type -->
-                                        <select name="course_nature" data-te-select-init data-te-select-option-height="52" data-te-select-placeholder="Type de Cours">
-                                            <option value="Matiere Fondamental" data-te-select-secondary-text="Tronc Commun">
-                                                Matiere Fondamental
-                                            </option>
-                                            <option value="Matiere de Specialité" data-te-select-secondary-text="">
-                                                Matiere de Specialité
-                                            </option>
-                                            <option value="Matiere Transversal" data-te-select-secondary-text="Tronc Commun">
-                                                Matiere Transversal
-                                            </option>
-                                        </select>
-
-                                        <!-- Cost/Hour -->
-                                        <div class="relative mb-3" data-te-input-wrapper-init>
-                                            <input name="cost_per_hour" type="number" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" />
-                                            <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Coût par heure
-                                            </label>
-                                        </div>
-                                        <!-- Hourly Rate -->
-                                        <div class="relative mb-3" data-te-input-wrapper-init>
-                                            <input name="duration" type="number" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" />
-                                            <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Heur Total
                                         </div>
                                         <!-- Level -->
                                         <select name="level" data-te-select-init data-te-select-placeholder="Niveau">
                                             @isset($levels)
                                             @foreach($levels as $level)
-                                            <option value="{{ $level->id }}">Niveau{{ $level->name }}</option>
+                                            <option value="{{ $level->id }}">Niveau {{ $level->name }}</option>
                                             @endforeach
                                             @endisset
                                         </select>
@@ -375,23 +345,16 @@
                                             @endforeach
                                             @endisset
                                         </select>
-                                    </div>
-                                    <!-- UE -->
-                                    <div class="mt-3">
-                                        <select name="ue_id" data-te-select-init data-te-select-filter="true" data-te-select-placeholder="Unite Denseignement">
-                                            @isset($uees)
-                                            @foreach($uees as $uee)
-                                            <option value="{{ $uee->id }}">{{ $uee->code }} | {{ $uee->name }}</option>
-                                            @endforeach
-                                            @endisset
-                                        </select>
-                                    </div>
-
-                                    <!-- Description -->
-                                    <div class="relative my-3" data-te-input-wrapper-init>
-                                        <textarea name="description" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlTextarea1" rows="3" placeholder="Your message"></textarea>
-                                        <label for="exampleFormControlTextarea1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Description
-                                        </label>
+                                        <div class="relative">
+                                            <!-- Level -->
+                                            <select name="specialty" data-te-select-init data-te-select-filter="true" data-te-select-placeholder="Specialite">
+                                                @isset($specialties)
+                                                @foreach($specialties as $specialty)
+                                                <option value="{{ $specialty->id }}">{{ $specialty->code }} | {{ $specialty->name }}</option>
+                                                @endforeach
+                                                @endisset
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 

@@ -57,7 +57,7 @@ class StudentMarks extends Component
 
     public function mount()
     {
-        // $this->a_year = $a_year;
+        // $this->a_year = $a_year; 
         // $this->studentId = $studentId;
         // $this->academic_year = $this->getAcademicYear();
         // $first_a_year = academic_year::first();
@@ -82,9 +82,17 @@ class StudentMarks extends Component
         $this->level = $first_level->id;
         $this->updateCourses();
         // dump($this->specialty, $this->level, $semester_session, $year_session);
-        $first_course = $this->courses[0];
-        $this->coursemod = $first_course->id;
-        $this->updateStudents();
+        // dd($this->courses);
+        if($this->courses){
+            $first_course = $this->courses[0];
+            $this->coursemod = $first_course->id;
+            $this->updateStudents();
+        }
+        else{
+            $this->course_students=null;
+        }
+        
+        
     }
     public function academicYear()
     {
@@ -105,9 +113,10 @@ class StudentMarks extends Component
     }
     public function updateLevels()
     {
-        $this->levels = level::whereHas('specialties', function ($query) {
-            $query->where('specialty_id', $this->specialty);
-        })->get();
+        // $this->levels = level::whereHas('specialties', function ($query) {
+        //     $query->where('specialty_id', $this->specialty);
+        // })->get();
+        $this->levels = level::all();
     }
     public function updateSemesters()
     {
@@ -118,9 +127,6 @@ class StudentMarks extends Component
 
     public function updateCourses()
     {
-        // query for the courses based on the selected specialty
-        // find the specialty by id
-        // $ues = unite_enseignement::where(spec)
         $specialty = Specialty::find($this->specialty);
         if (session()->has('semester_id')) {
             $this->semester = session('semester_id');
@@ -130,6 +136,9 @@ class StudentMarks extends Component
             ->where('level_id', $this->level)
             ->where('semester_id', $this->semester)
             ->pluck('id')->toArray();
+
+        // dd($this->specialty,$this->level,$this->semester, $ue_ids);
+
 
         // initialize an empty array to store the course ids
         $result = array();
@@ -142,8 +151,13 @@ class StudentMarks extends Component
         }
 
         // query for the courses based on the result array
-        $this->courses = Course::whereIn('id', $result)->orderBy('code', 'asc')->get();
-
+        $collection = Course::whereIn('id', $result)->orderBy('code', 'asc')->get();
+        if($collection->isNotEmpty()){
+            $this->courses = $collection;
+        }
+        else{
+            $this->courses = null;
+        }
         // $this->emit('specialtyUpdated');
     }
     public function updatingCoursemod()

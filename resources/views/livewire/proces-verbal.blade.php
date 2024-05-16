@@ -47,7 +47,7 @@
                 <div>
                     <form>
                         <label>Specialite</label>
-                        <select wire:model="specialty" mul wire:change="updateLevels" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                        <select wire:model="specialty" mul wire:change="updatePV" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                             @isset($specialties)
                             @foreach($specialties as $specialty)
                             <option value="{{ $specialty->id }}">{{ $specialty->name }} | {{ $specialty->code }}</option>
@@ -243,7 +243,11 @@
                                     @if($st_course->course->id == $course->id)
 
                                     <td class="whitespace-nowrap px-4 py-2 border">{{ $st_course->ca_marks }}</td>
+                                    @if($st_course->exam_marks > $st_course->reseat_mark)
                                     <td class="whitespace-nowrap px-4 py-2 border">{{$st_course->exam_marks}}</td>
+                                    @else
+                                    <td class="whitespace-nowrap px-4 py-2 border">{{$st_course->reseat_mark}}</td>
+                                    @endif
 
                                     @if($st_course->exam_marks < $st_course->reseat_mark)
                                         @php($courseavg = (((((($st_course->ca_marks) / 20) * 30) + ((($st_course->reseat_mark) / 20) * 70)) / 100) * 20))

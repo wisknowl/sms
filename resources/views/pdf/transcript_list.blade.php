@@ -68,10 +68,11 @@
                 </tr>
                 <tr>
                     <td colspan="3" style="font-weight: bold; font-family:Verdana, Geneva, Tahoma, sans-serif;">
-                        @if($transcript['tdr'] == 2)ANNUAL TRANSCRIPT
-                        @else
-                        TRANSCRIPT
-                        @endif
+                    @if($transcript['tdr'] == 2)
+                    {{ __('transcript.a_transcript') }}
+                    @else
+                    {{ __('transcript.transcript') }}
+                    @endif
                     </td>
                 </tr>
             </table>
@@ -79,18 +80,18 @@
         <div>
             <table class="table" style="padding: 2px;">
                 <tr style="font-size: 11px;">
-                    <td><label for="">Name: </label><span>{{ $transcript['credential']->name }}</span></td>
-                    <td><label for="">Matricule: </label><span>{{ $transcript['credential']->matricule }}</span></td>
-                    <td><label for="">Academic year: </label><span>{{ $transcript['academic_year'] }}</span></td>
+                    <td><label for="">{{ __('transcript.name') }} : </label><span>{{ $transcript['credential']->name }}</span></td>
+                    <td><label for="">{{ __('transcript.matricule') }} : </label><span>{{ $transcript['credential']->matricule }}</span></td>
+                    <td><label for="">{{ __('transcript.year') }} : </label><span>{{ $transcript['academic_year'] }}</span></td>
                 </tr>
                 <tr style="font-size: 11px;">
-                    <td><label for="">Date of birth: </label><span>{{ date('d/m/Y', strtotime($transcript['credential']->dob)) }}</span></td>
-                    <td><label for="">At: </label><span>{{ $transcript['credential']->pob }}</span></td>
-                    <td><label for="">Cyle: </label><span>{{ $transcript['credential']->cycle->name }}</span></td>
+                    <td><label for="">{{ __('transcript.dob') }} : </label><span>{{ date('d/m/Y', strtotime($transcript['credential']->dob)) }}</span></td>
+                    <td><label for="">{{ __('transcript.pob') }} : </label><span>{{ $transcript['credential']->pob }}</span></td>
+                    <td><label for="">Cycle: </label><span>{{ $transcript['credential']->cycle->name }}</span></td>
                 </tr>
                 <tr style="font-size: 11px;">
-                    <td colspan="2"><label for="">Specialty: </label><span>{{ $transcript['credential']->specialty->name }}</span></td>
-                    <td><label for="">Level: </label><span>{{ $transcript['level'] }}</span></td>
+                    <td colspan="2"><label for="">{{ __('transcript.specialty') }} : </label><span>{{ $transcript['credential']->specialty->name }}</span></td>
+                    <td><label for="">{{ __('transcript.level') }} : </label><span>{{ $transcript['level'] }}</span></td>
                 </tr>
             </table>
         </div>
@@ -212,8 +213,8 @@
                     @endforeach
                     @endforeach
                     <tr style="font-size: 10px; background-color:grey;">
-                        <th colspan="6">CREDIT ACQUIRED IN SEMESTER {{ strtoupper($semester->name) }}: {{ $credit }} on {{$course_credit_sum}}</th>
-                        <th colspan="3">AVERAGE: {{ number_format(ceil( $sumavg/$ue_credit_sum * 100) / 100, 2, '.', '') }}</th>
+                        <th colspan="6">{{ __('transcript.credit_acquired') }} {{ strtoupper($semester->name) }}: {{ $credit }} on {{$course_credit_sum}}</th>
+                        <th colspan="3">{{ __('transcript.average') }} : {{ number_format(ceil( $sumavg/$ue_credit_sum * 100) / 100, 2, '.', '') }}</th>
                     </tr>
                     @php($total_credit_obtain += $credit)
                     @php($total_credit += $course_credit_sum)
@@ -318,8 +319,8 @@
                     @endforeach
                     @endforeach
                     <tr style="font-size: 10px; background-color:grey;">
-                        <th colspan="6">CREDIT ACQUIRED IN SEMESTER {{ strtoupper($semester->name) }}: {{ $credit }} on {{$course_credit_sum}}</th>
-                        <th colspan="3">AVERAGE: {{ number_format(ceil( $sumavg/$ue_credit_sum * 100) / 100, 2, '.', '') }}</th>
+                        <th colspan="6">{{ __('transcript.credit_acquired') }} {{ strtoupper($semester->name) }}: {{ $credit }} on {{$course_credit_sum}}</th>
+                        <th colspan="3">{{ __('transcript.average') }} : {{ number_format(ceil( $sumavg/$ue_credit_sum * 100) / 100, 2, '.', '') }}</th>
                     </tr>
                     @php($total_credit_obtain += $credit)
                     @php($total_credit += $course_credit_sum)
@@ -331,18 +332,18 @@
         <div class="divb" style="margin-top: 0px;">
             <table class="table">
                 <tr style="font-size: 10px;">
-                    <td><label for="">Decision of Jury: </label><span>Passed</span></td>
-                    <td><label for="">GPA: </label><span>2.619</span></td>
-                    <td><label for="">Grade: </label><span>C+</span></td>
-                    <td><label for="">Total credit earned: </label><span>{{$total_credit_obtain}} On {{$total_credit}}</span></td>
-                    <td><label for="">Appreciation: </label><span>FAIRLY GOOD</span></td>
+                    <td><label for="">{{ __('transcript.decision') }} : </label><span style="font-weight:bold;">Passed</span></td>
+                    <td><label for="">GPA : </label><span style="font-weight:bold;">2.619</span></td>
+                    <td><label for="">Grade : </label><span style="font-weight:bold;">C+</span></td>
+                    <td><label for="">{{ __('transcript.total_credit') }} : </label><span style="font-weight:bold;">{{$total_credit_obtain}} On {{$total_credit}}</span></td>
+                    <td><label for="">{{ __('transcript.appreciation') }} : </label><span style="font-weight:bold;">FAIRLY GOOD</span></td>
                 </tr>
                 <tr style="font-size: 10px; text-align:end">
                     <td><label for="">GPA = </label><span>Grade Point Average</span></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td><label for="">Date: </label><span></span></td>
+                    <td><label for="">Date : </label><span>_________________</span></td>
                 </tr>
                 <tr style="font-size:9px;">
                     <td colspan="5">

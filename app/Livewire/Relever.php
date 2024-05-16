@@ -53,6 +53,8 @@ class Relever extends Component
     public $tdr;
     public $academic_year_mod;
     public $semester_mod;
+    public $moyenne_semestriel = [];
+
 
     public function mount()
     {
@@ -126,27 +128,66 @@ class Relever extends Component
             ->whereHas('levels', function ($query) {
                 $query->where('academic_year', $this->academic_year)->where('level_id', $this->level);
             })->get();
-        // dd($this->cycle, $this->specialty,$this->level,  $this->students);
+        foreach ($this->students as $student) {
+            $student_id = $student->id;
+            $year_session = Session::get('year_name');
+            $level = $student->levelByYear($year_session); // get the level object or null
+            if ($level) { // if the level is not null
+                $level_id = $level->id; // get the level id
+                $session = Session::get('semester_id');
+                $st_ues = student_ue::with('ue')
+                    ->where('student_id', $student_id)
+                    ->whereHas('ue', function ($query) use ($level_id, $session) {
+                        $query->where('level_id', $level_id)->where('semester_id', $session);
+                    })->get();
+                $courses = course_student::with('course')
+                    ->where('student_id', $student_id)
+                    ->whereHas('course', function ($query) use ($level_id) {
+                        $query->where('level_id', $level_id);
+                    })->get();
+            } else {
+                $st_ues = null;
+            }
+            $ue_credit_sum = 0;
+            $ue_sum = 0;
+            $credit_obtained = 0;
 
-        // $this->course_students = course_student::with('student', 'course')->where('course_id', $this->course)->get();
-        // $this->course_students = course_student::with('student', 'course')
-        //     ->where('course_id', $this->coursemod)
-        //     ->whereHas('student', function ($query) {
-        //         // Assuming you have a function to get the current academic year
-        //         $current_year = $this->getAcademicYear();
-        //         $query->where('specialty_id', $this->specialty)
-        //             // Assuming the student model has a level relation
-        //             ->whereHas('levels', function ($query) use ($current_year) {
-        //                 // Assuming the level model has a year column
-        //                 $query->where('academic_year', $this->academic_year)->where('level_id', $this->level);
-        //             });
-        //     })
-        //     ->get();
+            if ($st_ues) {
+                foreach ($st_ues as $st_ue) {
+                    $course_sum = 0;
+                    $course_credit_sum = 0;
+                    foreach ($courses as $course) {
+                        if ($course->course->ue_id == $st_ue->ue->id) {
+                            $check_credit_sum = 0;
 
-        // foreach ($this->course_students as $course_student) {
-        //     $le = $course_student->student->currentLevel()->name;
-        //     // dd($le);
-        // }
+                            if ($course->exam_marks < $course->reseat_mark) {
+                                $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->reseat_mark) / 20) * 70)) / 100) * 20);
+                            } else {
+                                $course_mark = (((((($course->ca_marks) / 20) * 30) + ((($course->exam_marks) / 20) * 70)) / 100) * 20);
+                            }
+                            if ($course_mark >= 10) {
+                                $check_credit_sum = $check_credit_sum + $course->course->credit_points;
+                            }
+                            $course_credit_multiply = $course_mark * $course->course->credit_points;
+                            $course_sum = $course_sum + $course_credit_multiply;
+                            $course_credit_sum = $course_credit_sum + $course->course->credit_points;
+                        }
+                    }
+                    $ue_mark = $course_sum / $course_credit_sum;
+                    if ($ue_mark < 10) {
+                        $not_validated_ue[] = $ue_mark;
+                    } else {
+                        $validated_ue[] = $ue_mark;
+                    }
+                    $ue_credit_multiply = $ue_mark * $st_ue->ue->credit_points;
+                    $ue_sum = $ue_sum + $ue_credit_multiply;
+                    $ue_credit_sum = $ue_credit_sum + $st_ue->ue->credit_points;
+                    $credit_obtained = $credit_obtained + $check_credit_sum;
+                }
+                $std_avg = $ue_sum / $ue_credit_sum;
+                $this->moyenne_semestriel[$student_id] = $std_avg;
+            }
+        }
     }
     public function transcript_list($student_list, $academic_year_mod, $tdr, $semester_mod)
     {
@@ -300,13 +341,20 @@ class Relever extends Component
             ]);
             $st_ue = $st_ue->fresh();
         }
-        // query for the courses based on the result array
-        // $courses = Course::whereIn('id', $result)->get();
 
-        // dd($ue_ids, $result, $st_courses);
-        // do some logic here
+
         $pdf = Pdf::loadView('pdf.index', compact('studentId', 'level', 'academic_year', 'credential', 'semesters', 'course_natures', 'st_ues', 'st_courses', 'tdr', 'semester_mod'));
-        return $pdf->stream();
+        // $headers = [
+        //     'Content-Disposition' => 'inline; filename="new.pdf"',
+        // ];
+        // return $pdf->stream('new.pdf', $headers);
+        $pdfOutput = $pdf->output();
+        $response = response($pdfOutput, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="new.pdf"'
+        ]);
+
+        return $response;
     }
     function getAcademicYear()
     {

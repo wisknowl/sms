@@ -14,7 +14,7 @@
         <!-- @notifyJs -->
         <div class="border-b mb-2">
             <h2 class="font-bold uppercase text-xl text-gray-800 text-center mb-4">
-                {{ __('Relever de Notes') }}
+                {{ __('relever_page.relever') }}
             </h2>
         </div>
         <div class="flex justify-end">
@@ -146,7 +146,7 @@
                     <label for="">Type de Relever</label>
                     <select wire:model.lazy="tdr" mul wire:change="" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                         <option value="1">Semestriel</option>
-                        <option value="2">Annual</option>
+                        <option value="2">Annuelle</option>
                     </select>
                 </div>
             </div>
@@ -176,7 +176,9 @@
                                     <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $count }}</td>
                                     <td class="whitespace-nowrap px-4 py-2 border">{{ $student->matricule }}</td>
                                     <td class="whitespace-nowrap px-4 py-2 border">{{ $student->name }}</td>
-                                    <td class="whitespace-nowrap px-4 py-2 border">00</td>
+                                    @if (array_key_exists($student->id, $moyenne_semestriel))
+                                    <td class="whitespace-nowrap px-4 py-2 border">{{ number_format(ceil($moyenne_semestriel[$student->id] * 100) / 100, 2, '.', '') }}</td>
+                                    @endif 
                                     <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
                                         <a href="{{ URL::to('generateTranscript/'. $student->id . '/' . $academic_year_mod . '/' . $tdr . '/' . $semester_mod) }}" target="_blank">
                                             <button class="font-medium text-blue-600 dark:text-red-500 hover:underline flex items-center">

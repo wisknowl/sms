@@ -107,26 +107,7 @@ class Facture extends Component
                 }
             })
             ->get();
-        foreach ($factures as $facture) {
-            dd($facture);
-            $paidAmounts = Facturation::where('student_id', $student_id)->where('level_id', $level_id)->where('academic_year', $year_session)
-                ->where('id', '<', $facture->id)
-                ->get()
-                ->reduce(function ($carry, $item) {
-                    $carry['inscription'] += $item->inscription;
-                    $carry['tranche1'] += $item->tranche1;
-                    $carry['tranche2'] += $item->tranche2;
-                    $carry['tranche3'] += $item->tranche3;
-                    return $carry;
-                }, ['inscription' => 0, 'tranche1' => 0, 'tranche2' => 0, 'tranche3' => 0]);
-
-            $remainingAmounts = [
-                'inscription' => $totalTrancheAmounts['inscription'] - $paidAmounts['inscription'],
-                'tranche1' => $totalTrancheAmounts['first'] - $paidAmounts['tranche1'],
-                'tranche2' => $totalTrancheAmounts['second'] - $paidAmounts['tranche2'],
-                'tranche3' => $totalTrancheAmounts['third'] - $paidAmounts['tranche3']
-            ];
-        }
+        
         // $sql = $factures->toSql();
         $factures = $factures->paginate(12);
         $facture_remaining_amount = [];

@@ -18,10 +18,22 @@ return [
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'login' => 'Login',
     'register' =>[
-        'name' => 'Ton nom',
+        'name' => 'Name',
         'email' => 'Email',
         'password' => 'Password',
         'password_confirmation' => 'Password Confirmation',  
+        'rememberMe' => 'Remember Me',
+        'forgotPassword' => 'Forgot your password?',
+        'already_registered' => 'Already Registered',
+        'register' => 'Register',
+    ],
+    'loginn' =>[
+        'name' => 'Name',
+        'email' => 'Email',
+        'password' => 'Password',
+        'password_confirmation' => 'Password Confirmation',  
+        'rememberMe' => 'Remember Me',
+        'forgotPassword' => 'Forgot your password?'
     ],
 
 ];
