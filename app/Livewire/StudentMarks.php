@@ -14,8 +14,10 @@ use App\Models\course_student;
 use App\Models\cycle;
 use App\Models\student;
 use App\Models\level;
+use App\Models\paper;
 use App\Models\semester;
 use App\Models\specialty;
+use App\Models\student_paper;
 use App\Models\student_ue;
 use App\Models\unite_enseignement;
 use Illuminate\Http\Request;
@@ -54,7 +56,11 @@ class StudentMarks extends Component
     public $level_id;
     public $greeting = [];
     public $noteDeliberation;
-
+    public $course_paper;
+    public $papers;
+    public $paper_students;
+    public $papermod;
+    public $mark = [];
     public function mount()
     {
         // $this->a_year = $a_year; 
@@ -83,16 +89,16 @@ class StudentMarks extends Component
         $this->updateCourses();
         // dump($this->specialty, $this->level, $semester_session, $year_session);
         // dd($this->courses);
-        if($this->courses){
+        if ($this->courses) {
             $first_course = $this->courses[0];
             $this->coursemod = $first_course->id;
             $this->updateStudents();
+        } else {
+            $this->course_students = null;
         }
-        else{
-            $this->course_students=null;
-        }
-        
-        
+        $this->course_paper = 1;
+        $this->updatePapers();
+        $this->updateStudentsBts();
     }
     public function academicYear()
     {
@@ -124,7 +130,10 @@ class StudentMarks extends Component
             $query->where('level_id', $this->level);
         })->get();
     }
-
+    public function updateCP()
+    {
+        // dd($this->course_paper);
+    }
     public function updateCourses()
     {
         $specialty = Specialty::find($this->specialty);
@@ -152,13 +161,23 @@ class StudentMarks extends Component
 
         // query for the courses based on the result array
         $collection = Course::whereIn('id', $result)->orderBy('code', 'asc')->get();
-        if($collection->isNotEmpty()){
+        if ($collection->isNotEmpty()) {
             $this->courses = $collection;
-        }
-        else{
+        } else {
             $this->courses = null;
         }
-        // $this->emit('specialtyUpdated');
+        $this->course_paper = 1;
+    }
+    public function updatePapers()
+    {
+        $specialty_id = $this->specialty;
+        $collection = paper::where('specialty_id', $specialty_id)->get();
+        if ($collection->isNotEmpty()) {
+            $this->papers = $collection;
+        } else {
+            $this->papers = null;
+        }
+        // dd($this->specialty,$specialty_id);
     }
     public function updatingCoursemod()
     {
@@ -197,16 +216,23 @@ class StudentMarks extends Component
         }
     }
 
+    public function updateStudentsBts()
+    {
+        $specialty_id = $this->specialty;
+        $this->paper_students = student_paper::with('student', 'paper')
+            ->where('paper_id', $this->papermod)
+            ->whereHas('student', function ($query) use ($specialty_id) {
+                $query->where('specialty_id', $specialty_id)
+                    ->whereHas('levels', function ($query) {
+                        $query->where('academic_year', $this->academic_year)->where('level_id', $this->level);
+                    });
+            })
+            ->get();
+        // dd($specialty_id,$this->paper_students);
+    }
+
     public function updateMarks(Request $request)
     {
-        // $this->validate();
-        // enable the query log for the default connection
-        // DB::connection()->enableQueryLog();
-        // // // enable the query log
-        // DB::enableQueryLog();
-
-
-
         // update the marks using the update method
         DB::transaction(function () use ($request) {
             // get the indexes of the ca_marks and exam_mark arrays
@@ -295,6 +321,23 @@ class StudentMarks extends Component
         // dump the query log
         // dump($queryLog);
 
+    }
+    public function update_bts_marks()
+    {
+        $indexes = array();
+        if (!empty($this->mark)) {
+            $indexes = array_merge($indexes, array_keys($this->mark));
+        }
+        $indexes = array_unique($indexes);
+        $updated = true;
+        foreach ($indexes as $index) {
+            $paper_student = student_paper::find($index);
+            if (array_key_exists($index, $this->mark) && !empty($this->mark[$index])) {
+                $updated = $updated && $paper_student->update(['mark' => $this->mark[$index]]);
+            }
+        }
+        $this->updateStudentsBts();
+        // dd($indexes);
     }
 
     public function generateTranscript($id)

@@ -329,13 +329,13 @@
         <table class="table">
             <tr style="font-size: 10px;">
                 <td><label for="">{{ __('transcript.decision') }} : </label><span style="font-weight:bold;">Passed</span></td>
-                <td><label for="">GPA : </label><span style="font-weight:bold;">2.619</span></td>
+                <td><label for="">{{ __('transcript.gpa') }} : </label><span style="font-weight:bold;">2.619</span></td>
                 <td><label for="">Grade : </label><span style="font-weight:bold;">C+</span></td>
                 <td><label for="">{{ __('transcript.total_credit') }} : </label><span style="font-weight:bold;">{{$total_credit_obtain}} On {{$total_credit}}</span></td>
                 <td><label for="">{{ __('transcript.appreciation') }} : </label><span style="font-weight:bold;">FAIRLY GOOD</span></td>
             </tr>
             <tr style="font-size: 10px; text-align:end">
-                <td><label for="">GPA = </label><span>Grade Point Average</span></td>
+                <td><label for="">{{ __('transcript.gpa') }} = </label><span>{{ __('transcript.gpaw') }}</span></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -359,6 +359,9 @@
                         </tr>
                     </table>
                 </td>
+            </tr>
+            <tr style="font-size: 8px; text-align:center">
+                <td colspan="5">{{ __('transcript.notice') }}</td>
             </tr>
         </table>
     </div>

@@ -52,19 +52,7 @@ class PaperController extends Controller
         $semesters = semester::all();
         $ues = unite_enseignement::all();
         $specialties = Specialty::with('ues')->get();
-        // $dropdown_data = [];
-        // foreach ($specialties as $specialty) {
-        //     $dropdown_data[$specialty->name] = $specialty->ues->pluck('name', 'id');
-        // }
-        $dropdown_data = [];
-        foreach ($specialties as $specialty) {
-            // dd($specialty);
-            foreach ($specialty->ues as $ue) {
-                $dropdown_data[$ue->id] = $ue->name;
-            }
-        }
-        // dd($dropdown_data);
-        return view('bts_blanc.index', compact('levels', 'courses', 'academic_years', 'semesters', 'ues', 'dropdown_data'));
+        return view('bts_blanc.index', compact('levels', 'courses', 'academic_years', 'semesters', 'ues'));
     }
 
     /**
@@ -81,54 +69,40 @@ class PaperController extends Controller
     public function store(Request $request): RedirectResponse
     {
         DB::transaction(function () use ($request) {
-            $course = strip_tags($request->input('name'));
-            $code = strip_tags($request->input('code'));
+            $paper = strip_tags($request->input('name'));
             $credit_point = strip_tags($request->input('credit_point'));
-            $duration = strip_tags($request->input('duration'));
-            $cost_per_hour = strip_tags($request->input('cost_per_hour'));
-            $course_nature = strip_tags($request->input('course_nature'));
-            $ue_id = strip_tags($request->input('ue_id'));
-            $level = strip_tags($request->input('level'));
-            $semester = strip_tags($request->input('semester'));
-            $description = strip_tags($request->input('description'));
-            $course_obj = new course();
-            $course_obj->name = $course;
-            $course_obj->code = $code;
-            $course_obj->credit_points = $credit_point;
-            $course_obj->duration = $duration;
-            $course_obj->cost_per_hour = $cost_per_hour;
-            $course_obj->course_nature = $course_nature;
-            $course_obj->ue_id = $ue_id;
-            $course_obj->level_id = $level;
-            $course_obj->semester_id = $semester;
-            $course_obj->description = $description;
-            $course_obj->save();
+            $level_id = strip_tags($request->input('level'));
+            $semester_id = strip_tags($request->input('semester'));
+            $specialty_id = strip_tags($request->input('specialty'));
+            // dd($paper, $credit_point, $level, $semester, $specialty);
 
-            $course_id = $course_obj->id;
-            $specialty_ids = unite_enseignement::where('id', $ue_id)->pluck('specialty_id')->toArray();
-            $result = array();
-            foreach ($specialty_ids as $specialty_id) {
-                $student_id = student::where('specialty_id', $specialty_id)->pluck('id')->toArray();
-                $result = array_merge($result, $student_id);
-            }
-            $query = student::whereIn('id', $result);
-            $students = $query->whereHas('levels', function ($query)  use ($level) {
-                $query->where('level_id', $level); // STUDENTS IN LEVEL_N OF WHICH ADADEMIC YEAR
+            $paper_obj = new paper();
+            $paper_obj->name = $paper;
+            $paper_obj->credit_points = $credit_point;
+            $paper_obj->level_id = $level_id;
+            $paper_obj->semester_id = $semester_id;
+            $paper_obj->specialty_id = $specialty_id;
+            $paper_obj->save();
+            $paper_id = $paper_obj->id;
+            
+            $year_session = Session::get('year_name');
+            $query = student::where('specialty_id', $specialty_id);
+            $students = $query->whereHas('levels', function ($query)  use ($level_id, $year_session) {
+                $query->where('academic_year', $year_session)->where('level_id', $level_id);
             })->get();
             foreach ($students as $student) {
                 $timestamp = Carbon::now()->format('Y-m-d H:i:s');
-                $student->course()->syncWithoutDetaching($course_id, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+                $student->paper()->syncWithoutDetaching($paper_id, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
             }
         });
-        notify()->success('Cours Creer avec succès');
+        notify()->success('Epreuve de BTS Blanc Creer avec succès');
         return redirect()->back();
-        //->with('success', 'Cours Creer avec succès');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(course $course)
+    public function show(paper $paper)
     {
         //
     }
@@ -136,7 +110,7 @@ class PaperController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(course $course)
+    public function edit(paper $paper)
     {
         //
     }
@@ -144,7 +118,7 @@ class PaperController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, course $course)
+    // public function update(Request $request, paper $paper)
     // {
     //     //
     // } 

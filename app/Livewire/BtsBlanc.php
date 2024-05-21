@@ -9,6 +9,7 @@ use App\Models\level;
 use App\Models\specialty;
 use App\Models\unite_enseignement;
 use App\Models\course;
+use App\Models\paper;
 use App\Models\student;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -39,6 +40,7 @@ class BtsBlanc extends Component
         $first_level = level::first();
         $this->level = $first_level->id;
         $this->fs();
+
     }
     public function nf()
     {
@@ -90,39 +92,39 @@ class BtsBlanc extends Component
         if (session()->has('semester_id')) {
             $semester_session = session('semester_id');
         }
-        $courses = course::with('ue')->orderBy('code', 'asc')->where('semester_id',$semester_session);
-        // dd($courses);
-        $courses->when($this->level, function ($query) {
-            return $query->where('level_id', $this->level);
-        })
-            ->when($this->specialty, function ($query) {
-                $ue_ids = unite_enseignement::where('specialty_id', $this->specialty)->where('level_id',$this->level)->where('semester_id',session('semester_id'))->where('semester_id',session('semester_id'))->pluck('id')->toArray();
-                $result = array();
+        $papers = paper::where('semester_id',$semester_session);
+        // dd($papers);
+        // $papers->when($this->level, function ($query) {
+        //     return $query->where('level_id', $this->level);
+        // })
+        //     ->when($this->specialty, function ($query) {
+        //         $ue_ids = unite_enseignement::where('specialty_id', $this->specialty)->where('level_id',$this->level)->where('semester_id',session('semester_id'))->where('semester_id',session('semester_id'))->pluck('id')->toArray();
+        //         $result = array();
 
-                foreach ($ue_ids as $ue_id) {
-                    $course_id = Course::where('ue_id', $ue_id)->get()->pluck('id')->toArray();
-                    // merge the course ids into the result array
-                    $result = array_merge($result, $course_id);
-                }
-                return $query->whereIn('id', $result);
-            })
-            ->when($this->ue, function ($query) {
-                return $query->where('ue_id', $this->ue);
-            })
-            ->when($this->search, function ($query) {
-                return $query->where(function ($query) {
-                    $query->where('name', 'like', '%' . $this->search . '%')
-                        ->orwhere('code', 'like', '%' . $this->search . '%')
-                        ->orwhere('id', 'like', '%' . $this->search . '%');
-                });
-            })->get();
-        $sql = $courses->toSql();
-        $courses = $courses->paginate(10);
+        //         foreach ($ue_ids as $ue_id) {
+        //             $course_id = Course::where('ue_id', $ue_id)->get()->pluck('id')->toArray();
+        //             // merge the course ids into the result array
+        //             $result = array_merge($result, $course_id);
+        //         }
+        //         return $query->whereIn('id', $result);
+        //     })
+        //     ->when($this->ue, function ($query) {
+        //         return $query->where('ue_id', $this->ue);
+        //     })
+        //     ->when($this->search, function ($query) {
+        //         return $query->where(function ($query) {
+        //             $query->where('name', 'like', '%' . $this->search . '%')
+        //                 ->orwhere('code', 'like', '%' . $this->search . '%')
+        //                 ->orwhere('id', 'like', '%' . $this->search . '%');
+        //         });
+        //     })->get();
+        $sql = $papers->toSql();
+        $papers = $papers->paginate(10);
         $levels = level::all();
         $academic_years = academic_year::all();
         $semesters = semester::all();
         $specialties = Specialty::with('ues')->get();
         config(['app.name' => 'Cours']);
-        return view('livewire.bts-blanc', compact('levels', 'courses', 'specialties','uees', 'academic_years', 'semesters','sql'));
+        return view('livewire.bts-blanc', compact('levels', 'papers', 'specialties','uees', 'academic_years', 'semesters','sql'));
     }
 }

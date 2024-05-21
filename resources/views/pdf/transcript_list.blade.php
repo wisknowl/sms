@@ -68,11 +68,11 @@
                 </tr>
                 <tr>
                     <td colspan="3" style="font-weight: bold; font-family:Verdana, Geneva, Tahoma, sans-serif;">
-                    @if($transcript['tdr'] == 2)
-                    {{ __('transcript.a_transcript') }}
-                    @else
-                    {{ __('transcript.transcript') }}
-                    @endif
+                        @if($transcript['tdr'] == 2)
+                        {{ __('transcript.a_transcript') }}
+                        @else
+                        {{ __('transcript.transcript') }}
+                        @endif
                     </td>
                 </tr>
             </table>
@@ -116,7 +116,7 @@
                     @foreach($transcript['semesters'] as $semester)
                     @if($transcript['tdr'] == 1 && $transcript['semester_mod'] == $semester->name)
                     @php($course_credit_sum=0)
-                    @php($credit = $sumavg = $count = $ue_credit_sum =  0)
+                    @php($credit = $sumavg = $count = $ue_credit_sum = 0)
                     @foreach($transcript['course_natures'] as $course_nature)
 
                     <tr style="font-size: 9px; text-align: center; background-color:lightblue">
@@ -133,37 +133,36 @@
                     @foreach($transcript['st_ues'] as $st_ue)
                     @if($semester->id == $st_ue->ue->semester_id && $course_nature->id == $st_ue->ue->course_nature_id)
                     <tr style="font-size: 10px; text-align: center; ">
-                    <td>{{ $st_ue->ue->code }}</td>
-                    <td></td>
-                    <td style="text-align: left;font-weight:bold;">{{ $st_ue->ue->name }}</td>
-                    <td></td>
-                    @php( $ue_mark = number_format(ceil($st_ue->average * 100) / 100, 2, '.', ''))
-                    <td style="font-weight:bold;">{{$ue_mark}}</td>
-                    <td style="font-weight:bold;">{{ $st_ue->credit }}</td>
-                    @if(  $ue_mark < 0 ||   $ue_mark==0) <td style="font-weight:bold;">F</td>
-                    @elseif(  $ue_mark > 0 &&   $ue_mark < 6.5) <td style="font-weight:bold;">F</td>
-                    @elseif(  $ue_mark == 6.5 || (  $ue_mark > 6.5 &&   $ue_mark < 8.5)) <td style="font-weight:bold;">D</td>
-                    @elseif(  $ue_mark == 8.5 || (  $ue_mark > 8.5 &&   $ue_mark < 10)) <td style="font-weight:bold;">C-</td>
-                    @elseif(  $ue_mark == 10 || (  $ue_mark > 10 &&   $ue_mark < 11.5)) <td style="font-weight:bold;">C</td>
-                    @elseif(  $ue_mark == 11.5 || (  $ue_mark > 11.5 &&   $ue_mark < 13.5)) <td style="font-weight:bold;">C+</td>
-                    @elseif(  $ue_mark == 13.5 || (  $ue_mark > 13.5 &&   $ue_mark < 15)) <td style="font-weight:bold;">B-</td>
-                    @elseif(  $ue_mark == 15 || (  $ue_mark > 15 &&   $ue_mark < 16.5)) <td style="font-weight:bold;">B</td>
-                    @elseif(  $ue_mark == 16.5 || (  $ue_mark > 16.5 &&   $ue_mark < 18.5)) <td style="font-weight:bold;">B+</td>
-                    @elseif(  $ue_mark == 18.5 || (  $ue_mark > 18.5 &&   $ue_mark < 19.5)) <td style="font-weight:bold;">A</td>
-                    @else
-                    <td style="font-weight:bold;">A+</td>
-                    @endif
-                    @if($ue_mark < 10)
-                    <td style="font-weight:bold;">NVA</td>
-                    @else
-                    <td style="font-weight:bold;">VA</td>
-                    @endif
-                    <td></td>
-                    @php($credit=$credit + $st_ue->credit)
-                    @php($ue_multiply = $st_ue->average * $st_ue->ue->credit_points)
-                    @php($ue_credit_sum = $ue_credit_sum + $st_ue->ue->credit_points)
-                    @php($sumavg = $sumavg + $ue_multiply)
-                </tr>
+                        <td>{{ $st_ue->ue->code }}</td>
+                        <td></td>
+                        <td style="text-align: left;font-weight:bold;">{{ $st_ue->ue->name }}</td>
+                        <td></td>
+                        @php( $ue_mark = number_format(ceil($st_ue->average * 100) / 100, 2, '.', ''))
+                        <td style="font-weight:bold;">{{$ue_mark}}</td>
+                        <td style="font-weight:bold;">{{ $st_ue->credit }}</td>
+                        @if( $ue_mark < 0 || $ue_mark==0) <td style="font-weight:bold;">F</td>
+                            @elseif( $ue_mark > 0 && $ue_mark < 6.5) <td style="font-weight:bold;">F</td>
+                                @elseif( $ue_mark == 6.5 || ( $ue_mark > 6.5 && $ue_mark < 8.5)) <td style="font-weight:bold;">D</td>
+                                    @elseif( $ue_mark == 8.5 || ( $ue_mark > 8.5 && $ue_mark < 10)) <td style="font-weight:bold;">C-</td>
+                                        @elseif( $ue_mark == 10 || ( $ue_mark > 10 && $ue_mark < 11.5)) <td style="font-weight:bold;">C</td>
+                                            @elseif( $ue_mark == 11.5 || ( $ue_mark > 11.5 && $ue_mark < 13.5)) <td style="font-weight:bold;">C+</td>
+                                                @elseif( $ue_mark == 13.5 || ( $ue_mark > 13.5 && $ue_mark < 15)) <td style="font-weight:bold;">B-</td>
+                                                    @elseif( $ue_mark == 15 || ( $ue_mark > 15 && $ue_mark < 16.5)) <td style="font-weight:bold;">B</td>
+                                                        @elseif( $ue_mark == 16.5 || ( $ue_mark > 16.5 && $ue_mark < 18.5)) <td style="font-weight:bold;">B+</td>
+                                                            @elseif( $ue_mark == 18.5 || ( $ue_mark > 18.5 && $ue_mark < 19.5)) <td style="font-weight:bold;">A</td>
+                                                                @else
+                                                                <td style="font-weight:bold;">A+</td>
+                                                                @endif
+                                                                @if($ue_mark < 10) <td style="font-weight:bold;">NVA</td>
+                                                                    @else
+                                                                    <td style="font-weight:bold;">VA</td>
+                                                                    @endif
+                                                                    <td></td>
+                                                                    @php($credit=$credit + $st_ue->credit)
+                                                                    @php($ue_multiply = $st_ue->average * $st_ue->ue->credit_points)
+                                                                    @php($ue_credit_sum = $ue_credit_sum + $st_ue->ue->credit_points)
+                                                                    @php($sumavg = $sumavg + $ue_multiply)
+                    </tr>
                     @foreach($transcript['st_courses'] as $st_course)
                     @if($st_ue->ue->id == $st_course->course->ue_id)
                     <tr style="font-size: 10px;">
@@ -185,30 +184,30 @@
                             @else
                             <td>0</td>
                             @endif
-                            @if(  $course_mark < 0 ||   $course_mark==0) <td>F</td>
-                            @elseif(  $course_mark > 0 &&   $course_mark < 6.5) <td>F</td>
-                            @elseif(  $course_mark == 6.5 || (  $course_mark > 6.5 &&   $course_mark < 8.5)) <td>D</td>
-                            @elseif(  $course_mark == 8.5 || (  $course_mark > 8.5 &&   $course_mark < 10)) <td>C-</td>
-                            @elseif(  $course_mark == 10 || (  $course_mark > 10 &&   $course_mark < 11.5)) <td>C</td>
-                            @elseif(  $course_mark == 11.5 || (  $course_mark > 11.5 &&   $course_mark < 13.5)) <td>C+</td>
-                            @elseif(  $course_mark == 13.5 || (  $course_mark > 13.5 &&   $course_mark < 15)) <td>B-</td>
-                            @elseif(  $course_mark == 15 || (  $course_mark > 15 &&   $course_mark < 16.5)) <td>B</td>
-                            @elseif(  $course_mark == 16.5 || (  $course_mark > 16.5 &&   $course_mark < 18.5)) <td>B+</td>
-                            @elseif(  $course_mark == 18.5 || (  $course_mark > 18.5 &&   $course_mark < 19.5)) <td>A</td>
-                            @else
-                            <td>A+</td>
-                            @endif
-                            <td></td>
-                            @if($semester->id == 1)
-                            <td>SN1</td>
-                            @else
-                            <td>SN2</td>
-                            @endif
+                            @if( $course_mark < 0 || $course_mark==0) <td>F</td>
+                                @elseif( $course_mark > 0 && $course_mark < 6.5) <td>F</td>
+                                    @elseif( $course_mark == 6.5 || ( $course_mark > 6.5 && $course_mark < 8.5)) <td>D</td>
+                                        @elseif( $course_mark == 8.5 || ( $course_mark > 8.5 && $course_mark < 10)) <td>C-</td>
+                                            @elseif( $course_mark == 10 || ( $course_mark > 10 && $course_mark < 11.5)) <td>C</td>
+                                                @elseif( $course_mark == 11.5 || ( $course_mark > 11.5 && $course_mark < 13.5)) <td>C+</td>
+                                                    @elseif( $course_mark == 13.5 || ( $course_mark > 13.5 && $course_mark < 15)) <td>B-</td>
+                                                        @elseif( $course_mark == 15 || ( $course_mark > 15 && $course_mark < 16.5)) <td>B</td>
+                                                            @elseif( $course_mark == 16.5 || ( $course_mark > 16.5 && $course_mark < 18.5)) <td>B+</td>
+                                                                @elseif( $course_mark == 18.5 || ( $course_mark > 18.5 && $course_mark < 19.5)) <td>A</td>
+                                                                    @else
+                                                                    <td>A+</td>
+                                                                    @endif
+                                                                    <td></td>
+                                                                    @if($semester->id == 1)
+                                                                    <td>SN1</td>
+                                                                    @else
+                                                                    <td>SN2</td>
+                                                                    @endif
                     </tr>
                     @php($course_credit_sum = $course_credit_sum + $st_course->course->credit_points)
                     @endif
                     @endforeach
-                      
+
                     @endif
                     @endforeach
                     @endforeach
@@ -222,7 +221,7 @@
 
                     @if($transcript['tdr'] == 2)
                     @php($course_credit_sum=0)
-                    @php($credit = $sumavg = $count = $ue_credit_sum =  0)
+                    @php($credit = $sumavg = $count = $ue_credit_sum = 0)
                     @foreach($transcript['course_natures'] as $course_nature)
 
                     <tr style="font-size: 9px; text-align: center; background-color:lightblue">
@@ -239,37 +238,36 @@
                     @foreach($transcript['st_ues'] as $st_ue)
                     @if($semester->id == $st_ue->ue->semester_id && $course_nature->id == $st_ue->ue->course_nature_id)
                     <tr style="font-size: 10px; text-align: center; ">
-                    <td>{{ $st_ue->ue->code }}</td>
-                    <td></td>
-                    <td style="text-align: left;font-weight:bold;">{{ $st_ue->ue->name }}</td>
-                    <td></td>
-                    @php( $ue_mark = number_format(ceil($st_ue->average * 100) / 100, 2, '.', ''))
-                    <td style="font-weight:bold;">{{$ue_mark}}</td>
-                    <td style="font-weight:bold;">{{ $st_ue->credit }}</td>
-                    @if(  $ue_mark < 0 ||   $ue_mark==0) <td style="font-weight:bold;">F</td>
-                    @elseif(  $ue_mark > 0 &&   $ue_mark < 6.5) <td style="font-weight:bold;">F</td>
-                    @elseif(  $ue_mark == 6.5 || (  $ue_mark > 6.5 &&   $ue_mark < 8.5)) <td style="font-weight:bold;">D</td>
-                    @elseif(  $ue_mark == 8.5 || (  $ue_mark > 8.5 &&   $ue_mark < 10)) <td style="font-weight:bold;">C-</td>
-                    @elseif(  $ue_mark == 10 || (  $ue_mark > 10 &&   $ue_mark < 11.5)) <td style="font-weight:bold;">C</td>
-                    @elseif(  $ue_mark == 11.5 || (  $ue_mark > 11.5 &&   $ue_mark < 13.5)) <td style="font-weight:bold;">C+</td>
-                    @elseif(  $ue_mark == 13.5 || (  $ue_mark > 13.5 &&   $ue_mark < 15)) <td style="font-weight:bold;">B-</td>
-                    @elseif(  $ue_mark == 15 || (  $ue_mark > 15 &&   $ue_mark < 16.5)) <td style="font-weight:bold;">B</td>
-                    @elseif(  $ue_mark == 16.5 || (  $ue_mark > 16.5 &&   $ue_mark < 18.5)) <td style="font-weight:bold;">B+</td>
-                    @elseif(  $ue_mark == 18.5 || (  $ue_mark > 18.5 &&   $ue_mark < 19.5)) <td style="font-weight:bold;">A</td>
-                    @else
-                    <td style="font-weight:bold;">A+</td>
-                    @endif
-                    @if($ue_mark < 10)
-                    <td style="font-weight:bold;">NVA</td>
-                    @else
-                    <td style="font-weight:bold;">VA</td>
-                    @endif
-                    <td></td>
-                    @php($credit=$credit + $st_ue->credit)
-                    @php($ue_multiply = $st_ue->average * $st_ue->ue->credit_points)
-                    @php($ue_credit_sum = $ue_credit_sum + $st_ue->ue->credit_points)
-                    @php($sumavg = $sumavg + $ue_multiply)
-                </tr>
+                        <td>{{ $st_ue->ue->code }}</td>
+                        <td></td>
+                        <td style="text-align: left;font-weight:bold;">{{ $st_ue->ue->name }}</td>
+                        <td></td>
+                        @php( $ue_mark = number_format(ceil($st_ue->average * 100) / 100, 2, '.', ''))
+                        <td style="font-weight:bold;">{{$ue_mark}}</td>
+                        <td style="font-weight:bold;">{{ $st_ue->credit }}</td>
+                        @if( $ue_mark < 0 || $ue_mark==0) <td style="font-weight:bold;">F</td>
+                            @elseif( $ue_mark > 0 && $ue_mark < 6.5) <td style="font-weight:bold;">F</td>
+                                @elseif( $ue_mark == 6.5 || ( $ue_mark > 6.5 && $ue_mark < 8.5)) <td style="font-weight:bold;">D</td>
+                                    @elseif( $ue_mark == 8.5 || ( $ue_mark > 8.5 && $ue_mark < 10)) <td style="font-weight:bold;">C-</td>
+                                        @elseif( $ue_mark == 10 || ( $ue_mark > 10 && $ue_mark < 11.5)) <td style="font-weight:bold;">C</td>
+                                            @elseif( $ue_mark == 11.5 || ( $ue_mark > 11.5 && $ue_mark < 13.5)) <td style="font-weight:bold;">C+</td>
+                                                @elseif( $ue_mark == 13.5 || ( $ue_mark > 13.5 && $ue_mark < 15)) <td style="font-weight:bold;">B-</td>
+                                                    @elseif( $ue_mark == 15 || ( $ue_mark > 15 && $ue_mark < 16.5)) <td style="font-weight:bold;">B</td>
+                                                        @elseif( $ue_mark == 16.5 || ( $ue_mark > 16.5 && $ue_mark < 18.5)) <td style="font-weight:bold;">B+</td>
+                                                            @elseif( $ue_mark == 18.5 || ( $ue_mark > 18.5 && $ue_mark < 19.5)) <td style="font-weight:bold;">A</td>
+                                                                @else
+                                                                <td style="font-weight:bold;">A+</td>
+                                                                @endif
+                                                                @if($ue_mark < 10) <td style="font-weight:bold;">NVA</td>
+                                                                    @else
+                                                                    <td style="font-weight:bold;">VA</td>
+                                                                    @endif
+                                                                    <td></td>
+                                                                    @php($credit=$credit + $st_ue->credit)
+                                                                    @php($ue_multiply = $st_ue->average * $st_ue->ue->credit_points)
+                                                                    @php($ue_credit_sum = $ue_credit_sum + $st_ue->ue->credit_points)
+                                                                    @php($sumavg = $sumavg + $ue_multiply)
+                    </tr>
                     @foreach($transcript['st_courses'] as $st_course)
                     @if($st_ue->ue->id == $st_course->course->ue_id)
                     <tr style="font-size: 10px;">
@@ -291,30 +289,30 @@
                             @else
                             <td>0</td>
                             @endif
-                            @if(  $course_mark < 0 ||   $course_mark==0) <td>F</td>
-                            @elseif(  $course_mark > 0 &&   $course_mark < 6.5) <td>F</td>
-                            @elseif(  $course_mark == 6.5 || (  $course_mark > 6.5 &&   $course_mark < 8.5)) <td>D</td>
-                            @elseif(  $course_mark == 8.5 || (  $course_mark > 8.5 &&   $course_mark < 10)) <td>C-</td>
-                            @elseif(  $course_mark == 10 || (  $course_mark > 10 &&   $course_mark < 11.5)) <td>C</td>
-                            @elseif(  $course_mark == 11.5 || (  $course_mark > 11.5 &&   $course_mark < 13.5)) <td>C+</td>
-                            @elseif(  $course_mark == 13.5 || (  $course_mark > 13.5 &&   $course_mark < 15)) <td>B-</td>
-                            @elseif(  $course_mark == 15 || (  $course_mark > 15 &&   $course_mark < 16.5)) <td>B</td>
-                            @elseif(  $course_mark == 16.5 || (  $course_mark > 16.5 &&   $course_mark < 18.5)) <td>B+</td>
-                            @elseif(  $course_mark == 18.5 || (  $course_mark > 18.5 &&   $course_mark < 19.5)) <td>A</td>
-                            @else
-                            <td>A+</td>
-                            @endif
-                            <td></td>
-                            @if($semester->id == 1)
-                            <td>SN1</td>
-                            @else
-                            <td>SN2</td>
-                            @endif
+                            @if( $course_mark < 0 || $course_mark==0) <td>F</td>
+                                @elseif( $course_mark > 0 && $course_mark < 6.5) <td>F</td>
+                                    @elseif( $course_mark == 6.5 || ( $course_mark > 6.5 && $course_mark < 8.5)) <td>D</td>
+                                        @elseif( $course_mark == 8.5 || ( $course_mark > 8.5 && $course_mark < 10)) <td>C-</td>
+                                            @elseif( $course_mark == 10 || ( $course_mark > 10 && $course_mark < 11.5)) <td>C</td>
+                                                @elseif( $course_mark == 11.5 || ( $course_mark > 11.5 && $course_mark < 13.5)) <td>C+</td>
+                                                    @elseif( $course_mark == 13.5 || ( $course_mark > 13.5 && $course_mark < 15)) <td>B-</td>
+                                                        @elseif( $course_mark == 15 || ( $course_mark > 15 && $course_mark < 16.5)) <td>B</td>
+                                                            @elseif( $course_mark == 16.5 || ( $course_mark > 16.5 && $course_mark < 18.5)) <td>B+</td>
+                                                                @elseif( $course_mark == 18.5 || ( $course_mark > 18.5 && $course_mark < 19.5)) <td>A</td>
+                                                                    @else
+                                                                    <td>A+</td>
+                                                                    @endif
+                                                                    <td></td>
+                                                                    @if($semester->id == 1)
+                                                                    <td>SN1</td>
+                                                                    @else
+                                                                    <td>SN2</td>
+                                                                    @endif
                     </tr>
                     @php($course_credit_sum = $course_credit_sum + $st_course->course->credit_points)
                     @endif
                     @endforeach
-                      
+
                     @endif
                     @endforeach
                     @endforeach
@@ -333,13 +331,13 @@
             <table class="table">
                 <tr style="font-size: 10px;">
                     <td><label for="">{{ __('transcript.decision') }} : </label><span style="font-weight:bold;">Passed</span></td>
-                    <td><label for="">GPA : </label><span style="font-weight:bold;">2.619</span></td>
+                    <td><label for="">{{ __('transcript.gpa') }} : </label><span style="font-weight:bold;">2.619</span></td>
                     <td><label for="">Grade : </label><span style="font-weight:bold;">C+</span></td>
                     <td><label for="">{{ __('transcript.total_credit') }} : </label><span style="font-weight:bold;">{{$total_credit_obtain}} On {{$total_credit}}</span></td>
                     <td><label for="">{{ __('transcript.appreciation') }} : </label><span style="font-weight:bold;">FAIRLY GOOD</span></td>
                 </tr>
                 <tr style="font-size: 10px; text-align:end">
-                    <td><label for="">GPA = </label><span>Grade Point Average</span></td>
+                    <td><label for="">{{ __('transcript.gpa') }} = </label><span>{{ __('transcript.gpaw') }}</span></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -363,6 +361,9 @@
                             </tr>
                         </table>
                     </td>
+                </tr>
+                <tr style="font-size: 8px; text-align:center">
+                    <td colspan="5">{{ __('transcript.notice') }}</td>
                 </tr>
             </table>
         </div>

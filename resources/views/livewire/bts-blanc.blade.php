@@ -222,28 +222,28 @@
                     <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                             <div class="overflow-hidden border rounded">
+                                
+
                                 <table class="min-w-full text-center text-sm font-light">
                                     <thead class="border-b font-medium dark:border-neutral-500">
                                         <tr>
                                             <th scope="col" class="px-4 py-2 border">#</th>
                                             <th scope="col" class="px-4 py-2 border">Name</th>
-                                            <th scope="col" class="px-4 py-2 border">Code</th>
-                                            <th scope="col" class="px-4 py-2 border">Unite D'enseignement</th>
+                                            <th scope="col" class="px-4 py-2 border">Specialité</th>
                                             <th scope="col" class="px-4 py-2 border">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php($count = 1)
                                         @php($credit_sum = 0)
-                                        @forelse($courses as $course)
+                                        @forelse($papers as $paper)
                                         <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
                                             <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $count }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $course->name }} | Credit {{ $course->credit_points }}</td>
-                                            @php($credit_sum = $credit_sum + $course->credit_points)
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $course->code }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $course->ue->code }} | {{ $course->ue->name }} | Credit {{ $course->ue->credit_points }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $paper->name }} | Credit {{ $paper->credit_points }}</td>
+                                            @php($credit_sum = $credit_sum + $paper->credit_points)
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $paper->code }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
-                                                <button type="button" wire:click.prevent='setDeleteId({{ $course->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
+                                                <button type="button" wire:click.prevent='setDeleteId({{ $paper->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4V4zm2 2h6V4H9v2zM6.074 8l.857 12H17.07l.857-12H6.074zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1z" fill="#FF0000" />
@@ -254,7 +254,7 @@
 
                                                 <!-- <button wire:click="$emit('openModal', 'mymodal')">Open Modal</button> X-->
                                                 <!-- <button wire:click="$dispatch('openModal', {component: 'mymodal'})"></button> -->
-                                                <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal" data-te-id="{{ $course->id }}" data-te-name="{{ $course->name }}" data-te-code="{{ $course->code }}" data-te-cp="{{ $course->credit_points }}" data-te-level="{{ $course->level_id }}" data-te-semester="{{ $course->semester_id }}" data-te-target="#updateModal">
+                                                <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal" data-te-id="{{ $paper->id }}" data-te-name="{{ $paper->name }}" data-te-code="{{ $paper->code }}" data-te-cp="{{ $paper->credit_points }}" data-te-level="{{ $paper->level_id }}" data-te-semester="{{ $paper->semester_id }}" data-te-target="#updateModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" id="edit" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
                                                             <path id="secondary" d="M21,22H3a1,1,0,0,1,0-2H21a1,1,0,0,1,0,2Z" style="fill: rgb(44, 169, 188);"></path>
@@ -333,7 +333,11 @@
                                         <select name="level" data-te-select-init data-te-select-placeholder="Niveau">
                                             @isset($levels)
                                             @foreach($levels as $level)
+                                            @if($level->name != 2)
+                                            <option value="{{ $level->id }}" disabled>Niveau {{ $level->name }}</option>
+                                            @else
                                             <option value="{{ $level->id }}">Niveau {{ $level->name }}</option>
+                                            @endif
                                             @endforeach
                                             @endisset
                                         </select>
@@ -341,7 +345,11 @@
                                         <select name="semester" data-te-select-init data-te-select-placeholder="Semester">
                                             @isset($semesters)
                                             @foreach($semesters as $semester)
+                                            @if($semester->name != 2)
+                                            <option value="{{ $semester->id }}" disabled>Semestre {{ $semester->name }}</option>
+                                            @else
                                             <option value="{{ $semester->id }}">Semestre {{ $semester->name }}</option>
+                                            @endif
                                             @endforeach
                                             @endisset
                                         </select>
@@ -528,7 +536,7 @@
                     </div>
                 </div>
                 <div>
-                    {{ $courses->links() }}
+                    {{ $papers->links() }}
                 </div>
             </div>
         </div>

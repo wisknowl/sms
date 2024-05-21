@@ -18,7 +18,11 @@
             </h2>
         </div>
         <div class="flex justify-end">
+            @if($course_paper == 1)
             <button wire:click="updateMarks" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Enregistrer</button>
+            @else
+            <button wire:click="update_bts_marks" class="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Enregistrer</button>
+            @endif
         </div>
         <div class="my-2 px-3 rounded bg-slate-100">
 
@@ -59,14 +63,15 @@
                 <div>
                     <div class="mt-1 flex items-center">
                         <div class="mr-3 rounded flex items-center">
-                            <input id="1" type="radio" wire:model="pvmod" wire:click="updatePV" value="1" name="PV" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                            <input id="1" type="radio" wire:model="course_paper" wire:click="updateCP" value="1" name="PV" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                             <label>EC</label>
                         </div>
                         <div class="rounded flex items-center">
-                            <input id="2" type="radio" wire:model="pvmod" wire:click="updatePV" value="2" name="PV" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                            <input id="2" type="radio" wire:model="course_paper" wire:click="updatePapers" value="2" name="PV" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                             <label>Epreuve BTS Blanc</label>
                         </div>
                     </div>
+                    @if($course_paper == 1)
                     <select wire:model.lazy.500ms="coursemod" mul wire:change="updateStudents" name="course_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
                         @isset($courses)
                         @php($sum_credit = 0)
@@ -79,6 +84,20 @@
                         <option value="0">Aucun cours trouver</option>
                         @endisset
                     </select>
+                    @else
+                    <select wire:model.lazy.500ms="papermod" mul wire:change="updateStudentsBts" name="paper_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm !important">
+                        @isset($papers)
+                        @php($sum_credit = 0)
+                        @foreach($papers as $paper)
+                        <option value="{{ $paper->id }}">{{ strtoupper($paper->name) }} ___ {{$paper->credit_points}}</option>
+                        @php($sum_credit = $sum_credit + $paper->credit_points)
+                        @endforeach
+                        <option value="1" class="text-bold">Crédit Total : {{$sum_credit}}</option>
+                        @else
+                        <option value="0">Aucun Epreuve trouver</option>
+                        @endisset
+                    </select>
+                    @endif
                 </div>
             </div>
             <div class="pb-4 grid grid-cols-4 gap-4">
@@ -98,10 +117,12 @@
             <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                     <div class="overflow-hidden border rounded">
+                        @if($course_paper == 1)
+
                         <table class="min-w-full text-center text-sm font-light">
                             <thead class="border-b font-medium dark:border-neutral-500">
                                 <tr>
-                                    <th scope="col" class="px-4 py-1 border">Index</th>
+                                    <th scope="col" class="px-4 py-1 border">#</th>
                                     <th scope="col" class="px-4 py-1 border">Matricule</th>
                                     <th scope="col" class="px-4 py-1 border">Nom</th>
                                     <th scope="col" class="px-4 py-1 border">Note CC</th>
@@ -177,11 +198,60 @@
                                 @php($count = $count + 1)
                                 @empty
                                 <tr>
-                                    <td colspan="8" class="whitespace-nowrap px-4 py-1 border">No Students found</td>
+                                    <td colspan="8" class="whitespace-nowrap px-4 py-1 border">Aucun Etudiant trouver</td>
                                 </tr>
                                 @endforelse
                             </tbody>
                         </table>
+                        @else
+                        <table class="min-w-full text-center text-sm font-light">
+                            <thead class="border-b font-medium dark:border-neutral-500">
+                                <tr>
+                                    <th scope="col" class="px-4 py-1 border">#</th>
+                                    <th scope="col" class="px-4 py-1 border">Matricule</th>
+                                    <th scope="col" class="px-4 py-1 border">Nom</th>
+                                    <th scope="col" class="px-4 py-1 border">Note BTS Blanc</th>
+                                </tr>
+                            </thead>
+                            <style>
+                                .center-placeholder {
+                                    text-align: center;
+
+                                    ::placeholder {
+                                        text-align: center;
+                                    }
+                                }
+                            </style>
+                            <tbody>
+                                @php($count = 1)
+                                @forelse($paper_students as $paper_student)
+                                <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
+                                    <td class="whitespace-nowrap px-4 py-1 border font-medium">{{ $count }}</td>
+
+                                    <td class="whitespace-nowrap px-4 py-1 border font-medium">{{ $paper_student->student->matricule }}</td>
+                                    <td class="whitespace-nowrap px-4 py-1 border">{{ $paper_student->student->name }}</td>
+                                    @if($count % 2 == 0)
+                                    <td class="whitespace-nowrap px-4 py-1 border">
+                                        <input id="number-input" placeholder="{{ old('mark.'.$paper_student->id, $paper_student->mark) }}" type="number" wire:key="{{ $paper_student->id }}" wire:model="mark.{{ $paper_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-full focus:border-t-0 border-0 bg-neutral-200">
+                                    </td>
+
+                                    @else
+                                    <td class="whitespace-nowrap px-4 py-1 border">
+                                        <input id="number-input" placeholder="{{ old('mark.'.$paper_student->id, $paper_student->mark) }}" type="number" wire:key="{{ $paper_student->id }}" wire:model="mark.{{ $paper_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-full focus:border-t-0 border-0 bg-neutral-100">
+                                    </td>
+
+                                    @endif
+
+                                </tr>
+                                @php($count = $count + 1)
+                                @empty
+                                <tr>
+                                    <td colspan="8" class="whitespace-nowrap px-4 py-1 border">Aucun Etudiant trouver</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        @endif
                     </div>
                 </div>
             </div>

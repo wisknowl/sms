@@ -45,6 +45,10 @@ class student extends Model
     {
         return $this->belongsToMany('App\Models\course', 'course_students', 'student_id', 'course_id');
     }
+    public function paper(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\paper', 'student_papers', 'student_id', 'paper_id');
+    }
     public function levels()
     {
         return $this->belongsToMany('App\Models\Level', 'student_levels', 'student_id', 'level_id')

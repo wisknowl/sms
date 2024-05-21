@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('papers', function (Blueprint $table) {
             $table->id();
+            $table->string('name'); 
+            $table->unsignedInteger('credit_points');
+            $table->foreignId('level_id')->references('id')->on('levels')->cascadeOnDelete();
+            $table->foreignId('semester_id')->references('id')->on('semesters')->cascadeOnDelete();
+            $table->foreignId('specialty_id')->references('id')->on('specialties')->cascadeOnDelete(); 
             $table->timestamps();
         });
     }

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('student_papers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('student_id')->references('id')->on('students')->cascadeOnDelete(); 
+            $table->foreignId('paper_id')->references('id')->on('papers')->cascadeOnDelete();
+            $table->decimal('mark', 5, 2)->default(0);
             $table->timestamps();
         });
     }
