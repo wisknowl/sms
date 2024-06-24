@@ -127,7 +127,7 @@ class StudentLw extends Component
 
     public function getFilteredStudents()
     {
-        return student::with('specialty', 'levels', 'cycle')->orderBy('id', 'desc')
+        return student::with('specialty', 'levels', 'cycle')->orderBy('specialty_id', 'desc')
             ->when($this->cycle, function ($query) {
                 return $query->where('cycle_id', $this->cycle);
             })

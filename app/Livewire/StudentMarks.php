@@ -61,6 +61,8 @@ class StudentMarks extends Component
     public $paper_students;
     public $papermod;
     public $mark = [];
+    public $courseName;
+    public $paperName;
     public function mount()
     {
         // $this->a_year = $a_year; 
@@ -98,6 +100,8 @@ class StudentMarks extends Component
         }
         $this->course_paper = 1;
         $this->updatePapers();
+        $first_paper = $this->papers[0];
+        $this->papermod = $first_paper->id;
         $this->updateStudentsBts();
     }
     public function academicYear()
@@ -186,7 +190,8 @@ class StudentMarks extends Component
 
     public function updateStudents()
     {
-        // query for the students based on the selected course
+        $this->courseName = course::find($this->coursemod)->code . " " . course::find($this->coursemod)->name . " " . " ___" . course::find($this->coursemod)->credit_points;
+
         $academic_year = $this->getAcademicYear();
         // dd($this->coursemod);
         $this->students = Student::whereHas('course', function ($query) {
@@ -218,6 +223,7 @@ class StudentMarks extends Component
 
     public function updateStudentsBts()
     {
+        $this->paperName = paper::find($this->papermod)->name . " " . " ___" . paper::find($this->papermod)->credit_points;
         $specialty_id = $this->specialty;
         $this->paper_students = student_paper::with('student', 'paper')
             ->where('paper_id', $this->papermod)

@@ -162,7 +162,11 @@
                                             <th scope="col" class="whitespace-nowrap px-4 py-2 border">Reste (xaf)</th>
                                             <th scope="col" class="whitespace-nowrap px-4 py-2 border">Référence</th>
                                             <th scope="col" class="whitespace-nowrap px-4 py-2 border">Jour du versement</th>
+                                            @role('admin|cashier')
                                             <th scope="col" class="whitespace-nowrap px-4 py-2 border">Action</th>
+                                            @else
+                                            <th scope="col" class="whitespace-nowrap px-4 py-2 border">View</th>
+                                            @endrole
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -181,6 +185,7 @@
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $facture->reference_id }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ \Carbon\Carbon::parse($facture->created_at)->format('d-m-Y H:i:s') }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
+                                                @role('admin|cashier')
                                                 <button type="button" wire:click.prevent='setDeleteId({{ $facture->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" disabled data-te-toggle="modal" data-te-target="#deleteModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -200,6 +205,7 @@
                                                         </svg>
                                                     </span>
                                                 </button>
+                                                @endrole
                                                 <a href="{{ asset('storage/factures/' . $facture->pdf_name) }}" target="_blank">
                                                     <button class="font-medium text-blue-600 dark:text-red-500 hover:underline flex items-center">
                                                         <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">

@@ -61,14 +61,14 @@
                     </select>
                 </div>
                 <div>
-                    <div class="mt-1 flex items-center">
-                        <div class="mr-3 rounded flex items-center">
+                    <div class=" flex justify-around items-center">
+                        <div class="mr-0 rounded flex justify-between items-center">
                             <input id="1" type="radio" wire:model="course_paper" wire:click="updateCP" value="1" name="PV" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label>EC</label>
+                            <div class="ml-1"><label>EC</label></div>
                         </div>
-                        <div class="rounded flex items-center">
+                        <div class="rounded flex justify-between items-center">
                             <input id="2" type="radio" wire:model="course_paper" wire:click="updatePapers" value="2" name="PV" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label>Epreuve BTS Blanc</label>
+                            <div class="ml-1"><label>Epreuve BTS Blanc</label></div>
                         </div>
                     </div>
                     @if($course_paper == 1)
@@ -101,13 +101,16 @@
                 </div>
             </div>
             <div class="pb-4 grid grid-cols-4 gap-4">
-                <button id="dropdownRadioBgHoverButton" data-dropdown-toggle="delib" class="flex justify-evenly items-center whitespace-nowrap rounded bg-white  pb-1 pt-1.5 text-xs font-medium uppercase leading-normal text-neutral-800 shadow-[0_4px_9px_-4px_#fbfbfb] transition duration-150 ease-in-out hover:bg-neutral-100 hover:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:bg-neutral-100 focus:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] focus:outline-none focus:ring-0 active:bg-neutral-200 active:shadow-[0_8px_9px_-4px_rgba(251,251,251,0.3),0_4px_18px_0_rgba(251,251,251,0.2)] motion-reduce:transition-none" type="button">
+                <button id="dropdownRadioBgHoverButton" data-dropdown-toggle="delib" class="flex justify-evenly items-center whitespace-nowrap rounded bg-white  pb-1 pt-1.5 text-xs font-medium uppercase leading-normal text-neutral-800 shadow-sm" type="button">
                     Saisir La note de Déliberation
                     <svg class="w-2.5 h-2.5 ms-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
                     </svg>
                 </button>
+
             </div>
+
+
             <!-- Dropdown menu -->
             <div id="delib" class="z-10 hidden p-4 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
                 <input placeholder="0.00" type="number" wire:model="noteDeliberation" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-200">
@@ -118,7 +121,11 @@
                 <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                     <div class="overflow-hidden border rounded">
                         @if($course_paper == 1)
-
+                        <div class="grid grid-cols-1">
+                            <div class="py-2 flex justify-center items-center whitespace-nowrap rounded bg-white text-black text-sm font-medium uppercase">
+                                {{$courseName}}
+                            </div>
+                        </div>
                         <table class="min-w-full text-center text-sm font-light">
                             <thead class="border-b font-medium dark:border-neutral-500">
                                 <tr>
@@ -204,6 +211,11 @@
                             </tbody>
                         </table>
                         @else
+                        <div class="grid grid-cols-1">
+                            <div class="py-2 flex justify-center items-center whitespace-nowrap rounded bg-white text-black text-sm font-medium uppercase">
+                                {{$paperName}}
+                            </div>
+                        </div>
                         <table class="min-w-full text-center text-sm font-light">
                             <thead class="border-b font-medium dark:border-neutral-500">
                                 <tr>

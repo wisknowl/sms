@@ -39,7 +39,7 @@
                         </svg>
                     </button>
                     <!-- Dropdown menu -->
-                    <div id="dropdown" class="z-40 !visible hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-60 dark:bg-gray-700">
+                    <div wire:ignore id="dropdown" class="z-10 !visible hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-60 dark:bg-gray-700">
                         <ul class="text-start py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
                             <li>
                                 <h2 class="mb-0" id="headingTwo">
@@ -78,35 +78,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <hr class=" h-0 border border-t-0 border-solid border-neutral-700 opacity-25 dark:border-neutral-200" />
-                            <li>
-                                <h2 class="mb-0" id="headingThree">
-                                    <button class="group relative flex w-full items-center rounded-none border-0 bg-white px-3 py-2 text-left text-base text-neutral-800 transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white [&:not([data-te-collapse-collapsed])]:bg-white [&:not([data-te-collapse-collapsed])]:text-primary [&:not([data-te-collapse-collapsed])]:[box-shadow:inset_0_-1px_0_rgba(229,231,235)] dark:[&:not([data-te-collapse-collapsed])]:bg-neutral-800 dark:[&:not([data-te-collapse-collapsed])]:text-primary-400 dark:[&:not([data-te-collapse-collapsed])]:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]" type="button" data-te-collapse-init data-te-collapse-collapsed data-te-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        Unité D'enseignement
-                                        <span class="-mr-1 ml-auto h-5 w-5 shrink-0 rotate-[-180deg] fill-[#336dec] transition-transform duration-200 ease-in-out group-[[data-te-collapse-collapsed]]:mr-0 group-[[data-te-collapse-collapsed]]:rotate-0 group-[[data-te-collapse-collapsed]]:fill-[#212529] motion-reduce:transition-none dark:fill-blue-300 dark:group-[[data-te-collapse-collapsed]]:fill-white">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                </h2>
-                                <div id="collapseThree" class="!visible hidden" data-te-collapse-item aria-labelledby="headingThree" data-te-parent="#ue">
-                                    <div class="">
-                                        <ul class="overflow-auto h-52 w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                            @foreach($ues as $ue)
-                                            <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                                <div>
-                                                    <div class="flex items-center pl-3 hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                        <input id="{{ $ue->id }}" type="radio" wire:model="ue" wire:click="fs" value="{{ $ue->id }}" name="{{ $ue->name }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                                        <label for="{{ $ue->id }}" class="ms-2 py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $ue->name }}</label>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
+                            
                             <hr class=" h-0 border border-t-0 border-solid border-neutral-700 opacity-25 dark:border-neutral-200" />
                             <li>
                                 <h2 class="mb-0" id="headingFour">
@@ -302,7 +274,7 @@
                             <div class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
                                 <!--Modal title-->
                                 <h5 class="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="exampleModalCenterTitle">
-                                    COURS
+                                    ELEMENT CONSTITUTIF
                                 </h5>
                                 <!--Close button-->
                                 <button type="button" class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" data-te-modal-dismiss aria-label="Close">
@@ -363,7 +335,7 @@
                                         <select name="level" data-te-select-init data-te-select-placeholder="Niveau">
                                             @isset($levels)
                                             @foreach($levels as $level)
-                                            <option value="{{ $level->id }}">Niveau{{ $level->name }}</option>
+                                            <option value="{{ $level->id }}">Niveau {{ $level->name }}</option>
                                             @endforeach
                                             @endisset
                                         </select>
@@ -456,7 +428,7 @@
                             <div class="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4 dark:border-opacity-50">
                                 <!--Modal title-->
                                 <h5 class="text-xl uppercase font-medium leading-normal text-neutral-800 dark:text-neutral-200" id="updateModalLabel">
-                                    MODIFIER le cours
+                                    MODIFIER L'ELEMENT CONSTITUTIF
                                 </h5>
                                 <!--Close button-->
                                 <button type="button" class="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none" data-te-modal-dismiss aria-label="Close">

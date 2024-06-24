@@ -34,11 +34,11 @@ class CourseLw extends Component
         $this->academic_year = $this->getAcademicYear();
         // $first_a_year = academic_year::first();
         // $this->academic_year = $first_a_year->name;
-        $first_specialty = specialty::first();
-        $this->specialty = $first_specialty->id;
-        $first_level = level::first();
-        $this->level = $first_level->id;
-        $this->fs();
+        // $first_specialty = specialty::first();
+        // $this->specialty = $first_specialty->id;
+        // $first_level = level::first();
+        // $this->level = $first_level->id;
+        // $this->fs();
     }
     public function nf()
     {
@@ -96,7 +96,7 @@ class CourseLw extends Component
             return $query->where('level_id', $this->level);
         })
             ->when($this->specialty, function ($query) {
-                $ue_ids = unite_enseignement::where('specialty_id', $this->specialty)->where('level_id',$this->level)->where('semester_id',session('semester_id'))->where('semester_id',session('semester_id'))->pluck('id')->toArray();
+                $ue_ids = unite_enseignement::where('specialty_id', $this->specialty)->where('semester_id',session('semester_id'))->pluck('id')->toArray();
                 $result = array();
 
                 foreach ($ue_ids as $ue_id) {
@@ -117,7 +117,7 @@ class CourseLw extends Component
                 });
             })->get();
         $sql = $courses->toSql();
-        $courses = $courses->paginate(10);
+        $courses = $courses->paginate(20);
         $levels = level::all();
         $academic_years = academic_year::all();
         $semesters = semester::all();

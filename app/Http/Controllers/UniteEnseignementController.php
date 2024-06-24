@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Session;
 use App\Exports\Ues;
 use Maatwebsite\Excel\Facades\Excel;
@@ -11,7 +12,9 @@ use Illuminate\View\View;
 use App\Models\level;
 use App\Models\semester;
 use App\Models\specialty;
+use App\Models\student;
 use App\Models\unite_enseignement;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -96,6 +99,20 @@ class UniteEnseignementController extends Controller
             $ue_obj->specialty_id = $specialty;
             $ue_obj->description = $description;
             $ue_obj->save();
+            $ue_id = $ue_obj->id;
+
+
+            $query = student::where('specialty_id', $specialty);
+            $year_session = Session::get('year_name');
+            $students = $query->whereHas('levels', function ($query)  use ($level, $year_session) {
+                $query->where('academic_year', $year_session)->where('level_id', $level);
+            })->get();
+            foreach ($students as $student) {
+                // dump($student->name);
+                $timestamp = Carbon::now()->format('Y-m-d H:i:s');
+                $student->ues()->syncWithoutDetaching($ue_id, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+            }
+            // dd(2);
         });
         notify()->success('Unite Denseignement Creer avec succès');
         return redirect()->back();
@@ -123,7 +140,7 @@ class UniteEnseignementController extends Controller
     // public function update(Request $request, unite_enseignement $unite_enseignement)
     // {
     // }
-    
+
     public function updateUe(Request $request)
     {
         $ue_id = strip_tags($request->input('id'));

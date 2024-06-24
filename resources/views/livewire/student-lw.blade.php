@@ -232,6 +232,8 @@
                                             <th scope="col" class="px-4 py-2 border">Matricule</th>
                                             <th scope="col" class="px-4 py-2 border">Name</th>
                                             <th scope="col" class="px-4 py-2 border">Email</th>
+                                            <th scope="col" class="px-4 py-2 border">Phone</th>
+                                            <th scope="col" class="px-4 py-2 border">POB</th>
                                             <th scope="col" class="px-4 py-2 border">Action</th>
                                         </tr>
                                     </thead>
@@ -243,6 +245,8 @@
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $student->matricule }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $student->name }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $student->email }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $student->mobile }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $student->pob }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
                                                 <button type="button" wire:click.prevent='setDeleteId({{ $student->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
@@ -255,7 +259,7 @@
 
                                                 <!-- <button wire:click="$emit('openModal', 'mymodal')">Open Modal</button> X-->
                                                 <!-- <button wire:click="$dispatch('openModal', {component: 'mymodal'})"></button> -->
-                                                <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal" data-te-id="{{ $student->id }}" data-te-name="{{ $student->name }}" data-te-email="{{ $student->email }}" data-te-phone="{{ $student->mobile }}" data-te-pob="{{ $student->pob }}" data-te-dob="{{ $student->dob }}" data-te-target="#updateModal">
+                                                <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal" data-te-id="{{ $student->id }}" data-te-name="{{ $student->name }}" data-te-mat="{{ $student->matricule }}" data-te-email="{{ $student->email }}" data-te-phone="{{ $student->mobile }}" data-te-pob="{{ $student->pob }}" data-te-dob="{{ $student->dob }}" data-te-target="#updateModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" id="edit" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
                                                             <path id="secondary" d="M21,22H3a1,1,0,0,1,0-2H21a1,1,0,0,1,0,2Z" style="fill: rgb(44, 169, 188);"></path>
@@ -473,6 +477,12 @@
                                     <div class="relative mb-3" data-te-input-wrapper-init>
                                         <input name="upName" id="name" type="text" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" required />
                                         <label for="exampleFormControlInput1" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Name
+                                        </label>
+                                    </div>
+                                    <!-- Matricule -->
+                                    <div class="relative mb-3" data-te-input-wrapper-init>
+                                        <input name="upMatricule" id="matricule" type="text" class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0" id="exampleFormControlInput1" placeholder="Example label" required />
+                                        <label for="exampleFormControlInput4" class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Matricule
                                         </label>
                                     </div>
                                     <!-- Email -->

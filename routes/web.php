@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\pvblanc;
 use App\Exports\SpecialtyExport;
 use App\Exports\pvsn;
 use App\Livewire\StudentLw;
@@ -96,7 +97,9 @@ Route::get('/admin', function (Request $request) {
         $semester_id = Session::get('semester_id');
         $semester_name = Session::get('semester_name');
     }
-    $students = student::orderBy('id', 'desc')->get();
+    $students = student::orderBy('id', 'desc')->whereHas('levels', function ($query) use ($year_name) {
+        $query->where('academic_year', $year_name)->where('level_id', 11);
+    })->get();
     $data = array();
     $validated_ue = array();
     $not_validated_ue = array();
@@ -310,10 +313,10 @@ Route::get('/dashboard', function (Request $request) {
     return view('dashboard', compact('academic_years', 'semesters', 'user_count', 'count', 'specialty_count', 'ue_count', 'course_count', 'validated_ue_percent', 'not_validated_ue_percent'));
 })->middleware(['auth', 'verified', 'set_session_values', 'localization'])->name('dashboard');
 
-Route::get('transcript_list/{student_list}/{academic_year_mod}/{tdr}/{semester_mod}', [LivewireRelever::class, 'transcript_list'])
+Route::get('transcript_list/{student_list}/{academic_year_mod}/{tdr}/{semester_mod}/{specialtyNameLevel}', [LivewireRelever::class, 'transcript_list'])
     ->middleware(['auth', 'verified', 'set_session_values', 'localization'])
     ->name('Transcript_list');
-Route::get('generateTranscript/{id}/{academic_year_mod}/{tdr}/{semester_mod}', [LivewireRelever::class, 'generateTranscript'])
+Route::get('generateTranscript/{id}/{academic_year_mod}/{tdr}/{semester_mod}/{name}', [LivewireRelever::class, 'generateTranscript'])
     ->middleware(['auth', 'verified', 'set_session_values', 'localization'])
     ->name('Transcript');
 Route::get('generatePV/{id}', [Specialty::class, 'generatePV'])->name('PV');
@@ -343,6 +346,16 @@ Route::get('exportpvsn/{id}/{level_id}/{semester_id}/{a_year}', function ($id, $
     $file_name = $specialty->code . '_N' . $level->name . '_S' . $semester->name . '_' . $a_year . '.xlsx';
     // return Excel::download(new SpecialtyExport($id, $level_id, $semester_id, $a_year), '$file_name.xlsx');
     return Excel::download(new pvsn($id, $level_id, $semester_id, $a_year), $file_name);
+});
+Route::get('exportpvblanc/{id}/{level_id}/{semester_id}/{a_year}', function ($id, $level_id, $semester_id, $a_year) {
+    // Get the models by their ids
+    $specialty = ModelsSpecialty::find($id);
+    $level = level::find($level_id);
+    $semester = semester::find($semester_id);
+    // Create the file name using the model attributes
+    $file_name = $specialty->code . '_N' . $level->name . '_S' . $semester->name . '_' . $a_year . '.xlsx';
+    // return Excel::download(new SpecialtyExport($id, $level_id, $semester_id, $a_year), '$file_name.xlsx');
+    return Excel::download(new pvblanc($id, $level_id, $semester_id, $a_year), $file_name);
 });
 
 Route::get('/switch/{locale}', [LanguageController::class, 'switch'])->name('lang.switch');

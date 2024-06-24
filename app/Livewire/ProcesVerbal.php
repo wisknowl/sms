@@ -13,6 +13,8 @@ use App\Models\student;
 use App\Models\unite_enseignement;
 use App\Models\course;
 use App\Models\course_student;
+use App\Models\paper;
+use App\Models\student_paper;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -32,6 +34,8 @@ class ProcesVerbal extends Component
     public $ues;
     public $courses;
     public $st_courses;
+    public $papers;
+    public $student_papers;
 
     public function mount(Request $request)
     {
@@ -79,8 +83,11 @@ class ProcesVerbal extends Component
         $first_level = $this->levels[0];
         $this->levelmod = $first_level->id;
 
-        $this->pvmod = 1;
-        $this->students = student::where('specialty_id', $this->specialty)->with('levels')->get();
+        $this->pvmod = 2;
+        $this->students = student::where('specialty_id', $this->specialty)->with('levels')
+            ->whereHas('levels', function ($query) {
+                $query->where('academic_year', $this->academic_year_mod)->where('level_id', $this->levelmod);
+            })->get();
         $this->ues = unite_enseignement::orderBy('code', 'asc')->where('specialty_id', $this->specialty)->where('level_id', $this->levelmod)->where('semester_id', $this->semestermod)->get();
 
         $ue_ids = unite_enseignement::where('specialty_id', $this->specialty)->where('level_id', $this->levelmod)->where('semester_id', $this->semestermod)->pluck('id')->toArray();
@@ -101,6 +108,12 @@ class ProcesVerbal extends Component
         }
         $this->st_courses = course_student::with('student', 'course')->whereIn('id', $res)->get();
 
+        $this->papers = paper::where('specialty_id', $this->specialty)->get();
+        $this->student_papers = student_paper::with('student', 'paper')
+            ->whereHas('paper', function ($query) {
+                $query->where('specialty_id', $this->specialty);
+            })->get();
+        // dd($this->papers, $this->student_papers);
     }
     public function updateSpecialties()
     {
@@ -108,33 +121,25 @@ class ProcesVerbal extends Component
     }
     public function updateLevels()
     {
-        $this->levels = level::whereHas('specialties', function ($query) {
-            $query->where('specialty_id', $this->specialty);
-        })->get();
+        // $this->levels = level::whereHas('specialties', function ($query) {
+        //     $query->where('specialty_id', $this->specialty);
+        // })->get();
+        $this->levels = level::all();
     }
-    public function pv(){
-
+    public function pv()
+    {
     }
-    public funCtion updatePV(){
+    public function updatePV()
+    {
         // dd($this->pvmod);
         $specialty = Specialty::find($this->specialty);
         $name = $specialty->name;
         $level_id = $this->levelmod;
         $semester = $this->semestermod;
-        $this->students = student::where('specialty_id', $this->specialty)->with('levels')->get();
-        // foreach($students as $student){
-        // foreach ($student->levels as $level) {
-        // $id = $level->id;
-        // if ($id == $level_id) {
-        //     echo '<pre>';
-        //     print_r($id);
-        //     // dd($id);
-        //     echo '</pre>';
-        // }
-
-        // }
-        // }
-        // dd($this->students);
+        $this->students = student::where('specialty_id', $this->specialty)->with('levels')
+            ->whereHas('levels', function ($query) {
+                $query->where('academic_year', $this->academic_year_mod)->where('level_id', $this->levelmod);
+            })->get();
         $this->ues = unite_enseignement::orderBy('code', 'asc')->where('specialty_id', $this->specialty)->where('level_id', $this->levelmod)->where('semester_id', $this->semestermod)->get();
 
         $ue_ids = unite_enseignement::where('specialty_id', $this->specialty)->where('level_id', $this->levelmod)->where('semester_id', $this->semestermod)->pluck('id')->toArray();
@@ -154,8 +159,15 @@ class ProcesVerbal extends Component
             // dump($i, $stc_id, $res);
         }
         $this->st_courses = course_student::with('student', 'course')->whereIn('id', $res)->get();
+
+        $this->papers = paper::where('specialty_id', $this->specialty)->get();
+        $this->student_papers = student_paper::with('student', 'paper')
+            ->whereHas('paper', function ($query) {
+                $query->where('specialty_id', $this->specialty);
+            })->get();
     }
-    public funCtion updatePVSN(){
+    public function updatePVSN()
+    {
         dd($this->pvmod);
     }
     function getAcademicYear()
@@ -179,6 +191,6 @@ class ProcesVerbal extends Component
         $specialtys = $specialties->paginate(3);
         $academic_years = academic_year::all();
         config(['app.name' => 'Proces Verbal']);
-        return view('livewire.proces-verbal', compact('academic_years', 'semesters', 'specialtys','cycles'));
+        return view('livewire.proces-verbal', compact('academic_years', 'semesters', 'specialtys', 'cycles'));
     }
 }

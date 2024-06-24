@@ -2,10 +2,12 @@
 
 namespace App\Exports;
 
+use App\Models\student_paper;
 use App\Models\academic_year;
 use App\Models\course;
 use App\Models\course_student;
 use App\Models\level;
+use App\Models\paper;
 use App\Models\semester;
 use App\Models\Specialty;
 use App\Models\student;
@@ -18,12 +20,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Sheet;
-
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
 
-class SpecialtyExport implements FromView, WithEvents
+class pvblanc implements FromView, WithEvents
 {
     protected $id;
     protected $level_id;
@@ -74,7 +75,7 @@ class SpecialtyExport implements FromView, WithEvents
                 $cellStyle1 = $event->sheet->getStyle('2:2');
                 $cellStyle1->getAlignment()->setWrapText(true);
                 $cellStyle1->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-                $sheet->getRowDimension(2)->setRowHeight(110);
+                $sheet->getRowDimension(2)->setRowHeight(15);
 
                 $cellStyle2 = $event->sheet->getStyle("D4:{$highestColumn}4");
                 foreach (range('D', "{$highestColumn}") as $column) {
@@ -124,7 +125,7 @@ class SpecialtyExport implements FromView, WithEvents
                 // Create a new RichText object
                 $text = new \PhpOffice\PhpSpreadsheet\RichText\RichText();
                 // Add the first part of the text without underline
-                $text->createText("PROCES VERBAL CONTROLE CONTINU\n");
+                $text->createText("PROCES VERBAL BTS BLANC\n");
                 $underline = $text->createTextRun("Annee academique:");
                 $underline->getFont()->setUnderline(true);
 
@@ -184,18 +185,7 @@ class SpecialtyExport implements FromView, WithEvents
         $level_id = $this->level_id;
         $semester = $this->semester_id;
         $students = student::where('specialty_id', $this->id)->with('levels')->get();
-        // foreach($students as $student){
-        // foreach ($student->levels as $level) {
-        // $id = $level->id;
-        // if ($id == $level_id) {
-        //     echo '<pre>';
-        //     print_r($id);
-        //     // dd($id);
-        //     echo '</pre>';
-        // }
-
-        // }
-        // }
+        
         // dd($students);
         $ues = unite_enseignement::orderBy('code', 'asc')->where('specialty_id', $this->id)->where('level_id', $this->level_id)->where('semester_id', $this->semester_id)->get();
 
@@ -216,6 +206,12 @@ class SpecialtyExport implements FromView, WithEvents
             // dump($i, $stc_id, $res);
         }
         $st_courses = course_student::with('student', 'course')->whereIn('id', $res)->get();
-        return view('export.pvcc', compact('name', 'level_id', 'semester', 'students', 'ues', 'courses', 'st_courses'));
+
+        $papers = paper::where('specialty_id', $this->id)->get(); 
+        $student_papers = student_paper::with('student', 'paper')
+            ->whereHas('paper', function ($query) {
+                $query->where('specialty_id', $this->id);
+            })->get();
+        return view('export.pvblanc', compact('name', 'level_id', 'semester', 'students', 'papers', 'student_papers'));
     }
 }

@@ -99,20 +99,22 @@
             <table border="0px" class="table">
                 <thead style="background-color: lightgray;text-align:center; font-size:10px;">
                     <tr class="table-danger">
-                        <th>Unit code</th>
-                        <th>Course code</th>
-                        <th>Course title</th>
-                        <th>Planned Credit</th>
-                        <th>Mark/20</th>
-                        <th>Earned Credit</th>
-                        <th>Grade</th>
-                        <th>Decision</th>
-                        <th>Session</th>
+                        <th style="padding: 2px">{{ __('transcript.unit_code') }}</th>
+                        <th>{{ __('transcript.course_code') }}</th>
+                        <th>{{ __('transcript.course_title') }}</th>
+                        <th>{{ __('transcript.p_credit') }}</th>
+                        <th>{{ __('transcript.mark_20') }}</th>
+                        <th>{{ __('transcript.e_credit') }}</th>
+                        <th>{{ __('transcript.grade') }}</th>
+                        <th>{{ __('transcript.dec') }}</th>
+                        <th>{{ __('transcript.session') }}</th>
                     </tr>
                 </thead>
                 <tbody style="background-color: white; text-align: center; font-size: 10px;">
                     @php($total_credit_obtain=0)
                     @php($total_credit=0)
+                    @php($annual_avg=0)
+                    @php($checkSemester = 1)
                     @foreach($transcript['semesters'] as $semester)
                     @if($transcript['tdr'] == 1 && $transcript['semester_mod'] == $semester->name)
                     @php($course_credit_sum=0)
@@ -122,7 +124,13 @@
                     <tr style="font-size: 9px; text-align: center; background-color:lightblue">
                         <td class="border-0"></td>
                         <td class="border-0"></td>
-                        <td class="border-0" style="text-align: left;">{{$course_nature->id}}-{{ strtoupper($course_nature->name) }}</td>
+                        @if($course_nature->id == 1)
+                        <td class="border-0" style="text-align: left;">{{$course_nature->id}}-{{ __('transcript.fund') }}</td>
+                        @elseif($course_nature->id == 2)
+                        <td class="border-0" style="text-align: left;">{{$course_nature->id}}-{{ __('transcript.prof') }}</td>
+                        @else
+                        <td class="border-0" style="text-align: left;">{{$course_nature->id}}-{{ __('transcript.trav') }}</td>
+                        @endif
                         <td class="border-0"></td>
                         <td class="border-0"></td>
                         <td class="border-0"></td>
@@ -173,12 +181,14 @@
                         @php($courseavg)
                         @if($st_course->exam_marks < $st_course->reseat_mark)
                             @php($courseavg = (((((($st_course->ca_marks) / 20) * 30) + ((($st_course->reseat_mark) / 20) * 70)) / 100) * 20))
-                            <td>{{ $courseavg }}</td>
+                            @php($course_mark = number_format(ceil($courseavg * 100) / 100, 2, '.', ''))
+                            <td>{{ $course_mark }}</td>
                             @else
                             @php($courseavg = (((((($st_course->ca_marks) / 20) * 30) + ((($st_course->exam_marks) / 20) * 70)) / 100) * 20))
                             @php($course_mark = number_format(ceil($courseavg * 100) / 100, 2, '.', ''))
                             <td>{{ $course_mark }}</td>
                             @endif
+
                             @if($course_mark >= 10)
                             <td>{{ $st_course->course->credit_points }}</td>
                             @else
@@ -211,15 +221,19 @@
                     @endif
                     @endforeach
                     @endforeach
-                    <tr style="font-size: 10px; background-color:grey;">
+                    <tr style="font-size: 10px; background-color:#393F86; color:white; font-weight: bold; font-family:Verdana, Geneva, Tahoma, sans-serif;">
                         <th colspan="6">{{ __('transcript.credit_acquired') }} {{ strtoupper($semester->name) }}: {{ $credit }} on {{$course_credit_sum}}</th>
                         <th colspan="3">{{ __('transcript.average') }} : {{ number_format(ceil( $sumavg/$ue_credit_sum * 100) / 100, 2, '.', '') }}</th>
                     </tr>
                     @php($total_credit_obtain += $credit)
                     @php($total_credit += $course_credit_sum)
+                    @php($annual_avg = $annual_avg + number_format(ceil( $sumavg/$ue_credit_sum * 100) / 100, 2, '.', ''))
+                    @php($gpa = ($annual_avg/20)*4)
+                    @php($mention = $annual_avg)
                     @endif
 
                     @if($transcript['tdr'] == 2)
+                    @php($checkSemester = 2)
                     @php($course_credit_sum=0)
                     @php($credit = $sumavg = $count = $ue_credit_sum = 0)
                     @foreach($transcript['course_natures'] as $course_nature)
@@ -227,7 +241,13 @@
                     <tr style="font-size: 9px; text-align: center; background-color:lightblue">
                         <td class="border-0"></td>
                         <td class="border-0"></td>
-                        <td class="border-0" style="text-align: left;">{{$course_nature->id}}-{{ strtoupper($course_nature->name) }}</td>
+                        @if($course_nature->id == 1)
+                        <td class="border-0" style="text-align: left;">{{$course_nature->id}}-{{ __('transcript.fund') }}</td>
+                        @elseif($course_nature->id == 2)
+                        <td class="border-0" style="text-align: left;">{{$course_nature->id}}-{{ __('transcript.prof') }}</td>
+                        @else
+                        <td class="border-0" style="text-align: left;">{{$course_nature->id}}-{{ __('transcript.trav') }}</td>
+                        @endif
                         <td class="border-0"></td>
                         <td class="border-0"></td>
                         <td class="border-0"></td>
@@ -278,12 +298,16 @@
                         @php($courseavg)
                         @if($st_course->exam_marks < $st_course->reseat_mark)
                             @php($courseavg = (((((($st_course->ca_marks) / 20) * 30) + ((($st_course->reseat_mark) / 20) * 70)) / 100) * 20))
-                            <td>{{ $courseavg }}</td>
+                            @php($course_mark = number_format(ceil($courseavg * 100) / 100, 2, '.', ''))
+
+                            <td>{{ $course_mark }}</td>
                             @else
                             @php($courseavg = (((((($st_course->ca_marks) / 20) * 30) + ((($st_course->exam_marks) / 20) * 70)) / 100) * 20))
                             @php($course_mark = number_format(ceil($courseavg * 100) / 100, 2, '.', ''))
+
                             <td>{{ $course_mark }}</td>
                             @endif
+
                             @if($course_mark >= 10)
                             <td>{{ $st_course->course->credit_points }}</td>
                             @else
@@ -316,12 +340,15 @@
                     @endif
                     @endforeach
                     @endforeach
-                    <tr style="font-size: 10px; background-color:grey;">
-                        <th colspan="6">{{ __('transcript.credit_acquired') }} {{ strtoupper($semester->name) }}: {{ $credit }} on {{$course_credit_sum}}</th>
+                    <tr style="font-size: 10px; background-color:#393F86; color:white; font-weight: bold; font-family:Verdana, Geneva, Tahoma, sans-serif;">
+                        <th colspan="6">{{ __('transcript.credit_acquired') }} {{ strtoupper($semester->name) }}: {{ $credit }} {{ __('transcript.on') }} {{$course_credit_sum}}</th>
                         <th colspan="3">{{ __('transcript.average') }} : {{ number_format(ceil( $sumavg/$ue_credit_sum * 100) / 100, 2, '.', '') }}</th>
                     </tr>
                     @php($total_credit_obtain += $credit)
                     @php($total_credit += $course_credit_sum)
+                    @php($annual_avg = $annual_avg + number_format(ceil( $sumavg/$ue_credit_sum * 100) / 100, 2, '.', ''))
+                    @php($gpa = ($annual_avg/40)*4)
+                    @php($mention = $annual_avg/2)
                     @endif
                     @endforeach
                 </tbody>
@@ -330,11 +357,35 @@
         <div class="divb" style="margin-top: 0px;">
             <table class="table">
                 <tr style="font-size: 10px;">
-                    <td><label for="">{{ __('transcript.decision') }} : </label><span style="font-weight:bold;">Passed</span></td>
-                    <td><label for="">{{ __('transcript.gpa') }} : </label><span style="font-weight:bold;">2.619</span></td>
-                    <td><label for="">Grade : </label><span style="font-weight:bold;">C+</span></td>
-                    <td><label for="">{{ __('transcript.total_credit') }} : </label><span style="font-weight:bold;">{{$total_credit_obtain}} On {{$total_credit}}</span></td>
-                    <td><label for="">{{ __('transcript.appreciation') }} : </label><span style="font-weight:bold;">FAIRLY GOOD</span></td>
+                    <td><label for="">{{ __('transcript.decision') }} : </label>
+                        <span style="font-weight:bold;">
+                            @if($checkSemester == 1)
+                            @if($total_credit_obtain == 30)
+                            {{ __('transcript.passed') }}
+                            @else
+                            {{ __('transcript.failed') }}
+                            @endif
+                            @else
+                            @if($total_credit_obtain == 60)
+                            {{ __('transcript.passed') }}
+                            @else
+                            {{ __('transcript.failed') }}
+                            @endif
+                            @endif
+                        </span>
+                    </td>
+                    <td><label for="">{{ __('transcript.gpa') }} : </label><span style="font-weight:bold;">{{number_format($gpa, 3, '.', '') }}</span></td>
+                    <td>
+                        <label for="">Grade : </label>
+                        <span style="font-weight:bold;">
+                            @if( $gpa < 0 || $gpa==0) F @elseif( $gpa> 0 && $gpa < 1.3) F @elseif( $gpa==1.3 || ( $gpa> 1.3 && $gpa < 1.7)) D @elseif( $gpa==1.7 || ( $gpa> 1.7 && $gpa < 2.0)) C- @elseif( $gpa==2.0 || ( $gpa> 2.0 && $gpa < 2.3)) C @elseif( $gpa==2.3 || ( $gpa> 2.3 && $gpa < 2.7)) C+ @elseif( $gpa==2.7 || ( $gpa> 2.7 && $gpa < 3.0)) B- @elseif( $gpa==3.0 || ( $gpa> 3.0 && $gpa < 3.3)) B @elseif( $gpa==3.3 || ( $gpa> 3.3 && $gpa < 3.7)) B+ @elseif( $gpa==3.7 || ( $gpa> 3.7 && $gpa < 3.9)) A @else A+ @endif </span>
+                    </td>
+                    <td><label for="">{{ __('transcript.total_credit') }} : </label><span style="font-weight:bold;">{{$total_credit_obtain}} {{ __('transcript.on') }} {{$total_credit}}</span></td>
+                    <td>
+                        <label for="">{{ __('transcript.appreciation') }} : </label>
+                        <span style="font-weight:bold;">
+                            @if($mention < 0 || $mention==0) {{ __('transcript.null') }} @elseif($mention> 0 && $mention < 5) {{ __('transcript.null') }} @elseif($mention==5 || ($mention> 5 && $mention < 10)) {{ __('transcript.mediocre') }} @elseif($mention==10 || ($mention> 10 && $mention < 12)) {{ __('transcript.passable') }} @elseif($mention==12 || ($mention> 12 && $mention < 14)) {{ __('transcript.assez_bien') }} @elseif($mention==14 || ($mention> 14 && $mention < 17.5)) {{ __('transcript.bien') }} @else {{ __('transcript.tres_bien') }} @endif </span>
+                    </td>
                 </tr>
                 <tr style="font-size: 10px; text-align:end">
                     <td><label for="">{{ __('transcript.gpa') }} = </label><span>{{ __('transcript.gpaw') }}</span></td>

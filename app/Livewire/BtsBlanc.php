@@ -92,11 +92,12 @@ class BtsBlanc extends Component
         if (session()->has('semester_id')) {
             $semester_session = session('semester_id');
         }
-        $papers = paper::where('semester_id',$semester_session);
+        $papers = paper::where('semester_id',$semester_session)->with('specialty');
         // dd($papers);
-        // $papers->when($this->level, function ($query) {
-        //     return $query->where('level_id', $this->level);
-        // })
+        $papers->
+        when($this->specialty, function ($query) {
+            return $query->where('specialty_id', $this->specialty);
+        })
         //     ->when($this->specialty, function ($query) {
         //         $ue_ids = unite_enseignement::where('specialty_id', $this->specialty)->where('level_id',$this->level)->where('semester_id',session('semester_id'))->where('semester_id',session('semester_id'))->pluck('id')->toArray();
         //         $result = array();
@@ -111,13 +112,12 @@ class BtsBlanc extends Component
         //     ->when($this->ue, function ($query) {
         //         return $query->where('ue_id', $this->ue);
         //     })
-        //     ->when($this->search, function ($query) {
-        //         return $query->where(function ($query) {
-        //             $query->where('name', 'like', '%' . $this->search . '%')
-        //                 ->orwhere('code', 'like', '%' . $this->search . '%')
-        //                 ->orwhere('id', 'like', '%' . $this->search . '%');
-        //         });
-        //     })->get();
+            ->when($this->search, function ($query) {
+                return $query->where(function ($query) {
+                    $query->where('name', 'like', '%' . $this->search . '%')
+                        ->orwhere('id', 'like', '%' . $this->search . '%');
+                });
+            })->get();
         $sql = $papers->toSql();
         $papers = $papers->paginate(10);
         $levels = level::all();

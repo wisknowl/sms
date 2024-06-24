@@ -15,6 +15,7 @@ function fillModalForm(event) {
     var semester = button.getAttribute("data-te-semester");
 
     //student
+    var mat = button.getAttribute("data-te-mat");
     var email = button.getAttribute("data-te-email");
     var phone = button.getAttribute("data-te-phone");
     var pob = button.getAttribute("data-te-pob");
@@ -54,6 +55,7 @@ function fillModalForm(event) {
     var inputSemester = document.getElementById("semester");
 
     //student
+    var inputMat = document.getElementById("matricule");
     var inputEmail = document.getElementById("email");
     var inputPhone = document.getElementById("phone");
     var inputPob = document.getElementById("pob");
@@ -76,6 +78,7 @@ function fillModalForm(event) {
     }
 
     //student
+    inputMat.value = mat;
     inputEmail.value = email;
     inputPhone.value = phone;
     inputPob.value = pob;

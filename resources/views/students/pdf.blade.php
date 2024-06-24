@@ -131,6 +131,7 @@
                 <th>#</th>
                 <th>Matricule</th>
                 <th>Nom</th>
+                <th>Specialite</th>
             </thead>
             <tbody>
                 @php($count = 1)
@@ -139,6 +140,7 @@
                     <td>{{$count}}</td>
                     <td>{{$student->matricule}}</td>
                     <td>{{$student->name}}</td>
+                    <td>{{$student->specialty->name}}</td>
                 </tr>
                 @php($count =  $count + 1)
                 @endforeach

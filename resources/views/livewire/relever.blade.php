@@ -74,7 +74,8 @@
                     @php($student_array[] = null)
                     @endforelse
                     @php($student_list = serialize($student_array))
-                    <a href="{{ URL::to('transcript_list/' . $student_list .  '/' . $academic_year_mod . '/' . $tdr . '/' . $semester_mod) }}" target="_blank">
+                    @php($specialtyNameLevel = $specialtyName . " " . $levelName)
+                    <a href="{{ URL::to('transcript_list/' . $student_list .  '/' . $academic_year_mod . '/' . $tdr . '/' . $semester_mod . '/' . $specialtyNameLevel) }}" target="_blank">
                         <button wire:click="" type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-500 focus:text-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                             <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 309.529 309.529" style="enable-background:new 0 0 309.529 309.529;" xml:space="preserve">
@@ -180,7 +181,7 @@
                                     <td class="whitespace-nowrap px-4 py-2 border">{{ number_format(ceil($moyenne_semestriel[$student->id] * 100) / 100, 2, '.', '') }}</td>
                                     @endif 
                                     <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
-                                        <a href="{{ URL::to('generateTranscript/'. $student->id . '/' . $academic_year_mod . '/' . $tdr . '/' . $semester_mod) }}" target="_blank">
+                                        <a href="{{ URL::to('generateTranscript/'. $student->id . '/' . $academic_year_mod . '/' . $tdr . '/' . $semester_mod . '/' . $student->name) }}" target="_blank">
                                             <button class="font-medium text-blue-600 dark:text-red-500 hover:underline flex items-center">
                                                 <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                     <svg width="800px" height="800px" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--noto" preserveAspectRatio="xMidYMid meet">

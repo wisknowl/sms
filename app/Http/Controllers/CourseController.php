@@ -117,7 +117,7 @@ class CourseController extends Controller
                 $query->where('academic_year', $year_session)->where('level_id', $level);
             })->get();
             foreach ($students as $student) {
-                $timestamp = Carbon::now()->format('Y-m-d H:i:s');
+                $timestamp = Carbon::now()->format('Y-m-d H:i:s'); 
                 $student->course()->syncWithoutDetaching($course_id, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
             }
         });

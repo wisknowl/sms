@@ -13,5 +13,9 @@ class paper extends Model
     {
         return $this->belongsToMany('App\Models\student', 'student_papers', 'student_id', 'paper_id');
     }
+    public function specialty()
+    {
+        return $this->belongsTo(specialty::class);
+    }
 
 }

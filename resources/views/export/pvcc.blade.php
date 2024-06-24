@@ -68,7 +68,7 @@
                 <td>Bien</td>
                 @else
                 <td>Très bien</td>
-                @endif -->
+                @endif --> 
                 @endif
                 @endif
                 @endforeach

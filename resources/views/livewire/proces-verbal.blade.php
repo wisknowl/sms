@@ -19,13 +19,19 @@
         </div>
         <div class="flex justify-end">
             @if($pvmod == 1)
-            <a href="{{ URL::to('exportpvcc/'. $specialty. '/' . $levelmod . '/' . $semestermod . '/' . $academic_year_mod)  }}" target="_blank">
+            <a href="{{ URL::to('exportpvcc/'. $specialty. '/' . $levelmod . '/' . $semestermod . '/' . $academic_year_mod)  }}" >
+                <x-primary-button wire:change="" class=" ml-3">
+                    {{ __('Imprimer') }}
+                </x-primary-button>
+            </a>
+            @elseif($pvmod == 2)
+            <a href="{{ URL::to('exportpvsn/'. $specialty. '/' . $levelmod . '/' . $semestermod . '/' . $academic_year_mod)  }}" >
                 <x-primary-button wire:change="" class=" ml-3">
                     {{ __('Imprimer') }}
                 </x-primary-button>
             </a>
             @else
-            <a href="{{ URL::to('exportpvsn/'. $specialty. '/' . $levelmod . '/' . $semestermod . '/' . $academic_year_mod)  }}" target="_blank">
+            <a href="{{ URL::to('exportpvblanc/'. $specialty. '/' . $levelmod . '/' . $semestermod . '/' . $academic_year_mod)  }}" >
                 <x-primary-button wire:change="" class=" ml-3">
                     {{ __('Imprimer') }}
                 </x-primary-button>
@@ -70,13 +76,17 @@
                 <div>
                     <label for="">Type De PV</label>
                     <div class="mt-1 flex items-center">
-                        <div class="mr-3 p-2 rounded bg-white">
+                        <div class=" p-1 rounded bg-white">
                             <input id="1" type="radio" wire:model="pvmod" wire:click="updatePV" value="1" name="PV" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label>PVCC</label>
+                            <label>PV_CC</label>
                         </div>
-                        <div class="bg-white p-2 rounded">
+                        <div class="bg-white p-1 rounded">
                             <input id="2" type="radio" wire:model="pvmod" wire:click="updatePV" value="2" name="PV" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                            <label>PVSN</label>
+                            <label>PV_SN</label>
+                        </div>
+                        <div class="bg-white p-1 rounded">
+                            <input id="3" type="radio" wire:model="pvmod" wire:click="updatePV" value="3" name="PV" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                            <label>PV_BLANC</label>
                         </div>
                     </div>
                 </div>
@@ -153,7 +163,7 @@
                             </tbody>
 
                         </table>
-                        @else
+                        @elseif($pvmod == 2)
                         <table border="0px" class="table" style="text-align: center;">
                             <thead>
                                 <tr class=" ">
@@ -341,6 +351,61 @@
                                 @endforeach
 
                             </tbody>
+                        </table>
+                        @else
+                        <table class="min-w-full text-center text-sm font-light">
+                            <thead>
+                                
+                                <tr style="font-size: small;">
+                                    <td colspan="3" class=" px-4 py-2 border"></td>
+                                    @foreach($papers as $paper)
+                                    <th class=" px-4 py-2 border"><b>{{$paper->code}} {{$paper->name}} | Credit {{ $paper->credit_points }}</b></th>
+                                    @endforeach
+                                </tr>
+                                <tr>
+                                    <th class="whitespace-nowrap px-4 py-2 border"><b>#</b></th>
+                                    <th class="whitespace-nowrap px-4 py-2 border"><b>Matricule</b></th>
+                                    <th class="whitespace-nowrap px-4 py-2 border"><b>Noms</b></th>
+                                    @foreach($papers as $paper)
+                                    <th class="whitespace-nowrap px-4 py-2 border"><b>Note/20</b></th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @php($count=1)
+                                @foreach($students as $student)
+                                @foreach($student->levels as $level)
+                                @if($level->id == $levelmod)
+                                <tr style="font-size: small;" class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
+                                    <th class="whitespace-nowrap px-4 py-2 border"><b>{{$count}}</b></th>
+                                    <th class="whitespace-nowrap px-4 py-2 border"><b>{{$student->matricule}}</b></th>
+                                    <th class="whitespace-nowrap px-4 py-2 border"><b>{{$student->name}}</b></th>
+                                    @foreach($papers as $paper)
+
+                                    @foreach($student_papers as $st_paper)
+                                    @if($st_paper->paper->id == $paper->id)
+
+                                    @if($st_paper->student_id == $student->id)
+                                    @php($ca = $st_paper->mark)
+                                    @if($ca == 0)
+                                    <td class="whitespace-nowrap px-4 py-2 border"></td>
+                                    @else
+                                    <td class="whitespace-nowrap px-4 py-2 border">{{ $st_paper->mark }}</td>
+                                    @endif
+
+                                    @endif
+                                    @endif
+                                    @endforeach
+                                    @endforeach
+                                </tr>
+                                @php($count=$count+1)
+                                @endif
+                                @endforeach
+                                @endforeach
+
+                            </tbody>
+
                         </table>
                         @endif
                     </div>

@@ -124,7 +124,7 @@ class Ues extends Component
             ->get();
         // dd($ues);
         $sql = $units->toSql();
-        $ues = $units->paginate(10);
+        $ues = $units->paginate(20);
         // $ues = $units->get();
 
         $levels = level::all();

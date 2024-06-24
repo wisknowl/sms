@@ -78,65 +78,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <hr class=" h-0 border border-t-0 border-solid border-neutral-700 opacity-25 dark:border-neutral-200" />
-                            <li>
-                                <h2 class="mb-0" id="headingThree">
-                                    <button class="group relative flex w-full items-center rounded-none border-0 bg-white px-3 py-2 text-left text-base text-neutral-800 transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white [&:not([data-te-collapse-collapsed])]:bg-white [&:not([data-te-collapse-collapsed])]:text-primary [&:not([data-te-collapse-collapsed])]:[box-shadow:inset_0_-1px_0_rgba(229,231,235)] dark:[&:not([data-te-collapse-collapsed])]:bg-neutral-800 dark:[&:not([data-te-collapse-collapsed])]:text-primary-400 dark:[&:not([data-te-collapse-collapsed])]:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]" type="button" data-te-collapse-init data-te-collapse-collapsed data-te-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        Unité D'enseignement
-                                        <span class="-mr-1 ml-auto h-5 w-5 shrink-0 rotate-[-180deg] fill-[#336dec] transition-transform duration-200 ease-in-out group-[[data-te-collapse-collapsed]]:mr-0 group-[[data-te-collapse-collapsed]]:rotate-0 group-[[data-te-collapse-collapsed]]:fill-[#212529] motion-reduce:transition-none dark:fill-blue-300 dark:group-[[data-te-collapse-collapsed]]:fill-white">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                </h2>
-                                <div id="collapseThree" class="!visible hidden" data-te-collapse-item aria-labelledby="headingThree" data-te-parent="#ue">
-                                    <div class="">
-                                        <ul class="overflow-auto h-52 w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                            @foreach($ues as $ue)
-                                            <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                                <div>
-                                                    <div class="flex items-center pl-3 hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                        <input id="{{ $ue->id }}" type="radio" wire:model="ue" wire:click="fs" value="{{ $ue->id }}" name="{{ $ue->name }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                                        <label for="{{ $ue->id }}" class="ms-2 py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $ue->name }}</label>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-                            <hr class=" h-0 border border-t-0 border-solid border-neutral-700 opacity-25 dark:border-neutral-200" />
-                            <li>
-                                <h2 class="mb-0" id="headingFour">
-                                    <button class="group relative flex w-full items-center rounded-none border-0 bg-white px-3 py-2 text-left text-base text-neutral-800 transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none dark:bg-neutral-800 dark:text-white [&:not([data-te-collapse-collapsed])]:bg-white [&:not([data-te-collapse-collapsed])]:text-primary [&:not([data-te-collapse-collapsed])]:[box-shadow:inset_0_-1px_0_rgba(229,231,235)] dark:[&:not([data-te-collapse-collapsed])]:bg-neutral-800 dark:[&:not([data-te-collapse-collapsed])]:text-primary-400 dark:[&:not([data-te-collapse-collapsed])]:[box-shadow:inset_0_-1px_0_rgba(75,85,99)]" type="button" data-te-collapse-init data-te-collapse-collapsed data-te-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                        Niveau
-                                        <span class="-mr-1 ml-auto h-5 w-5 shrink-0 rotate-[-180deg] fill-[#336dec] transition-transform duration-200 ease-in-out group-[[data-te-collapse-collapsed]]:mr-0 group-[[data-te-collapse-collapsed]]:rotate-0 group-[[data-te-collapse-collapsed]]:fill-[#212529] motion-reduce:transition-none dark:fill-blue-300 dark:group-[[data-te-collapse-collapsed]]:fill-white">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                </h2>
-                                <div id="collapseFour" class="!visible hidden" data-te-collapse-item aria-labelledby="headingFour" data-te-parent="#accordionExample1">
-                                    <div class="">
-                                        <ul class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                            @foreach($levels as $level)
-                                            <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                                <div>
-
-                                                    <div class="flex items-center pl-3 hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                        <input id="{{ $level->id }}" type="radio" wire:model="level" wire:click="fs" value="{{ $level->id }}" name="{{ $level->name }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                                        <label for="{{ $level->id }}" class="ms-2 py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 uppercase">Niveau {{ $level->name }}</label>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
+                            
 
                         </ul>
                     </div>
@@ -241,7 +183,7 @@
                                             <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $count }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $paper->name }} | Credit {{ $paper->credit_points }}</td>
                                             @php($credit_sum = $credit_sum + $paper->credit_points)
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $paper->code }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $paper->specialty->name }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
                                                 <button type="button" wire:click.prevent='setDeleteId({{ $paper->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">

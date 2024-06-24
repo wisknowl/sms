@@ -54,6 +54,8 @@ class Relever extends Component
     public $academic_year_mod;
     public $semester_mod;
     public $moyenne_semestriel = [];
+    public $specialtyName;
+    public $levelName;
 
 
     public function mount()
@@ -64,6 +66,7 @@ class Relever extends Component
 
         $first_specialty = $this->specialties[0];
         $this->specialty = $first_specialty->id;
+        $this->specialtyName = $first_specialty->name;
         $this->updateLevels();
 
         // $first_specialty = $this->specialties[0];
@@ -103,11 +106,15 @@ class Relever extends Component
     {
         $this->specialties = specialty::where('cycle_id', $this->cycle)->get();
     }
+    public function updateSpecialtyName()
+    {
+    }
     public function updateLevels()
     {
-        $this->levels = level::whereHas('specialties', function ($query) {
-            $query->where('specialty_id', $this->specialty);
-        })->get();
+        // $this->levels = level::whereHas('specialties', function ($query) {
+        //     $query->where('specialty_id', $this->specialty);
+        // })->get();
+        $this->levels = level::all();
     }
     public function type()
     {
@@ -121,6 +128,9 @@ class Relever extends Component
 
     public function updateStudents()
     {
+        $this->specialtyName = specialty::find($this->specialty)->name;
+        $this->levelName = level::find($this->level)->name;
+        // dd($this->specialtyName, $this->levelName);
         if (session()->has('year_name')) {
             $this->academic_year = session('year_name');
         }
@@ -189,19 +199,20 @@ class Relever extends Component
             }
         }
     }
-    public function transcript_list($student_list, $academic_year_mod, $tdr, $semester_mod)
+    public function transcript_list($student_list, $academic_year_mod, $tdr, $semester_mod, $specialtyNameLevel)
     {
         $studentArray = unserialize($student_list);
         // dump($studentArray);
         foreach ($studentArray as $id) {
-            $transcriptArray[] = $this->unit_transcript($id, $academic_year_mod, $tdr, $semester_mod);
+            $transcriptArray[] = $this->unit_transcript($id, $academic_year_mod, $tdr, $semester_mod,$specialtyNameLevel);
             // dump($transcriptArray);
         }
-        // dd(1);
+        $file_name = $specialtyNameLevel . " " . $this->level . $academic_year_mod . '.pdf';
+
         $pdf = Pdf::loadView('pdf.transcript_list', compact('transcriptArray'));
-        return $pdf->stream('transcript_list.pdf');
+        return $pdf->stream($file_name);
     }
-    public function unit_transcript($id, $academic_year_mod, $tdr, $semester_mod)
+    public function unit_transcript($id, $academic_year_mod, $tdr, $semester_mod, $specialtyNameLevel)
     {
         $semester_mod = semester::find($semester_mod)->name;
         // dd($tdr, $academic_year_mod, $semester_mod);
@@ -333,7 +344,10 @@ class Relever extends Component
                     $c_credit_sum = $c_credit_sum + $st_course->course->credit_points;
                 }
             }
-
+            // dump($st_ue->ue->name, $sum, $c_credit_sum);
+            // if($c_credit_sum == 0){
+            //     dd(1);
+            // }
             $sum = $sum / $c_credit_sum;
             $updated = $st_ue->update([
                 'average' => $sum,
