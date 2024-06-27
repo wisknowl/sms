@@ -102,7 +102,7 @@
             </div>
             <div class="pb-4 grid grid-cols-4 gap-4">
                 <button id="dropdownRadioBgHoverButton" data-dropdown-toggle="delib" class="flex justify-evenly items-center whitespace-nowrap rounded bg-white  pb-1 pt-1.5 text-xs font-medium uppercase leading-normal text-neutral-800 shadow-sm" type="button">
-                    Saisir La note de Déliberation
+                    note de Déliberation
                     <svg class="w-2.5 h-2.5 ms-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
                     </svg>
@@ -170,10 +170,18 @@
                                     </td>
                                     @if($course_student->exam_marks < $course_student->reseat_mark)
                                         @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->reseat_mark) / 20) * 70)) / 100) * 20))
-                                        <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
+                                        @if($courseavg < 10)
+                                            <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
+                                            @else
+                                            <td class="whitespace-nowrap px-4 py-1 border bg-green-200">{{ $courseavg }}</td>
+                                            @endif
                                         @else
                                         @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->exam_marks) / 20) * 70)) / 100) * 20))
-                                        <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
+                                        @if($courseavg < 10)
+                                            <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
+                                            @else
+                                            <td class="whitespace-nowrap px-4 py-1 border bg-green-200">{{ $courseavg }}</td>
+                                            @endif
                                         @endif
 
                                         @else
@@ -190,10 +198,18 @@
 
                                         @if($course_student->exam_marks < $course_student->reseat_mark)
                                             @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->reseat_mark) / 20) * 70)) / 100) * 20))
-                                            <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
+                                            @if($courseavg < 10)
+                                            <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
+                                            @else
+                                            <td class="whitespace-nowrap px-4 py-1 border bg-green-200">{{ $courseavg }}</td>
+                                            @endif
                                             @else
                                             @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->exam_marks) / 20) * 70)) / 100) * 20))
-                                            <td class="whitespace-nowrap px-4 py-1 border">{{ $courseavg }}</td>
+                                            @if($courseavg < 10)
+                                            <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
+                                            @else
+                                            <td class="whitespace-nowrap px-4 py-1 border bg-green-200">{{ $courseavg }}</td>
+                                            @endif
                                             @endif
 
                                             @endif
