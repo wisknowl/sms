@@ -107,13 +107,13 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
                     </svg>
                 </button>
-
+                <button wire:click="$dispatch('openModal', {component: 'mymodal'})" class="flex justify-evenly items-center whitespace-nowrap rounded bg-blue-100  pb-1 pt-1.5 text-xs font-medium uppercase leading-normal text-neutral-800 shadow-sm" type="button">
+                    Déliberer
+                </button>
             </div>
-
-
             <!-- Dropdown menu -->
             <div id="delib" class="z-10 hidden p-4 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-                <input placeholder="0.00" type="number" wire:model="noteDeliberation" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-200">
+                <input placeholder="0.00" type="number" wire:model="" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-200">
             </div>
         </div>
         <div class="flex flex-col">
@@ -153,7 +153,7 @@
                                 @php($count = 1)
                                 @forelse($course_students as $course_student)
                                 <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
-                                    <td class="whitespace-nowrap px-4 py-1 border font-medium">{{ $count }}</td>
+                                    <td class="whitespace-nowrap px-4 py-1 border font-medium">{{ $course_student->id }}</td>
 
                                     <td class="whitespace-nowrap px-4 py-1 border font-medium">{{ $course_student->student->matricule }}</td>
                                     <td class="whitespace-nowrap px-4 py-1 border">{{ $course_student->student->name }}</td>
@@ -170,51 +170,47 @@
                                     </td>
                                     @if($course_student->exam_marks < $course_student->reseat_mark)
                                         @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->reseat_mark) / 20) * 70)) / 100) * 20))
-                                        @if($courseavg < 10)
-                                            <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
-                                            @else
-                                            <td class="whitespace-nowrap px-4 py-1 border bg-green-200">{{ $courseavg }}</td>
-                                            @endif
-                                        @else
-                                        @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->exam_marks) / 20) * 70)) / 100) * 20))
-                                        @if($courseavg < 10)
-                                            <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
-                                            @else
-                                            <td class="whitespace-nowrap px-4 py-1 border bg-green-200">{{ $courseavg }}</td>
-                                            @endif
-                                        @endif
-
-                                        @else
-                                        <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-full focus:border-t-0 border-0 bg-neutral-100">
-                                        </td>
-
-                                        <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-100">
-                                        </td>
-                                        <td class="whitespace-nowrap px-4 py-1 border">
-                                            <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-100">
-                                        </td>
-
-                                        @if($course_student->exam_marks < $course_student->reseat_mark)
-                                            @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->reseat_mark) / 20) * 70)) / 100) * 20))
-                                            @if($courseavg < 10)
-                                            <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
+                                        @if($courseavg < 10) <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
                                             @else
                                             <td class="whitespace-nowrap px-4 py-1 border bg-green-200">{{ $courseavg }}</td>
                                             @endif
                                             @else
                                             @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->exam_marks) / 20) * 70)) / 100) * 20))
-                                            @if($courseavg < 10)
-                                            <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
-                                            @else
-                                            <td class="whitespace-nowrap px-4 py-1 border bg-green-200">{{ $courseavg }}</td>
-                                            @endif
-                                            @endif
+                                            @if($courseavg < 10) <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
+                                                @else
+                                                <td class="whitespace-nowrap px-4 py-1 border bg-green-200">{{ $courseavg }}</td>
+                                                @endif
+                                                @endif
 
-                                            @endif
+                                                @else
+                                                <td class="whitespace-nowrap px-4 py-1 border">
+                                                    <input id="number-input" placeholder="{{ old('ca_marks.'.$course_student->id, $course_student->ca_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="ca_marks.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 py-0 px-2 w-full focus:border-t-0 border-0 bg-neutral-100">
+                                                </td>
 
-                                            <!-- <td>
+                                                <td class="whitespace-nowrap px-4 py-1 border">
+                                                    <input placeholder="{{ old('exam_mark.'.$course_student->id, $course_student->exam_marks) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="exam_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-100">
+                                                </td>
+                                                <td class="whitespace-nowrap px-4 py-1 border">
+                                                    <input placeholder="{{ old('reseat_mark.'.$course_student->id, $course_student->reseat_mark) }}" type="number" wire:key="{{ $course_student->id }}" wire:model="reseat_mark.{{ $course_student->id }}" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 py-0 px-2 w-full border-0 bg-neutral-100">
+                                                </td>
+
+                                                @if($course_student->exam_marks < $course_student->reseat_mark)
+                                                    @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->reseat_mark) / 20) * 70)) / 100) * 20))
+                                                    @if($courseavg < 10) <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
+                                                        @else
+                                                        <td class="whitespace-nowrap px-4 py-1 border bg-green-200">{{ $courseavg }}</td>
+                                                        @endif
+                                                        @else
+                                                        @php($courseavg = (((((($course_student->ca_marks) / 20) * 30) + ((($course_student->exam_marks) / 20) * 70)) / 100) * 20))
+                                                        @if($courseavg < 10) <td class="whitespace-nowrap px-4 py-1 border bg-red-200">{{ $courseavg }}</td>
+                                                            @else
+                                                            <td class="whitespace-nowrap px-4 py-1 border bg-green-200">{{ $courseavg }}</td>
+                                                            @endif
+                                                            @endif
+
+                                                            @endif
+
+                                                            <!-- <td>
                             <input type="text" placeholder="{{ $course_student->id }}" wire:model="course_student_id" class="center-placeholder rounded focus:border-x-0 focus:border-t-0 border-0">
                         </td> -->
                                 </tr>

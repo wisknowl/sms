@@ -16,6 +16,7 @@ use App\Models\course_student;
 use App\Models\paper;
 use App\Models\student_paper;
 use Livewire\Component;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\WithPagination;
 
 
@@ -169,6 +170,57 @@ class ProcesVerbal extends Component
     public function updatePVSN()
     {
         dd($this->pvmod);
+    }
+    public function rattrapage()
+    {
+        $students = student::where('specialty_id', $this->specialty)->with('levels')
+            ->whereHas('levels', function ($query) {
+                $query->where('academic_year', $this->academic_year_mod)->where('level_id', $this->levelmod);
+            })->get();
+        $studentData = array();
+
+        foreach ($students as $student) {
+            $failedCourses = array();
+            $st_courses = course_student::with('course')->where('student_id', $student->id)->whereHas('student', function ($query) {
+                $query->where('specialty_id', $this->specialty)
+                    ->whereHas('levels', function ($query) {
+                        $query->where('academic_year', $this->academic_year_mod)->where('level_id', $this->levelmod);
+                    });
+            })->whereHas('course', function ($query) {
+                $query->where('semester_id', $this->semestermod);
+            })
+                ->get();
+            foreach ($st_courses as $st_course) {
+                if ($st_course->exam_marks < $st_course->reseat_mark) {
+                    $course_mark = (((((($st_course->ca_marks) / 20) * 30) + ((($st_course->reseat_mark) / 20) * 70)) / 100) * 20);
+                } else {
+                    $course_mark = (((((($st_course->ca_marks) / 20) * 30) + ((($st_course->exam_marks) / 20) * 70)) / 100) * 20);
+                }
+                if ($course_mark < 7) {
+                    $failedCourses[] = [
+                        'course_name' => $st_course->course->name,
+                        'ca_marks' => $st_course->ca_marks,
+                        'exam_marks' => $st_course->exam_marks,
+                        'course_mark' => $course_mark,
+                    ];
+                }
+            }
+            $studentData[$student->id] = $failedCourses;
+        }
+        $specialty_code = specialty::find($this->specialty);
+        $level_name = level::find($this->levelmod);
+        $semester_name = semester::find($this->semestermod);
+        $a_year = academic_year::find($this->academic_year_mod);
+        $specialty_name = $specialty_code->name . '_N' . $level_name->name . '_S' . $semester_name->name;
+        $file_name = $specialty_code->code . '_N' . $level_name->name . '_S' . $semester_name->name . '_' . $this->academic_year_mod . '.pdf';
+        // dd($studentData);
+        // $pdf = Pdf::loadView('pdf.ratrrapage', compact('studentId', 'level', 'academic_year', 'credential', 'semesters', 'course_natures', 'st_ues', 'st_courses', 'tdr', 'semester_mod'));
+        $pdf = Pdf::loadView('pdf.rattrapage', compact('students', 'studentData', 'specialty_name'))->output();
+        // return $pdf->stream();
+        return response()->streamDownload(
+            fn () => print($pdf),
+            $file_name
+        );
     }
     function getAcademicYear()
     {

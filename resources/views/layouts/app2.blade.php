@@ -61,10 +61,6 @@
             right: 25px;
         }
     </style>
-
-
-
-
 </head>
 
 <body class="font-sans antialiased h-full">

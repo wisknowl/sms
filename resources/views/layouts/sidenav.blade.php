@@ -18,7 +18,7 @@
             break;
             }
             }
-            
+
             @endphp
             <a href="{{route('admin')}}" class="list-group-item list-group-item-action py-2 ripple {{ request()->is('admin') ? 'active' : '' }}" aria-current="true">
                 <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>{{ __('side_nav.dashboard') }}</span>

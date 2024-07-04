@@ -365,7 +365,7 @@ class Relever extends Component
         $pdfOutput = $pdf->output();
         $response = response($pdfOutput, 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="new.pdf"'
+            'Content-Disposition' => 'inline; filename="new.pdf"' 
         ]);
 
         return $response;

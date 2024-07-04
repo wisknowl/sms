@@ -224,8 +224,8 @@
                                                     <span></span>
                                                 </button>
 
-                                                <!-- <button wire:click="$emit('openModal', 'mymodal')">Open Modal</button> X-->
-                                                <!-- <button wire:click="$dispatch('openModal', {component: 'mymodal'})"></button> -->
+                                                <!-- <button wire:click="$emit('openModal', 'mymodal')">Open Modal</button> -->
+                                                <!-- <button wire:click="$dispatch('openModal', {component: 'mymodal'})">click</button> -->
                                                 <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal" data-te-id="{{ $course->id }}" data-te-name="{{ $course->name }}" data-te-code="{{ $course->code }}" data-te-cp="{{ $course->credit_points }}" data-te-level="{{ $course->level_id }}" data-te-semester="{{ $course->semester_id }}" data-te-target="#updateModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" id="edit" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">

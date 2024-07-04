@@ -132,10 +132,10 @@
                                                             @php($check = 0)
                                                             <td>{{$check}}</td>
                                                         @endif
-                                                        @if($check == 0)
-                                                            <td>NV</td>
+                                                        @if($courseavg < 10)
+                                                        <td>NV</td>
                                                         @else
-                                                            <td>VA</td>
+                                                        <td>VA</td>
                                                         @endif
 
                                                     @endif
@@ -183,7 +183,7 @@
                             @php($semester_avg = $ue_sum / $ue_credit_sum)
                             <td>{{ number_format(ceil($semester_avg * 100) / 100, 2, '.', '') }}</td>
                             <td>{{$credit_obtained}}</td>
-                            @if($credit_obtained == 30)
+                            @if($credit_obtained >= 30)
                             <td>Fermé</td>
                             @else
                             <td>Non Fermé</td>

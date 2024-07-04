@@ -243,21 +243,7 @@ class StudentMarks extends Component
         DB::transaction(function () use ($request) {
             // get the indexes of the ca_marks and exam_mark arrays
             $i = 154;
-            if ($this->noteDeliberation) {
-                $courseStudents = course_student::all();
 
-                // Loop through each record and update the exam_marks
-                foreach ($courseStudents as $courseStudent) {
-                    // Calculate the new exam mark with the deliberation mark added
-                    $newExamMark = $courseStudent->exam_marks + $this->noteDeliberation;
-                    if ($newExamMark > 20) {
-                        $newExamMark = 20;
-                    }
-
-                    // Update the exam_marks column with the new value
-                    $updateDel = $courseStudent->update(['exam_marks' => $newExamMark]);
-                }
-            }
             $indexes = array(); // Initialize an empty array
             if (!empty($this->ca_marks)) {
                 // Merge the keys of $this->ca_marks with the $indexes array
@@ -432,6 +418,12 @@ class StudentMarks extends Component
             $previousYear = $currentYear - 1;
             return "$previousYear-$currentYear";
         }
+    }
+    protected $listeners = ['closeModal'];
+
+    public function closeModal()
+    {
+        $this->dispatch('refreshComponent');
     }
 
     public function render(Request $request)
