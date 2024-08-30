@@ -35,6 +35,10 @@ class student extends Model
     {
         return $this->belongsTo(specialty::class);
     }
+    public function studentSpecialty($specialty_id)
+    {
+        return $this->specialty()->find($specialty_id)->name;
+    }
 
     public function cycle()
     {

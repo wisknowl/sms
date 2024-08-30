@@ -11,7 +11,7 @@
     <div class="p-6 text-gray-900">
         <div class="border-b mb-2">
             <h2 class="font-bold uppercase text-xl text-gray-800 text-center mb-4">
-                {{ __('student_page.student') }}
+                {{ __('Utilisateur') }}
             </h2>
         </div>
         <!--Tabs content-->
@@ -229,28 +229,23 @@
                                     <thead class="border-b font-medium dark:border-neutral-500">
                                         <tr>
                                             <th scope="col" class="px-4 py-2 border">#</th>
-                                            <th scope="col" class="px-4 py-2 border">Matricule</th>
                                             <th scope="col" class="px-4 py-2 border">Name</th>
                                             <th scope="col" class="px-4 py-2 border">Email</th>
-                                            <th scope="col" class="px-4 py-2 border">Phone</th>
-                                            <th scope="col" class="px-4 py-2 border">POB</th>
-                                            <th scope="col" class="px-4 py-2 border">Specialité</th>
+                                            <th scope="col" class="px-4 py-2 border">Role</th>
                                             <th scope="col" class="px-4 py-2 border">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @php($count = 1)
-                                        @forelse($students as $student)
+                                        @forelse($users as $user)
                                         <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
                                             <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $count }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $student->matricule }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $student->name }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $student->email }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $student->mobile }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $student->pob }}</td>
-                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $student->studentSpecialty($student->specialty_id) }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $user->name }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">{{ $user->email }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border">Unkown</td>
+                                            
                                             <td class="whitespace-nowrap px-4 py-2 flex justify-center items-center">
-                                                <button type="button" wire:click.prevent='setDeleteId({{ $student->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
+                                                <button type="button" wire:click.prevent='setDeleteId({{ $user->id }})' class="flex justify-center items-center font-medium text-red-600 dark:text-red-500 hover:underline" data-te-toggle="modal" data-te-target="#deleteModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4V4zm2 2h6V4H9v2zM6.074 8l.857 12H17.07l.857-12H6.074zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1z" fill="#FF0000" />
@@ -261,7 +256,7 @@
 
                                                 <!-- <button wire:click="$emit('openModal', 'mymodal')">Open Modal</button> X-->
                                                 <!-- <button wire:click="$dispatch('openModal', {component: 'mymodal'})"></button> -->
-                                                <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal" data-te-id="{{ $student->id }}" data-te-name="{{ $student->name }}" data-te-mat="{{ $student->matricule }}" data-te-email="{{ $student->email }}" data-te-phone="{{ $student->mobile }}" data-te-pob="{{ $student->pob }}" data-te-dob="{{ $student->dob }}" data-te-target="#updateModal">
+                                                <button class="edit mx-2 font-medium text-blue-600 dark:text-red-500 hover:underline" data-te-toggle="modal" id="btnModal" data-te-id="{{ $user->id }}" data-te-name="{{ $user->name }}" data-te-email="{{ $user->email }}" data-te-target="#updateModal">
                                                     <span class="mr-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
                                                         <svg fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" id="edit" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
                                                             <path id="secondary" d="M21,22H3a1,1,0,0,1,0-2H21a1,1,0,0,1,0,2Z" style="fill: rgb(44, 169, 188);"></path>
@@ -570,7 +565,6 @@
 
             </div>
             <div>
-                {{ $students->links() }}
             </div>
         </div>
     </div>

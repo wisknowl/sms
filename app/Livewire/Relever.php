@@ -319,10 +319,12 @@ class Relever extends Component
         }
         // $st_courses = course_student::with('course')->whereIn('course_id', $result)->get();
 
-        $st_ues = student_ue::with('ue')->where('student_id', $id)->whereHas('ue', function ($query) use ($level_id) {
+        $st_ues = student_ue::with('ue')->where('student_id', $id)->whereHas('ue', function ($query) use ($level_id, $semester_mod) {
             // Add a constraint on the level_id column of the ues table
-            $query->where('level_id', $level_id);
+            $query->where('level_id', $level_id)->where('semester_id', $semester_mod);
         })->get();
+
+        // dd($st_ues);
         $st_courses = course_student::with('course')->where('student_id', $id)->get();
 
         foreach ($st_ues as $st_ue) {

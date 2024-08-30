@@ -281,10 +281,10 @@ class StudentController extends Controller
         // Find the model by id
         $student = student::findOrFail($student_id);
         // Get the old and new specialty and level ids
-        $old_specialty_id = $student->specialty_id;
+        // $old_specialty_id = $student->specialty_id;
         $new_specialty_id = $request->input('upSpecialty_id');
-        $old_level_id = $student->levels()->wherePivot('academic_year', $this->getAcademicYear())->first()->id;
-        $new_level_id = strip_tags($request->input('upLevel_id'));
+        // $old_level_id = $student->levels()->wherePivot('academic_year', $this->getAcademicYear())->first()->id;
+        // $new_level_id = strip_tags($request->input('upLevel_id'));
 
         // Update the model
         $updated = $student->update([

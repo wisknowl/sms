@@ -28,7 +28,7 @@ class SetSessionValues
         } else { // If the month is July or below
             $previousYear = $currentYear - 1;
             return "$previousYear-$currentYear";
-        }
+        } 
     }
     public function handle(Request $request, Closure $next): Response
     {

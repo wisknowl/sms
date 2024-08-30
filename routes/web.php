@@ -377,9 +377,8 @@ Route::get('/semesterSession', [StudentController::class, 'getChartData'])->name
 Route::put('/students/updateStudent', [StudentController::class, 'updateStudent'])->name('students.updateStudent');
 Route::get('/students/pdf', [StudentLw::class, 'student_list'])->name('students.pdf');
 
-Route::resource('academic_years', AcademicYearController::class)
-    ->only(['index', 'store'])
-    ->middleware(['auth', 'verified']);
+Route::get('academic_years', [AcademicYearController::class, 'startNewAcademicYear'])
+    ->name('academic_years');
 
 Route::resource('semesters', SemesterController::class)
     ->only(['index', 'store'])
@@ -431,6 +430,10 @@ Route::resource('facture', FacturationController::class)
     ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
 Route::resource('relever', ReleverController::class)
     ->only(['index', 'store'])
+    ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
+
+    Route::resource('users', usercontroller::class)
+    // ->only(['index', 'store'])
     ->middleware(['auth', 'verified', 'set_session_values', 'localization']);
 
 Route::middleware('auth')->group(function () {

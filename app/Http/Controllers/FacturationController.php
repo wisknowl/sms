@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\academic_year;
 use App\Models\level;
 use Session;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\facturation;
 use App\Models\facture;
+use App\Models\semester;
 use App\Models\specialty;
 use App\Models\specialty_tranche;
 use App\Models\student;
@@ -27,7 +29,30 @@ class FacturationController extends Controller
      */
     public function index(Request $request): view
     {
-        return view('facture.index');
+        if ($request->has('year_id') && !empty($request->input('year_id'))) {
+            $year_id = $request->input('year_id');
+            $year_name = academic_year::where('id', $year_id)->value('name');
+            Session::put('year_name', $year_name);
+            Session::put('year_id', $year_id);
+        } else {
+            // Use the session value as the default value
+            $year_id = Session::get('year_id');
+            $year_name = Session::get('year_name');
+        }
+        if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
+            $semester_id = $request->input('semester_id');
+            $semester_name = semester::where('id', $semester_id)->value('name');
+            Session::put('semester_name', $semester_name);
+            Session::put('semester_id', $semester_id);
+        } else {
+            // Use the session value as the default value
+            $semester_id = Session::get('semester_id');
+            $semester_name = Session::get('semester_name');
+        }
+        $academic_years = academic_year::all();
+        $semesters = semester::all();
+
+        return view('facture.index',compact('academic_years', 'semesters',));
     }
 
     /**
@@ -121,7 +146,11 @@ class FacturationController extends Controller
             if ($sumRemainingAmounts == 0) {
                 notify()->error($student->name . ' a complété tous ses frais de scolarité');
                 return redirect()->back();
-            } else {
+            } elseif($montant > $sumRemainingAmounts){
+                notify()->error($student->name . ' a '. $sumRemainingAmounts . ' reste a payer, mais vous avey saisie' . $montant);
+                return redirect()->back();
+            }
+            else {
 
                 // dd($remainingAmounts);
                 // Distribute the montant across the tranches

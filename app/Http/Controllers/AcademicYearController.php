@@ -16,6 +16,27 @@ class AcademicYearController extends Controller
     {
         //
     }
+    public function startNewAcademicYear()
+    {
+        // dd(1);
+        $currentYear = date('Y');
+        $currentMonth = date('m');
+
+        $nextYear = $currentYear + 1;
+        if ($currentMonth == 8) {
+            academic_year::create([
+                'name' => $currentYear . '-' . $nextYear,
+                'start_date' => $currentYear . '-08-01',
+                'end_date' => $nextYear . '-07-31',
+            ]);
+            notify()->success('Nouvelle Annee academique Creer avec succès');
+            return redirect()->back();
+        }
+        else{
+            notify()->success('Vous ne pouvez pas creer une nouvelle annee presentement');
+            return redirect()->back();
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -37,9 +58,9 @@ class AcademicYearController extends Controller
             $end_date = date('Y-m-d', strtotime(strip_tags($request->input('start_date'))));
             // $end_date = strip_tags($request->input('end_date'));
             $academic_year_obj = new academic_year();
-            $academic_year_obj->name=$academic_year;
-            $academic_year_obj->start_date=$start_date;
-            $academic_year_obj->end_date=$end_date;
+            $academic_year_obj->name = $academic_year;
+            $academic_year_obj->start_date = $start_date;
+            $academic_year_obj->end_date = $end_date;
             $academic_year_obj->save();
         });
         notify()->success('Annee academique Creer avec succès');

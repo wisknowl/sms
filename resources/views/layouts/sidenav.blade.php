@@ -130,9 +130,19 @@
             <a href="#" class="list-group-item list-group-item-action py-2 ripple">
                 <i class="fas fa-calendar fa-fw me-3"></i><span>{{ __('side_nav.time_table') }}</span>
             </a>
-            <a href="#" class="list-group-item list-group-item-action py-2 ripple">
+
+            @if(Auth::user()->hasRole('admin')) 
+            <a href="{{route('users.index')}}" class="list-group-item list-group-item-action py-2 ripple {{ request()->is('users') ? 'active' : '' }}">
                 <i class="fas fa-users fa-fw me-3"></i><span>{{ __('side_nav.users') }}</span>
             </a>
+            @else 
+             
+            <a href="#" class="list-group-item list-group-item-action py-2 ripple" style="cursor:not-allowed;">
+                <i class="fas fa-users fa-fw me-3"></i><span>{{ __('side_nav.users') }}</span>
+            </a>
+            @endif
+            
+            
         </div>
     </div>
 </nav>

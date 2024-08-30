@@ -13,14 +13,16 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\academic_year;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Auth;
+
+
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class StudentLw extends Component
+class Userlivewire extends Component
 {
-
+    
     use WithPagination;
 
     public $academic_year;
@@ -45,29 +47,6 @@ class StudentLw extends Component
     public function fs()
     {
     }
-    public function setDeleteId($id)
-    {
-        $this->delete_id = $id;
-    }
-    public function deleteStudent()
-    {
-        $user = Auth::user();
-        if($user->hasRole('admin')){
-            $student = student::where('id', $this->delete_id)->first();
-            $student->delete();
-            notify()->success('L\'Etudiant a été supprimée avec succès');
-        }
-        else{
-            // return response()->json(['message' => 'You do not have the permission to delete students'], 403);
-            notify()->error('You do not have the permission to delete students');
-
-        }
-        
-    }
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
     function getAcademicYear()
     {
         $currentYear = date('Y');
@@ -80,29 +59,22 @@ class StudentLw extends Component
             return "$previousYear-$currentYear";
         }
     }
-    // public function convert_to_utf8_recursively($data)
-    // {
-    //     if (is_string($data)) {
-    //         dump(1);
-    //         return mb_convert_encoding($data, 'UTF-8', 'UTF-8');
-    //     } elseif (is_array($data)) {
-    //         dump(1);
-    //         $convertedData = [];
-    //         foreach ($data as $key => $value) {
-    //             $convertedData[$key] = $this->convert_to_utf8_recursively($value);
-    //         }
-    //         return $convertedData;
-    //     } elseif (is_object($data)) {
-    //         // dd(1);
-    //         foreach ($data as $key => $value) {
-    //             $data->$key = $this->convert_to_utf8_recursively($value);
-    //             dump($data->$key);
-    //         }
-    //         return $data;
-    //     } else {
-    //         return $data;
-    //     }
-    // }
+    public function setDeleteId($id)
+    {
+        $this->delete_id = $id;
+    }
+    public function deleteStudent()
+    {
+        $student = student::where('id', $this->delete_id)->first();
+        $student->delete();
+        notify()->success('L\'Etudiant a été supprimée avec succès');
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    
     public function student_list()
     {
         $students = $this->getFilteredStudents()->get();
@@ -167,9 +139,9 @@ class StudentLw extends Component
         $levels = level::all();
 
         // $sql = $students->toSql();
-        $students = $this->getFilteredStudents();
-        $students = $students->paginate(10);
+        $users = User::all();
+        // $users = $users->paginate(10);
         config(['app.name' => 'Etudiant']);
-        return view('livewire.student-lw', compact('levels', 'cycles', 'specialties', 'students', 'academic_years',));
+        return view('livewire.userlivewire', compact('levels', 'cycles', 'specialties', 'users', 'academic_years',));
     }
 }

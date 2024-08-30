@@ -17,27 +17,33 @@
 
     <!-- Dropdown menu -->
     <div id="dropdownRadioBgHover" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+      @if(request()->path()=='admin')
       <form action="{{ route('admin', ['year_id' => Session::get('year_id'), 'semester_id' => Session::get('semester_id')]) }}" method="get">
-        <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
-          @isset($academic_years)
-          @foreach($academic_years as $academic_year)
-          <li>
-            <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-              <input id="{{ $academic_year->id }}" type="radio" value="{{ $academic_year->id }}" name="year_id" onclick="this.form.submit()" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-              <label for="{{ $academic_year->id }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $academic_year->name }}</label>
-            </div>
-          </li>
-          @endforeach
-          @endisset
-        </ul>
-      </form>
+        @else
+        <form action="{{ route('students.index', ['year_id' => Session::get('year_id'), 'semester_id' => Session::get('semester_id')]) }}" method="get">
+          @endif
+          <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
+            @isset($academic_years)
+            @foreach($academic_years as $academic_year)
+            <li>
+              <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                <input id="{{ $academic_year->id }}" type="radio" value="{{ $academic_year->id }}" name="year_id" onclick="this.form.submit()" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                <label for="{{ $academic_year->id }}" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{ $academic_year->name }}</label>
+              </div>
+            </li>
+            @endforeach
+            @endisset
+          </ul>
+        </form>
 
-      <div class="p-3" data-te-select-custom-content-ref>
-        <!-- Button trigger modal -->
-        <button type="button" class="inline-block rounded uppercase bg-primary p-1 text-xs font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-toggle="modal" data-te-target="#exampleModal1" data-te-ripple-init data-te-ripple-color="light">
-          Creer
-        </button>
-      </div>
+        <div class="p-3" data-te-select-custom-content-ref>
+          <!-- Button trigger modal -->
+          <a href="{{ route('academic_years') }}">
+            <button type="button" class="inline-block rounded uppercase bg-primary p-1 text-xs font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
+              Debuter une nouvelle annee
+            </button>
+          </a>
+        </div>
     </div>
     <!-- Modal -->
     <div data-te-modal-init class="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -57,7 +63,7 @@
           </div>
 
           <!--Modal body-->
-          <form method="POST" action="{{ route('academic_years.store') }}">
+          <form method="POST" action="">
             @csrf
             <div class="relative flex-auto p-4" data-te-modal-body-ref>
               <div class="relative mb-3" data-te-input-wrapper-init>
@@ -176,7 +182,7 @@
 <section>
   <div class="row">
     <a href="{{ route('students.index') }}" class="col-xl-3 col-sm-6 col-12 mb-4">
-      <div >
+      <div>
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between px-md-1">
@@ -194,7 +200,7 @@
       </div>
     </a>
     <a href="{{ route('specialties.index') }}" class="col-xl-3 col-sm-6 col-12 mb-4">
-      <div >
+      <div>
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between px-md-1">
@@ -211,7 +217,7 @@
       </div>
     </a>
     <a href="{{ route('uniteEseignements.index') }}" class="col-xl-3 col-sm-6 col-12 mb-4">
-      <div >
+      <div>
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between px-md-1">
@@ -229,7 +235,7 @@
     </a>
     <a href="{{ route('cours.index') }}" class="col-xl-3 col-sm-6 col-12 mb-4">
 
-      <div >
+      <div>
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between px-md-1">
@@ -276,7 +282,7 @@
 <!-- Section: Main chart -->
 
 <!--Section: Sales Performance KPIs-->
-<section class="mb-4">
+<!-- <section class="mb-4">
   <div class="card">
     <div class="card-header text-center py-3">
       <h5 class="mb-0 text-center">
@@ -366,12 +372,12 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 <!--Section: Sales Performance KPIs-->
 
 
 <!--Section: Statistics with subtitles-->
-<section>
+<!-- <section>
   <div class="row">
     <div class="col-xl-6 col-md-12 mb-4">
       <div class="card">
@@ -456,7 +462,7 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 
 <!--Section: Statistics with subtitles-->
 @endsection
