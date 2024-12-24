@@ -7,6 +7,8 @@ use App\Models\specialty;
 use App\Models\specialty_tranche;
 use App\Models\tranche;
 use Livewire\Component;
+use App\Models\academic_year;
+use App\Models\semester;
 
 class SpecialtyDetail extends Component
 {
@@ -19,7 +21,7 @@ class SpecialtyDetail extends Component
     public function mount($specialtyId)
     {
         $this->specialtyId = $specialtyId;
-        $name = specialty::findOrFail($specialtyId);
+        $name = specialty::findOrFail($specialtyId); 
         $this->specialty_name = $name->name;
 
         $this->tranches = tranche::orderBy('id', 'asc')->get();

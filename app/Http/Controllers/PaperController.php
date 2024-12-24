@@ -17,39 +17,24 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Livewire\Features\SupportFormObjects\Form;
 use Carbon\Carbon;
+use App\Traits\HandlesYearAndSemester;
 
 class PaperController extends Controller
 {
+    use HandlesYearAndSemester;
     /**
      * Display a listing of the resource.
      */
 
     public function index(Request $request): view
     {
-        if ($request->has('year_id') && !empty($request->input('year_id'))) {
-            $year_id = $request->input('year_id');
-            $year_name = academic_year::where('id', $year_id)->value('name');
-            Session::put('year_name', $year_name);
-            Session::put('year_id', $year_id);
-        } else {
-            // Use the session value as the default value
-            $year_id = Session::get('year_id');
-            $year_name = Session::get('year_name');
-        }
-        if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
-            $semester_id = $request->input('semester_id');
-            $semester_name = semester::where('id', $semester_id)->value('name');
-            Session::put('semester_name', $semester_name);
-            Session::put('semester_id', $semester_id);
-        } else {
-            // Use the session value as the default value
-            $semester_id = Session::get('semester_id');
-            $semester_name = Session::get('semester_name');
-        }
+        $data = $this->handleYearAndSemester($request);
+        $semesters = $data['semesters'];
+        $academic_years = $data['academic_years'];
+
         $courses = course::all();
         $levels = level::all();
-        $academic_years = academic_year::all();
-        $semesters = semester::all();
+        
         $ues = unite_enseignement::all();
         $specialties = Specialty::with('ues')->get();
         return view('bts_blanc.index', compact('levels', 'courses', 'academic_years', 'semesters', 'ues'));

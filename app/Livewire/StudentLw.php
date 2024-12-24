@@ -161,7 +161,6 @@ class StudentLw extends Component
 
     public function render()
     {
-        $academic_years = academic_year::all();
         $specialties = specialty::all();
         $cycles = cycle::all();
         $levels = level::all();
@@ -170,6 +169,6 @@ class StudentLw extends Component
         $students = $this->getFilteredStudents();
         $students = $students->paginate(10);
         config(['app.name' => 'Etudiant']);
-        return view('livewire.student-lw', compact('levels', 'cycles', 'specialties', 'students', 'academic_years',));
+        return view('livewire.student-lw', compact('levels', 'cycles', 'specialties', 'students',));
     }
 }

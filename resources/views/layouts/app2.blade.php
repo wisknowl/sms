@@ -135,10 +135,14 @@
                         $request = 'students.index';
                         }if($request == 'users'){
                         $request = 'users.index';
+                        }// Handle dynamic routes
+                        elseif (preg_match('/^specialties\/(\d+)$/', $request, $matches)) {
+                        $request = 'specialties.show';
+                        $specialtyId = $matches[1];
                         }
                         @endphp
                         <div id="dropdownRadioBgHover" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-                            <form action="{{ route($request, ['year_id' => Session::get('year_id'), 'semester_id' => Session::get('semester_id')]) }}" method="get">
+                            <form action="{{ route($request, array_merge(['year_id' => Session::get('year_id'), 'semester_id' => Session::get('semester_id')],isset($specialtyId) ? ['specialty' => $specialtyId] : [])) }}" method="get">
                                 <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
                                     @isset($academic_years)
                                     @foreach($academic_years as $academic_year)
@@ -157,7 +161,7 @@
                                 <!-- Button trigger modal -->
                                 <a href="{{ route('academic_years') }}">
                                     <button type="button" class="inline-block rounded uppercase bg-primary p-1 text-xs font-medium leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">
-                                        Debuter une nouvelle annee
+                                        Nouvelle Annee Academique
                                     </button>
                                 </a>
                             </div>
@@ -225,7 +229,7 @@
 
                         <!-- Dropdown menu -->
                         <div id="dropdownDefaultRadio" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-                            <form action="{{ route($request, ['year_id' => Session::get('year_id'), 'semester_id' => Session::get('semester_id')]) }}" method="get">
+                            <form action="{{ route($request, array_merge(['year_id' => Session::get('year_id'), 'semester_id' => Session::get('semester_id')],isset($specialtyId) ? ['specialty' => $specialtyId] : [])) }}" method="get">
                                 <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownRadioBgHoverButton">
                                     @isset($semesters)
                                     @foreach($semesters as $semester)

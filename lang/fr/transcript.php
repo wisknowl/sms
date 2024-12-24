@@ -5,7 +5,7 @@ return [
    "dob" => "Date de naissance",
    "matricule" => "Matricule",
    "year" => "Année académique",
-   "pob" => "À",
+   "pob" => "à",
    "a_transcript" => "RELEVE DE NOTES ANNUEL",
    "transcript" => "RELEVER",
    "specialty" => "Spécialité",
@@ -18,7 +18,7 @@ return [
    "e_credit" => "Crédit acquis",
    "grade" => "Grade",
    "dec" =>  "Décision",
-   "session" => "Session",
+   "yea" => "Année",
    "fund" => "FONDAMENTALES",
    "prof" => "PROFESSIONNELLES",
    "trav" => "TRANSVERSALES",
@@ -38,5 +38,6 @@ return [
    "assez_bien" => "Assez bien",
    "bien" => "Bien",
    "tres_bien" => "Très bien",
-   "notice" => "Il n'est délivré qu'un suel exemplaire de ce document, le titulaire peut en faire autant de copies conformes nécessaires."
+   "notice" => "Il n'est délivré qu'un suel exemplaire de ce document, le titulaire peut en faire autant de copies conformes nécessaires.",
+   "sex"=> "Sexe",
 ];

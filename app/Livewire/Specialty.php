@@ -106,8 +106,7 @@ class Specialty extends Component
 
     public function render() 
     {
-        $semesters = semester::all();
-        $academic_years = academic_year::all();
+        
         $cycles = cycle::all();
         $specs = ModelsSpecialty::with('cycle');
 
@@ -124,6 +123,6 @@ class Specialty extends Component
         $sql = $specs->toSql();
         $specialties = $specs->paginate(0);
         config(['app.name' => 'Specialite']);
-        return view('livewire.specialty', compact('specialties', 'academic_years', 'semesters', 'cycles','sql'));
+        return view('livewire.specialty', compact('specialties', 'cycles','sql'));
     }
 }

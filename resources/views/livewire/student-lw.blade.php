@@ -242,7 +242,7 @@
                                         @php($count = 1)
                                         @forelse($students as $student)
                                         <tr class="border-b transition duration-300 ease-in-out hover:bg-neutral-300 dark:border-neutral-300 dark:hover:bg-neutral-200 bg-neutral-100 even:bg-neutral-200">
-                                            <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $count }}</td>
+                                            <td class="whitespace-nowrap px-4 py-2 border font-medium">{{ $student->id }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $student->matricule }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $student->name }}</td>
                                             <td class="whitespace-nowrap px-4 py-2 border">{{ $student->email }}</td>

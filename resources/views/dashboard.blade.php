@@ -60,7 +60,7 @@
                             </div>
 
                             <!--Modal body-->
-                            <form method="POST" action="{{ route('academic_years.store') }}">
+                            <form method="POST" action="">
                                 @csrf
                                 <div class="relative flex-auto p-4" data-te-modal-body-ref>
                                     <div class="relative mb-3" data-te-input-wrapper-init>

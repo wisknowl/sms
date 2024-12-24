@@ -5,7 +5,7 @@ return [
    "dob" => "Date of birth",
    "matricule" => "Registration number",
    "year" => "Academic Year",
-   "pob" => "At",
+   "pob" => "at",
    "a_transcript" => "ANNUAL TRANSCRIPT",
    "transcript" => "TRANSCRIPT",
    "specialty" => "Speciatly",
@@ -18,7 +18,7 @@ return [
    "e_credit" => "Earned Credit",
    "grade" => "Grade",
    "dec" =>  "Decision",
-   "session" => "Session",
+   "yea" => "year",
    "fund" => "FUNDAMENTALS",
    "prof" => "PROFESSIONALS",
    "trav" => "TRANSVERSALS",
@@ -38,6 +38,7 @@ return [
    "assez_bien" => "Fairly good",
    "bien" => "Good",
    "tres_bien" => "Very Good",
-   "notice" => "Only one copy of the transcript is issued, The holder can reproduce and obtain certified copies"
+   "notice" => "Only one copy of the transcript is issued, The holder can reproduce and obtain certified copies",
+   "sex"=> "Sex",
 
 ];

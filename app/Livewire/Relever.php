@@ -138,6 +138,7 @@ class Relever extends Component
             ->whereHas('levels', function ($query) {
                 $query->where('academic_year', $this->academic_year)->where('level_id', $this->level);
             })->get();
+        // dd($this->students);
         foreach ($this->students as $student) {
             $student_id = $student->id;
             $year_session = Session::get('year_name');
@@ -150,6 +151,7 @@ class Relever extends Component
                     ->whereHas('ue', function ($query) use ($level_id, $session) {
                         $query->where('level_id', $level_id)->where('semester_id', $session);
                     })->get();
+                // dd($level,$st_ues); 
                 $courses = course_student::with('course')
                     ->where('student_id', $student_id)
                     ->whereHas('course', function ($query) use ($level_id) {
@@ -202,11 +204,15 @@ class Relever extends Component
     public function transcript_list($student_list, $academic_year_mod, $tdr, $semester_mod, $specialtyNameLevel)
     {
         $studentArray = unserialize($student_list);
-        // dump($studentArray);
+        // dd($studentArray);
         foreach ($studentArray as $id) {
+            // dump($id);
             $transcriptArray[] = $this->unit_transcript($id, $academic_year_mod, $tdr, $semester_mod,$specialtyNameLevel);
             // dump($transcriptArray);
         }
+        // dd($transcriptArray);
+        
+        
         $file_name = $specialtyNameLevel . " " . $this->level . $academic_year_mod . '.pdf';
 
         $pdf = Pdf::loadView('pdf.transcript_list', compact('transcriptArray'));

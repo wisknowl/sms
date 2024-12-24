@@ -200,6 +200,7 @@ class StudentMarks extends Component
         if (session()->has('year_name')) {
             $this->academic_year = session('year_name');
         }
+        // dump($this->academic_year);
         // $this->course_students = course_student::with('student', 'course')->where('course_id', $this->course)->get();
         $this->course_students = course_student::with('student', 'course')
             ->where('course_id', $this->coursemod)

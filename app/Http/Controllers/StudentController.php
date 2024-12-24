@@ -20,42 +20,27 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Traits\HandlesYearAndSemester;
 
 class StudentController extends Controller
 {
+    use HandlesYearAndSemester;
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request): view
     {
-        if ($request->has('year_id') && !empty($request->input('year_id'))) {
-            $year_id = $request->input('year_id');
-            $year_name = academic_year::where('id', $year_id)->value('name');
-            Session::put('year_name', $year_name);
-            Session::put('year_id', $year_id);
-        } else {
-            // Use the session value as the default value
-            $year_id = Session::get('year_id');
-            $year_name = Session::get('year_name');
-        }
-        if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
-            $semester_id = $request->input('semester_id');
-            $semester_name = semester::where('id', $semester_id)->value('name');
-            Session::put('semester_name', $semester_name);
-            Session::put('semester_id', $semester_id);
-        } else {
-            // Use the session value as the default value
-            $semester_id = Session::get('semester_id');
-            $semester_name = Session::get('semester_name');
-        }
+        $data = $this->handleYearAndSemester($request);
+        $semesters = $data['semesters'];
+        $academic_years = $data['academic_years'];
+
         $specialties = specialty::all();
         $cycles = cycle::all();
-        $semesters = semester::all();
-        $academic_years = academic_year::all();
+
         $levels = level::all();
         $students = student::orderBy('id', 'desc')->get();
         $labels = $students->pluck('matricule')->toArray();
-        $data = $students->pluck('id')->toArray();
+        // $data = $students->pluck('id')->toArray();
         return view('students.index', compact('levels', 'cycles', 'academic_years', 'semesters', 'specialties', 'students', 'labels'));
     }
     public function getChartData(Request $request)
@@ -137,71 +122,111 @@ class StudentController extends Controller
         $matricule = $this->generateMatricule($dob);
         //check if the cycle_id corresponds to the specialty_cycle_id
         $specialty = specialty::find($specialty_id);
-        // Create a new student with the name, specialty, and matricule
-        $student_obj = new Student();
-        $student_obj->name = $name;
-        $student_obj->email = $email;
-        $student_obj->mobile = $mobile;
-        $student_obj->dob = $dob;
-        $student_obj->gender = $gender;
-        $student_obj->pob = $pob;
-        $student_obj->cycle_id = $cycle_id;
-        $student_obj->specialty_id = $specialty_id;
-        $student_obj->matricule = $matricule;
-        // Save the student to the database
-        $student_obj->save();
-        // Get the id of the student
-        $student_id = $student_obj->id;
+        // Query the database for duplicates
+        $existing_student = Student::where('name', $name)
+            ->where('dob', $dob)
+            ->where('pob', $pob)
+            ->first();
 
-        // Get courses of the specialty
-        $level = level::find($level_id);
-        $id = $level->id;
-        $specialty = specialty::find($specialty_id);
-        // die($specialty);
+            if ($existing_student) {
+                // Return response to the frontend indicating a duplicate
+                return response()->json([
+                    'status' => 'duplicate',
+                    'message' => 'A student with the same Name, Date of Birth, and Place of Birth already exists.',
+                    'matricule' => $existing_student->matricule,
+                ]);
+            }
+            dd(1);
 
-        // $ue_ids = $specialty->ues->pluck('id')->toArray();
-        $ue_ids =  unite_enseignement::where('specialty_id', $specialty_id)->where('level_id', $id)->pluck('id')->toArray();
-        // echo '<pre>';
-        // print_r($ue_ids);
-        // echo '</pre>';
+        if ($existing_student) {
+            // Duplicate found - Notify the user
+            // notify()->error('Vous avez déjà créé' . ' ' . $existing_student->name);
 
-        // Initialize an empty array to store the final result
-        $result = array();
-        foreach ($ue_ids as $ue_id) {
-            $course_id = course::where('ue_id', $ue_id)->get()->pluck('id')->toArray();
-            // echo '<pre>';
-            // print_r($course_id);
-            // echo '</pre>';
+            echo "
+            <script>
+                if (confirm('A student with the same Name, Date of Birth, and Place of Birth already exists. Matricule: {$existing_student->matricule}. Are you sure you want to proceed?')) {
+                    // User clicked 'Yes' (OK)
+                    window.location.href = 'save_student.php?proceed=yes'; // Redirect or perform action
+                } else {
+                    // User clicked 'No' (Cancel)
+                    window.location.href = 'save_student.php?proceed=no'; // Redirect or cancel action
+                }
+            </script>";
+            dd(1);
+            // Get user confirmation (you can replace this with a frontend alert/dialog)
+            $user_input = trim(fgets(STDIN)); // Example for CLI; replace with appropriate frontend logic
 
-            // Merge the $course_id array with the $result array
-            $result = array_merge($result, $course_id);
+            if (strtolower($user_input) !== 'yes') {
+                echo "Operation canceled. The student was not saved.";
+                return;
+            } else { dd(1);
+                // Create a new student with the name, specialty, and matricule
+                $student_obj = new Student();
+                $student_obj->name = $name;
+                $student_obj->email = $email;
+                $student_obj->mobile = $mobile;
+                $student_obj->dob = $dob;
+                $student_obj->gender = $gender;
+                $student_obj->pob = $pob;
+                $student_obj->cycle_id = $cycle_id;
+                $student_obj->specialty_id = $specialty_id;
+                $student_obj->matricule = $matricule;
+                // Save the student to the database
+                $student_obj->save();
+                // Get the id of the student
+                $student_id = $student_obj->id;
+
+                // Get courses of the specialty
+                $level = level::find($level_id);
+                $id = $level->id;
+                $specialty = specialty::find($specialty_id);
+                // die($specialty);
+
+                // $ue_ids = $specialty->ues->pluck('id')->toArray();
+                $ue_ids =  unite_enseignement::where('specialty_id', $specialty_id)->where('level_id', $id)->pluck('id')->toArray();
+                // echo '<pre>';
+                // print_r($ue_ids);
+                // echo '</pre>';
+
+                // Initialize an empty array to store the final result
+                $result = array();
+                foreach ($ue_ids as $ue_id) {
+                    $course_id = course::where('ue_id', $ue_id)->get()->pluck('id')->toArray();
+                    // echo '<pre>';
+                    // print_r($course_id);
+                    // echo '</pre>';
+
+                    // Merge the $course_id array with the $result array
+                    $result = array_merge($result, $course_id);
+                }
+                // Print the final result
+                // $ue_ids =  unite_enseignement::where('specialty_id', $specialty_id)->where('level_id',$id)->pluck('name')->toArray();
+                // echo '<pre>';
+                // print_r($ue_ids);
+                // echo '</pre>';
+                // dd($result);
+
+
+                // dd($dob, $year, $month);
+                $ayear = $this->getAcademicYear();
+
+
+                try {
+                    $timestamp = Carbon::now()->format('Y-m-d H:i:s');
+                    $student = student::find($student_id);
+                    $student->ues()->attach($ue_ids, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+                    $student->course()->attach($result, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
+                } catch (\Carbon\Exceptions\InvalidFormatException $e) {
+                    echo $e->getMessage();
+                }
+
+
+                $student->levels()->attach($level, ['academic_year' => $ayear, 'pass_mark' => 50]);
+                // Return a response with the student data and a success message
+                notify()->success('Etudiant inscrire avec succès');
+                return redirect()->back();
+            }
         }
-        // Print the final result
-        // $ue_ids =  unite_enseignement::where('specialty_id', $specialty_id)->where('level_id',$id)->pluck('name')->toArray();
-        // echo '<pre>';
-        // print_r($ue_ids);
-        // echo '</pre>';
-        // dd($result);
-        
-
-// dd($dob, $year, $month);
-        $ayear = $this->getAcademicYear();
-
-
-        try {
-            $timestamp = Carbon::now()->format('Y-m-d H:i:s');
-            $student = student::find($student_id);
-            $student->ues()->attach($ue_ids, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
-            $student->course()->attach($result, ['created_at' => $timestamp, 'updated_at' => $timestamp]);
-        } catch (\Carbon\Exceptions\InvalidFormatException $e) {
-            echo $e->getMessage();
-        }
-        
-
-        $student->levels()->attach($level, ['academic_year' => $ayear, 'pass_mark' => 50]);
-        // Return a response with the student data and a success message
-        notify()->success('Etudiant inscrire avec succès');
-        return redirect()->back();
     }
     function getAcademicYear()
     {
@@ -271,7 +296,7 @@ class StudentController extends Controller
         $pob = strip_tags($request->input('upPob'));
         $cycle_id = strip_tags($request->input('upCycle_id'));
 
-// dd($dob);
+        // dd($dob);
         // Validate the request data
         $request->validate([
             // Your validation rules here

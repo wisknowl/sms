@@ -18,9 +18,12 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use App\Traits\HandlesYearAndSemester;
+
 
 class UniteEnseignementController extends Controller
 {
+    use HandlesYearAndSemester;
     public function export()
     {
         return Excel::download(new Ues, 'ues.xlsx');
@@ -30,27 +33,11 @@ class UniteEnseignementController extends Controller
      */
     public function index(Request $request): view
     {
-        if ($request->has('year_id') && !empty($request->input('year_id'))) {
-            $year_id = $request->input('year_id');
-            $year_name = academic_year::where('id', $year_id)->value('name');
-            Session::put('year_name', $year_name);
-            Session::put('year_id', $year_id);
-        } else {
-            // Use the session value as the default value
-            $year_id = Session::get('year_id');
-            $year_name = Session::get('year_name');
-        }
-        if ($request->has('semester_id') && !empty($request->input('semester_id'))) {
-            $semester_id = $request->input('semester_id');
-            $semester_name = semester::where('id', $semester_id)->value('name');
-            Session::put('semester_name', $semester_name);
-            Session::put('semester_id', $semester_id);
-        } else {
-            // Use the session value as the default value
-            $semester_id = Session::get('semester_id');
-            $semester_name = Session::get('semester_name');
-        }
-        $academic_years = academic_year::all();
+        $data = $this->handleYearAndSemester($request);
+        $semesters = $data['semesters'];
+        $academic_years = $data['academic_years'];
+
+       
         $ues = unite_enseignement::orderBy('id', 'desc')
             ->when($request->input('level'), function ($query) use ($request) {
                 return $query->where('level_id', $request->input('level'));
@@ -62,7 +49,7 @@ class UniteEnseignementController extends Controller
         $levels = level::all();
         $course_natures = course_nature::all();
         $specialties = specialty::all();
-        $semesters = semester::all();
+        
 
         return view('uniteEseignements.index', compact('ues', 'levels', 'academic_years', 'semesters', 'specialties', 'course_natures'));
     }
